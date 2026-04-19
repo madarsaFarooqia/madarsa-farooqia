@@ -1,7 +1,7 @@
 export const languages = [
   { code: 'en', label: 'English', dir: 'ltr', flag: '🇺🇸' },
   { code: 'ar', label: 'العربية', dir: 'rtl', flag: '🇸🇦' },
-  { code: 'ur', label: 'اردو', dir: 'rtl', flag: '🇵🇰' },
+  { code: 'ur', label: 'اردو', dir: 'rtl', flag: '🇮🇳' },
   { code: 'hi', label: 'हिंदी', dir: 'ltr', flag: '🇮🇳' },
   { code: 'tr', label: 'Türkçe', dir: 'ltr', flag: '🇹🇷' },
 ];

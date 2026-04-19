@@ -1,77 +1,191 @@
-import React from 'react';
-import { Toaster as SonnerToaster } from 'sonner';
-import { QueryClientProvider } from '@tanstack/react-query';
-import {
-  BrowserRouter as Router,
-  Route,
-  Routes,
-  Navigate,
-  Outlet,
-} from 'react-router-dom';
+// import React from 'react';
+// import { Toaster as SonnerToaster } from 'sonner';
+// import { QueryClientProvider } from '@tanstack/react-query';
+// import {
+//   BrowserRouter as Router,
+//   Route,
+//   Routes,
+//   Navigate,
+//   Outlet,
+// } from 'react-router-dom';
 
-import { AuthProvider, useAuth } from './lib/AuthContext';
-import { LanguageProvider } from './lib/LanguageContext';
-import { queryClientInstance } from './lib/query-client';
-import Layout from '@/components/layout/Layout';
-import LoadingSpinner from '@/components/shared/LoadingSpinner';
-import UserNotRegisteredError from '@/components/UserNotRegisteredError';
-import PageNotFound from '@/lib/PageNotFound';
+// import { AuthProvider, useAuth } from './lib/AuthContext';
+// import { LanguageProvider } from './lib/LanguageContext';
+// import { queryClientInstance } from './lib/query-client';
+// import Layout from '@/components/layout/Layout';
+// import LoadingSpinner from '@/components/shared/LoadingSpinner';
+// import UserNotRegisteredError from '@/components/UserNotRegisteredError';
+// import PageNotFound from '@/lib/PageNotFound';
 
-import Home from '@/pages/Home';
-import Teachers from '@/pages/Teachers';
-import Donate from '@/pages/Donate';
-import Fundraising from '@/pages/Fundraising';
-import Contact from '@/pages/Contact';
-import MyDonations from '@/pages/MyDonations';
-import Payment from '@/pages/Payment';
-import ComingSoon from '@/pages/ComingSoon';
-import Niswaan from '@/pages/Niswaan';
-import MasjidHifz from '@/pages/MasjidHifz';
-import Campaigns from '@/pages/Campaigns';
-import Events from '@/pages/Events';
-import Students from '@/pages/Students';
+// import Home from '@/pages/Home';
+// import Teachers from '@/pages/Teachers';
+// import Donate from '@/pages/Donate';
+// import Fundraising from '@/pages/Fundraising';
+// import Contact from '@/pages/Contact';
+// import MyDonations from '@/pages/MyDonations';
+// import Payment from '@/pages/Payment';
+// import ComingSoon from '@/pages/ComingSoon';
+// import Niswaan from '@/pages/Niswaan';
+// import MasjidHifz from '@/pages/MasjidHifz';
+// import Campaigns from '@/pages/Campaigns';
+// import Events from '@/pages/Events';
+// import Students from '@/pages/Students';
 
-import AdminLayout from '@/pages/admin/AdminLayout';
-import Dashboard from '@/pages/admin/Dashboard';
-import TeachersAdmin from '@/pages/admin/TeachersAdmin';
-import StudentsAdmin from '@/pages/admin/StudentsAdmin';
-import EventsAdmin from '@/pages/admin/EventsAdmin';
-import CampaignsAdmin from '@/pages/admin/CampaignsAdmin';
-import DonationsAdmin from '@/pages/admin/DonationsAdmin';
-import RegistrationsAdmin from '@/pages/admin/RegistrationsAdmin';
+// import AdminLayout from '@/pages/admin/AdminLayout';
+// import Dashboard from '@/pages/admin/Dashboard';
+// import TeachersAdmin from '@/pages/admin/TeachersAdmin';
+// import StudentsAdmin from '@/pages/admin/StudentsAdmin';
+// import EventsAdmin from '@/pages/admin/EventsAdmin';
+// import CampaignsAdmin from '@/pages/admin/CampaignsAdmin';
+// import DonationsAdmin from '@/pages/admin/DonationsAdmin';
+// import RegistrationsAdmin from '@/pages/admin/RegistrationsAdmin';
 
-function AdminGate() {
-  const { user, isLoadingAuth } = useAuth();
-  if (isLoadingAuth) {
-    return (
-      <div className="fixed inset-0 flex items-center justify-center bg-background">
-        <LoadingSpinner size="lg" />
-      </div>
-    );
-  }
-  if (user?.role !== 'admin') {
-    return <Navigate to="/" replace />;
-  }
-  return <Outlet />;
-}
+// function AdminGate() {
+//   const { user, isLoadingAuth } = useAuth();
+//   if (isLoadingAuth) {
+//     return (
+//       <div className="fixed inset-0 flex items-center justify-center bg-background">
+//         <LoadingSpinner size="lg" />
+//       </div>
+//     );
+//   }
+//   if (user?.role !== 'admin') {
+//     return <Navigate to="/" replace />;
+//   }
+//   return <Outlet />;
+// }
+
+// const AuthenticatedApp = () => {
+//   const { isLoadingAuth, isLoadingPublicSettings, authError, navigateToLogin } = useAuth();
+
+//   if (isLoadingPublicSettings || isLoadingAuth) {
+//     return (
+//       <div className="fixed inset-0 flex items-center justify-center bg-background flex-col gap-4">
+//         <LoadingSpinner size="lg" />
+//         <p className="font-amiri text-xl text-muted-foreground">بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ</p>
+//       </div>
+//     );
+//   }
+
+//   if (authError) {
+//     if (authError.type === 'user_not_registered') {
+//       return <UserNotRegisteredError />;
+//     }
+//     if (authError.type === 'auth_required') {
+//       navigateToLogin();
+//       return null;
+//     }
+//   }
+
+//   return (
+//     <Routes>
+//       <Route element={<Layout />}>
+//         <Route path="/" element={<Home />} />
+//         <Route path="/teachers" element={<Teachers />} />
+//         <Route path="/donate" element={<Donate />} />
+//         <Route path="/fundraising" element={<Fundraising />} />
+//         <Route path="/contact" element={<Contact />} />
+//         <Route path="/campaigns" element={<Campaigns />} />
+//         <Route path="/events" element={<Events />} />
+//         <Route path="/students" element={<Students />} />
+//         <Route path="/my-donations" element={<MyDonations />} />
+//         <Route path="/payment" element={<Payment />} />
+//         <Route path="/coming-soon" element={<ComingSoon />} />
+//         <Route path="/niswaan" element={<Niswaan />} />
+//         <Route path="/masjid-hifz" element={<MasjidHifz />} />
+//       </Route>
+
+//       <Route path="/admin" element={<AdminGate />}>
+//         <Route element={<AdminLayout />}>
+//           <Route index element={<Dashboard />} />
+//           <Route path="teachers" element={<TeachersAdmin />} />
+//           <Route path="students" element={<StudentsAdmin />} />
+//           <Route path="events" element={<EventsAdmin />} />
+//           <Route path="campaigns" element={<CampaignsAdmin />} />
+//           <Route path="donations" element={<DonationsAdmin />} />
+//           <Route path="registrations" element={<RegistrationsAdmin />} />
+//         </Route>
+//       </Route>
+
+//       <Route path="*" element={<PageNotFound />} />
+//     </Routes>
+//   );
+// };
+
+// function App() {
+//   return (
+//     <AuthProvider>
+//       <QueryClientProvider client={queryClientInstance}>
+//         <LanguageProvider>
+//           <Router>
+//             <AuthenticatedApp />
+//           </Router>
+//           <SonnerToaster position="top-center" richColors />
+//         </LanguageProvider>
+//       </QueryClientProvider>
+//     </AuthProvider>
+//   );
+// }
+
+// export default App;
+
+import { Toaster } from "@/components/ui/toaster";
+import { Toaster as SonnerToaster } from "sonner";
+import { QueryClientProvider } from "@tanstack/react-query";
+import { queryClientInstance } from "@/lib/query-client";
+import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
+import PageNotFound from "./lib/PageNotFound";
+import { AuthProvider, useAuth } from "@/lib/AuthContext";
+import UserNotRegisteredError from "@/components/UserNotRegisteredError";
+import { LanguageProvider } from "@/lib/LanguageContext";
+
+import Layout from "@/components/layout/Layout";
+import Home from "@/pages/Home";
+import Teachers from "@/pages/Teachers";
+import Donate from "@/pages/Donate";
+import Fundraising from "@/pages/Fundraising";
+import Contact from "@/pages/Contact";
+import MyDonations from "@/pages/MyDonations";
+import Payment from "@/pages/Payment";
+import ComingSoon from "@/pages/ComingSoon";
+import Niswaan from "@/pages/Niswaan";
+import MasjidHifz from "@/pages/MasjidHifz";
+import ReceiptViewer from "@/pages/ReceiptViewer";
+import LoadingSpinner from "@/components/shared/LoadingSpinner";
+
+// Admin pages
+import AdminLayout from "@/pages/admin/AdminLayout";
+import AdminDashboard from "@/pages/admin/AdminDashboard";
+import TeachersAdmin from "@/pages/admin/TeachersAdmin";
+import StudentsAdmin from "@/pages/admin/StudentsAdmin";
+import EventsAdmin from "@/pages/admin/EventsAdmin";
+import RegistrationsAdmin from "@/pages/admin/RegistrationsAdmin";
+import CampaignsPro from "@/pages/admin/CampaignsPro";
+import DonationsPro from "@/pages/admin/DonationsPro";
+import ReportsAdmin from "@/pages/admin/ReportsAdmin";
+import BlogAdmin from "@/pages/admin/BlogAdmin";
+import QAAdmin from "@/pages/admin/QAAdmin";
+import InfrastructureAdmin from "@/pages/admin/InfrastructureAdmin";
 
 const AuthenticatedApp = () => {
-  const { isLoadingAuth, isLoadingPublicSettings, authError, navigateToLogin } = useAuth();
+  const { isLoadingAuth, isLoadingPublicSettings, authError, navigateToLogin } =
+    useAuth();
 
   if (isLoadingPublicSettings || isLoadingAuth) {
     return (
       <div className="fixed inset-0 flex items-center justify-center bg-background flex-col gap-4">
         <LoadingSpinner size="lg" />
-        <p className="font-amiri text-xl text-muted-foreground">بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ</p>
+        <p className="font-amiri text-xl text-muted-foreground">
+          بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ
+        </p>
       </div>
     );
   }
 
   if (authError) {
-    if (authError.type === 'user_not_registered') {
+    if (authError.type === "user_not_registered") {
       return <UserNotRegisteredError />;
-    }
-    if (authError.type === 'auth_required') {
+    } else if (authError.type === "auth_required") {
       navigateToLogin();
       return null;
     }
@@ -85,26 +199,27 @@ const AuthenticatedApp = () => {
         <Route path="/donate" element={<Donate />} />
         <Route path="/fundraising" element={<Fundraising />} />
         <Route path="/contact" element={<Contact />} />
-        <Route path="/campaigns" element={<Campaigns />} />
-        <Route path="/events" element={<Events />} />
-        <Route path="/students" element={<Students />} />
         <Route path="/my-donations" element={<MyDonations />} />
         <Route path="/payment" element={<Payment />} />
         <Route path="/coming-soon" element={<ComingSoon />} />
         <Route path="/niswaan" element={<Niswaan />} />
         <Route path="/masjid-hifz" element={<MasjidHifz />} />
+        <Route path="/receipts" element={<ReceiptViewer />} />
       </Route>
 
-      <Route path="/admin" element={<AdminGate />}>
-        <Route element={<AdminLayout />}>
-          <Route index element={<Dashboard />} />
-          <Route path="teachers" element={<TeachersAdmin />} />
-          <Route path="students" element={<StudentsAdmin />} />
-          <Route path="events" element={<EventsAdmin />} />
-          <Route path="campaigns" element={<CampaignsAdmin />} />
-          <Route path="donations" element={<DonationsAdmin />} />
-          <Route path="registrations" element={<RegistrationsAdmin />} />
-        </Route>
+      {/* Admin routes */}
+      <Route path="/admin" element={<AdminLayout />}>
+        <Route index element={<AdminDashboard />} />
+        <Route path="teachers" element={<TeachersAdmin />} />
+        <Route path="students" element={<StudentsAdmin />} />
+        <Route path="events" element={<EventsAdmin />} />
+        <Route path="registrations" element={<RegistrationsAdmin />} />
+        <Route path="campaigns-pro" element={<CampaignsPro />} />
+        <Route path="donations-pro" element={<DonationsPro />} />
+        <Route path="reports" element={<ReportsAdmin />} />
+        <Route path="blog" element={<BlogAdmin />} />
+        <Route path="messages" element={<QAAdmin />} />
+        <Route path="infrastructure" element={<InfrastructureAdmin />} />
       </Route>
 
       <Route path="*" element={<PageNotFound />} />
@@ -120,6 +235,7 @@ function App() {
           <Router>
             <AuthenticatedApp />
           </Router>
+          <Toaster />
           <SonnerToaster position="top-center" richColors />
         </LanguageProvider>
       </QueryClientProvider>

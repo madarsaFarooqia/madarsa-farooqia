@@ -1,8 +1,8 @@
-import { motion } from 'framer-motion';
-import { Link } from 'react-router-dom';
-import { Calendar, ArrowUpRight } from 'lucide-react';
-import { format } from 'date-fns';
-import GeometricProgress from './GeometricProgress';
+import { motion } from "framer-motion";
+import { Link } from "react-router-dom";
+import { Calendar, ArrowUpRight } from "lucide-react";
+import { format } from "date-fns";
+import GeometricProgress from "./GeometricProgress";
 
 export default function CampaignCard({ campaign, index = 0 }) {
   const raised = campaign.raised_amount || 0;
@@ -13,7 +13,7 @@ export default function CampaignCard({ campaign, index = 0 }) {
     <motion.div
       initial={{ opacity: 0, y: 30 }}
       whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true, margin: '-60px' }}
+      viewport={{ once: true, margin: "-60px" }}
       transition={{ duration: 0.6, delay: index * 0.08 }}
       className="group relative bg-card rounded-2xl border border-border overflow-hidden hover:shadow-xl hover:shadow-primary/5 transition-all duration-400"
     >
@@ -30,7 +30,7 @@ export default function CampaignCard({ campaign, index = 0 }) {
         )}
         <div className="absolute top-4 left-4">
           <span className="inline-flex items-center gap-1.5 bg-white/95 backdrop-blur-sm text-primary text-xs font-jakarta font-semibold px-3 py-1.5 rounded-full shadow-sm">
-            {campaign.category || 'Campaign'}
+            {campaign.category || "Campaign"}
           </span>
         </div>
         {pct >= 100 && (
@@ -57,16 +57,24 @@ export default function CampaignCard({ campaign, index = 0 }) {
           {campaign.deadline ? (
             <div className="flex items-center gap-1.5 text-xs font-jakarta text-muted-foreground">
               <Calendar size={13} />
-              <span>Ends {format(new Date(campaign.deadline), 'MMM d, yyyy')}</span>
+              <span>
+                Ends {format(new Date(campaign.deadline), "MMM d, yyyy")}
+              </span>
             </div>
           ) : (
-            <span className="text-xs font-jakarta text-muted-foreground">Ongoing</span>
+            <span className="text-xs font-jakarta text-muted-foreground">
+              Ongoing
+            </span>
           )}
           <Link
             to={`/donate?campaign=${campaign.id}`}
             className="inline-flex items-center gap-1 text-sm font-jakarta font-semibold text-primary hover:text-accent transition-colors"
           >
-            Donate <ArrowUpRight size={15} className="group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
+            Donate{" "}
+            <ArrowUpRight
+              size={15}
+              className="group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform"
+            />
           </Link>
         </div>
       </div>

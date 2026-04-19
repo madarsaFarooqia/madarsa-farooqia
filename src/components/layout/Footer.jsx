@@ -1,10 +1,12 @@
-import React from 'react';
-import { Link } from 'react-router-dom';
-import { Heart, Mail, Phone, MapPin, Share2, MessageCircle, Send, ExternalLink } from 'lucide-react';
-import { useLanguage } from '@/lib/LanguageContext';
-import { useTranslation } from '@/lib/i18n';
+import React from "react";
+import { Link } from "react-router-dom";
+import { FaFacebook, FaTwitter, FaInstagram, FaYoutube } from "react-icons/fa";
+import { useLanguage } from "@/lib/LanguageContext";
+import { useTranslation } from "@/lib/i18n";
+import { Heart, Mail, Phone, MapPin } from "lucide-react";
 
-import { SITE_LOGO_URL } from '@/lib/constants';
+const LOGO_URL =
+  "https://media.base44.com/images/public/69e13339ea1b0b97c63a7ecc/b4db5ec8f_farooqia_logo_withBg.png";
 
 export default function Footer() {
   const { language, currentLang } = useLanguage();
@@ -17,10 +19,18 @@ export default function Footer() {
           {/* Brand */}
           <div>
             <div className="flex items-center gap-3 mb-4">
-              <img src={SITE_LOGO_URL} alt="Logo" className="w-12 h-12 rounded-full border-2 border-accent/40 object-cover" />
+              <img
+                src={LOGO_URL}
+                alt="Logo"
+                className="w-12 h-12 rounded-full border-2 border-accent/40 object-cover"
+              />
               <div>
-                <div className="font-playfair font-bold text-base text-background">Madrasa Farooqia</div>
-                <div className="text-background/50 text-xs font-amiri">مدرسة فاروقية</div>
+                <div className="font-playfair font-bold text-base text-background">
+                  Madrasa Farooqia
+                </div>
+                <div className="text-background/50 text-xs font-amiri">
+                  مدرسة فاروقية
+                </div>
               </div>
             </div>
             <p className="text-background/60 text-sm leading-relaxed mb-2">
@@ -30,28 +40,39 @@ export default function Footer() {
               Spreading authentic Islamic knowledge since 1999.
             </p>
             <div className="flex gap-3 mt-5">
-              {[Share2, MessageCircle, Send, ExternalLink].map((Icon, i) => (
-                <a key={i} href="#" className="w-8 h-8 rounded-lg bg-background/10 flex items-center justify-center hover:bg-accent hover:text-accent-foreground transition-colors" aria-label="Social link">
-                  <Icon className="w-4 h-4" />
-                </a>
-              ))}
+              {[FaFacebook, FaTwitter, FaInstagram, FaYoutube].map(
+                (Icon, i) => (
+                  <a
+                    key={i}
+                    href="#"
+                    className="w-8 h-8 rounded-lg bg-background/10 flex items-center justify-center hover:bg-accent hover:text-accent-foreground transition-colors"
+                  >
+                    <Icon className="w-4 h-4" />
+                  </a>
+                ),
+              )}
             </div>
           </div>
 
           {/* Quick Links */}
           <div>
-            <h4 className="font-semibold text-accent mb-4 text-sm uppercase tracking-wider">Quick Links</h4>
+            <h4 className="font-semibold text-accent mb-4 text-sm uppercase tracking-wider">
+              Quick Links
+            </h4>
             <ul className="space-y-2.5">
               {[
-                { to: '/', label: tr.home },
-                { to: '/teachers', label: tr.teachers },
-                { to: '/donate', label: tr.donate },
-                { to: '/fundraising', label: tr.fundraising },
-                { to: '/contact', label: tr.contact },
-                { to: '/coming-soon', label: 'Coming Soon' },
-              ].map(link => (
+                { to: "/", label: tr.home },
+                { to: "/teachers", label: tr.teachers },
+                { to: "/donate", label: tr.donate },
+                { to: "/fundraising", label: tr.fundraising },
+                { to: "/contact", label: tr.contact },
+                { to: "/coming-soon", label: "Coming Soon" },
+              ].map((link) => (
                 <li key={link.to}>
-                  <Link to={link.to} className="text-background/60 hover:text-accent text-sm transition-colors">
+                  <Link
+                    to={link.to}
+                    className="text-background/60 hover:text-accent text-sm transition-colors"
+                  >
                     {link.label}
                   </Link>
                 </li>
@@ -61,7 +82,9 @@ export default function Footer() {
 
           {/* Contact */}
           <div>
-            <h4 className="font-semibold text-accent mb-4 text-sm uppercase tracking-wider">{tr.contact}</h4>
+            <h4 className="font-semibold text-accent mb-4 text-sm uppercase tracking-wider">
+              {tr.contact}
+            </h4>
             <ul className="space-y-3">
               <li className="flex items-start gap-3 text-sm text-background/60">
                 <MapPin className="w-4 h-4 text-accent mt-0.5 shrink-0" />
@@ -84,15 +107,20 @@ export default function Footer() {
               </li>
               <li className="flex items-center gap-3 text-sm text-background/60">
                 <Mail className="w-4 h-4 text-accent shrink-0" />
-                info@contactDeveloper
+                @contactdeveloper
               </li>
             </ul>
           </div>
 
           {/* Donate CTA */}
           <div>
-            <h4 className="font-semibold text-accent mb-4 text-sm uppercase tracking-wider">Support Us</h4>
-            <p className="text-background/60 text-sm mb-4 leading-relaxed">Your generous donation sustains our mission of authentic Islamic education.</p>
+            <h4 className="font-semibold text-accent mb-4 text-sm uppercase tracking-wider">
+              Support Us
+            </h4>
+            <p className="text-background/60 text-sm mb-4 leading-relaxed">
+              Your generous donation sustains our mission of authentic Islamic
+              education.
+            </p>
             <Link
               to="/donate"
               className="inline-flex items-center gap-2 px-5 py-2.5 gold-gradient text-foreground font-semibold rounded-xl text-sm hover:opacity-90 transition-opacity shadow-lg"
@@ -105,7 +133,9 @@ export default function Footer() {
 
         <div className="py-5 border-t border-background/10 flex flex-col sm:flex-row items-center justify-between gap-2 text-xs text-background/40">
           <span>© 2025 Madrasa Farooqia. All rights reserved.</span>
-          <span className="font-amiri text-base text-background/50">بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ</span>
+          <span className="font-amiri text-base text-background/50">
+            بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ
+          </span>
         </div>
       </div>
     </footer>

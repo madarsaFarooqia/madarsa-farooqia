@@ -1,29 +1,40 @@
-import React from 'react';
-import { Link } from 'react-router-dom';
-import { Heart, Users, Calendar, AlertCircle, CheckCircle2 } from 'lucide-react';
-import { Badge } from '@/components/ui/badge';
-import { Progress } from '@/components/ui/progress';
+import React from "react";
+import { Link } from "react-router-dom";
+import {
+  Heart,
+  Users,
+  Calendar,
+  AlertCircle,
+  CheckCircle2,
+} from "lucide-react";
+import { Badge } from "@/components/ui/badge";
+import { Progress } from "@/components/ui/progress";
 
 export default function CampaignCard({ campaign, tr }) {
-  const percentage = campaign.goal_amount 
+  const percentage = campaign.goal_amount
     ? Math.min((campaign.collected_amount / campaign.goal_amount) * 100, 100)
     : 0;
 
-  const daysLeft = campaign.end_date 
-    ? Math.max(0, Math.ceil((new Date(campaign.end_date) - new Date()) / (1000 * 60 * 60 * 24)))
+  const daysLeft = campaign.end_date
+    ? Math.max(
+        0,
+        Math.ceil(
+          (new Date(campaign.end_date) - new Date()) / (1000 * 60 * 60 * 24)
+        )
+      )
     : null;
 
   const isCompleted = percentage >= 100;
 
   const categoryColors = {
-    building: 'bg-secondary text-foreground border-border',
-    education: 'bg-secondary text-foreground border-border',
-    infrastructure: 'bg-secondary text-foreground border-border',
-    equipment: 'bg-secondary text-foreground border-border',
-    scholarship: 'bg-secondary text-foreground border-border',
-    food_program: 'bg-secondary text-foreground border-border',
-    orphan_care: 'bg-secondary text-foreground border-border',
-    general: 'bg-secondary text-foreground border-border',
+    building: "bg-secondary text-foreground border-border",
+    education: "bg-secondary text-foreground border-border",
+    infrastructure: "bg-secondary text-foreground border-border",
+    equipment: "bg-secondary text-foreground border-border",
+    scholarship: "bg-secondary text-foreground border-border",
+    food_program: "bg-secondary text-foreground border-border",
+    orphan_care: "bg-secondary text-foreground border-border",
+    general: "bg-secondary text-foreground border-border",
   };
 
   return (
@@ -45,7 +56,7 @@ export default function CampaignCard({ campaign, tr }) {
 
         {/* Badges */}
         <div className="absolute top-3 left-3 flex gap-2">
-          {campaign.priority === 'urgent' && (
+          {campaign.priority === "urgent" && (
             <Badge className="bg-red-500 text-white border-0 flex items-center gap-1">
               <AlertCircle className="w-3 h-3" /> {tr.urgent}
             </Badge>
@@ -58,8 +69,10 @@ export default function CampaignCard({ campaign, tr }) {
         </div>
 
         <div className="absolute top-3 right-3">
-          <Badge className={`${categoryColors[campaign.category] || categoryColors.general} border text-xs font-medium`}>
-            {campaign.category?.replace(/_/g, ' ')}
+          <Badge
+            className={`${categoryColors[campaign.category] || categoryColors.general} border text-xs font-medium`}
+          >
+            {campaign.category?.replace(/_/g, " ")}
           </Badge>
         </div>
       </div>
@@ -70,7 +83,9 @@ export default function CampaignCard({ campaign, tr }) {
           {campaign.title}
         </h3>
         {campaign.description && (
-          <p className="text-muted-foreground text-sm mb-4 line-clamp-2">{campaign.description}</p>
+          <p className="text-muted-foreground text-sm mb-4 line-clamp-2">
+            {campaign.description}
+          </p>
         )}
 
         {/* Progress */}
@@ -85,7 +100,9 @@ export default function CampaignCard({ campaign, tr }) {
           </div>
           <Progress value={percentage} className="h-2.5" />
           <div className="flex justify-between items-center mt-2 text-xs text-muted-foreground">
-            <span className="font-medium text-accent">{percentage.toFixed(0)}%</span>
+            <span className="font-medium text-accent">
+              {percentage.toFixed(0)}%
+            </span>
             {daysLeft !== null && (
               <span className="flex items-center gap-1">
                 <Calendar className="w-3 h-3" /> {daysLeft} {tr.daysLeft}
@@ -98,7 +115,9 @@ export default function CampaignCard({ campaign, tr }) {
         <div className="flex items-center justify-between text-sm text-muted-foreground mb-4">
           <div className="flex items-center gap-1.5">
             <Users className="w-4 h-4" />
-            <span>{campaign.donors_count || 0} {tr.donors}</span>
+            <span>
+              {campaign.donors_count || 0} {tr.donors}
+            </span>
           </div>
         </div>
 
