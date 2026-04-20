@@ -274,7 +274,6 @@ import {
   ChevronDown,
   Globe2,
   Sparkles,
-  ExternalLink,
   GraduationCap,
   Building2,
 } from "lucide-react";
@@ -282,10 +281,7 @@ import { useLanguage } from "@/lib/LanguageContext";
 import { useTranslation } from "@/lib/i18n";
 import TeacherCard from "@/components/teachers/TeacherCard";
 import CampaignCard from "@/components/fundraising/CampaignCard";
-import { FaYoutube } from "react-icons/fa";
 import { fundraisingCampaignService, teacherService } from "@/services";
-
-const YOUTUBE_CHANNEL = "https://www.youtube.com/@MadrasaFarooqia";
 
 const islamicVerses = [
   {
