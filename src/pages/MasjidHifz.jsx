@@ -441,7 +441,7 @@ export default function MasjidHifz() {
                   key={lbl}
                   className="px-5 py-3 bg-white/10 backdrop-blur-sm rounded-2xl border border-white/20 text-center"
                 >
-                  <div className="font-playfair font-bold text-white text-xl">
+                  <div className="font-comic font-bold text-white text-xl">
                     {val}
                   </div>
                   <div className="text-white/60 text-xs">{lbl}</div>
@@ -504,7 +504,7 @@ export default function MasjidHifz() {
               </p>
               <div className="grid grid-cols-2 gap-4">
                 <div className="p-4 bg-secondary/50 rounded-2xl border border-border text-center">
-                  <div className="font-playfair text-2xl font-bold text-foreground">
+                  <div className="font-comic text-2xl font-bold text-foreground">
                     500+
                   </div>
                   <div className="text-xs text-muted-foreground mt-1">
@@ -512,7 +512,7 @@ export default function MasjidHifz() {
                   </div>
                 </div>
                 <div className="p-4 bg-secondary/50 rounded-2xl border border-border text-center">
-                  <div className="font-playfair text-2xl font-bold text-foreground">
+                  <div className="font-comic text-2xl font-bold text-foreground">
                     800+
                   </div>
                   <div className="text-xs text-muted-foreground mt-1">

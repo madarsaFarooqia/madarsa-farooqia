@@ -98,7 +98,7 @@ import { BookOpen, Clock, Star } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import TeacherModal from "./TeacherModal";
 
-export default function TeacherCard({ teacher, language, tr }) {
+export default function TeacherCard({ teacher, language, t }) {
   const [showModal, setShowModal] = useState(false);
 
   const displayName =
@@ -151,7 +151,7 @@ export default function TeacherCard({ teacher, language, tr }) {
               <div className="flex items-center gap-1.5">
                 <Clock className="w-4 h-4 text-accent" />
                 <span>
-                  {teacher.experience_years} {tr.experience}
+                  {teacher.experience_years} {t('teachers:experience')}
                 </span>
               </div>
             )}
@@ -159,7 +159,7 @@ export default function TeacherCard({ teacher, language, tr }) {
               <div className="flex items-center gap-1.5">
                 <BookOpen className="w-4 h-4 text-accent" />
                 <span>
-                  {teacher.subjects.length} {tr.subjects}
+                  {teacher.subjects.length} {t('teachers:subjects')}
                 </span>
               </div>
             )}
@@ -184,7 +184,7 @@ export default function TeacherCard({ teacher, language, tr }) {
           )}
 
           <button className="w-full py-2.5 text-sm font-semibold text-foreground border-2 border-border rounded-xl hover:bg-foreground hover:text-background transition-all group-hover:border-foreground">
-            {tr.viewProfile}
+            {t('teachers:viewProfile')}
           </button>
         </div>
       </div>
@@ -193,7 +193,7 @@ export default function TeacherCard({ teacher, language, tr }) {
         <TeacherModal
           teacher={teacher}
           language={language}
-          tr={tr}
+          t={t}
           onClose={() => setShowModal(false)}
         />
       )}

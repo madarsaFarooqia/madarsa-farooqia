@@ -320,7 +320,7 @@ const CustomTooltip = ({ active, payload, label, currency }) => {
 
 export default function MyDonations() {
   const { language } = useLanguage();
-  const tr = useTranslation(language);
+  const { t } = useTranslation(language);
   const [donations, setDonations] = useState([]);
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -334,7 +334,7 @@ export default function MyDonations() {
         return fakeDonations;
       })
       .then(setDonations)
-      .catch(() => {})
+      .catch(() => { })
       .finally(() => setLoading(false));
   }, []);
 
@@ -409,7 +409,7 @@ export default function MyDonations() {
               <Heart className="w-4 h-4" /> My Giving Dashboard
             </div>
             <h1 className="font-playfair text-4xl sm:text-5xl font-bold text-white mb-2">
-              {tr.myDonationsTitle || "My Donations"}
+              {t('nav:myDonations')}
             </h1>
             <p className="text-white/60">{user.full_name || user.email}</p>
           </motion.div>
@@ -502,7 +502,7 @@ export default function MyDonations() {
             <div className="text-center py-24 bg-card rounded-3xl border border-border">
               <Heart className="w-16 h-16 text-muted-foreground/20 mx-auto mb-4" />
               <h3 className="font-playfair text-2xl font-bold text-foreground mb-2">
-                {tr.noDonations || "No Donations Yet"}
+                {t('donate:noDonations')}
               </h3>
               <p className="text-muted-foreground mb-6">
                 Make your first donation and start tracking it here.
@@ -692,9 +692,9 @@ export default function MyDonations() {
                             <Calendar className="w-3 h-3" />
                             {d.created_date
                               ? format(
-                                  new Date(d.created_date),
-                                  "MMM d, yyyy · h:mm a",
-                                )
+                                new Date(d.created_date),
+                                "MMM d, yyyy · h:mm a",
+                              )
                               : "Unknown date"}
                             {d.is_recurring && (
                               <Badge

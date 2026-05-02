@@ -3,6 +3,7 @@ import { X } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
+import { fundraisingCampaignService } from '@/services';
 
 const CATEGORIES = ['building', 'education', 'infrastructure', 'equipment', 'scholarship', 'food_program', 'orphan_care', 'general'];
 const PRIORITIES = ['low', 'medium', 'high', 'urgent'];
@@ -28,9 +29,9 @@ export default function CampaignFormModal({ campaign, onClose, onSaved }) {
     if (!form.title || !form.goal_amount) return alert('Title and goal amount are required.');
     setSaving(true);
     if (campaign?.id) {
-      await base44.entities.FundraisingCampaign.update(campaign.id, { ...form, goal_amount: Number(form.goal_amount) });
+      await fundraisingCampaignService.update(campaign.id, { ...form, goal_amount: Number(form.goal_amount) });
     } else {
-      await base44.entities.FundraisingCampaign.create({ ...form, goal_amount: Number(form.goal_amount), donors_count: 0 });
+      await fundraisingCampaignService.create({ ...form, goal_amount: Number(form.goal_amount), donors_count: 0 });
     }
     setSaving(false);
     onSaved();

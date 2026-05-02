@@ -18,7 +18,7 @@ const paymentMethods = [
 
 export default function Payment() {
   const { language } = useLanguage();
-  const tr = useTranslation(language);
+  const { t } = useTranslation(language);
   const [searchParams] = useSearchParams();
   const amount = searchParams.get('amount') || '0';
   const currency = searchParams.get('currency') || 'USD';
@@ -49,17 +49,17 @@ export default function Payment() {
           <div className="w-20 h-20 bg-emerald-100 rounded-full flex items-center justify-center mx-auto mb-6">
             <Check className="w-10 h-10 text-emerald-600" />
           </div>
-          <h2 className="font-playfair text-3xl font-bold text-foreground mb-3">Payment Successful!</h2>
+          <h2 className="font-playfair text-3xl font-bold text-foreground mb-3">{t('payment:successTitle')}</h2>
           <p className="text-muted-foreground mb-2">
-            Your payment of <span className="font-semibold text-primary">{currency} {amount}</span> has been processed.
+            {t('payment:successDesc')} <span className="font-semibold text-primary">{currency} {amount}</span>
           </p>
-          <p className="text-sm text-muted-foreground mb-6">A receipt has been sent to your email.</p>
+          <p className="text-sm text-muted-foreground mb-6">{t('payment:receiptSent')}</p>
           <div className="flex gap-3">
             <Button asChild variant="outline" className="flex-1">
-              <Link to="/">Home</Link>
+              <Link to="/">{t('payment:goHome')}</Link>
             </Button>
             <Button asChild className="flex-1 gold-gradient text-foreground">
-              <Link to="/my-donations">My Donations</Link>
+              <Link to="/my-donations">{t('payment:myDonations')}</Link>
             </Button>
           </div>
         </motion.div>
@@ -75,13 +75,13 @@ export default function Payment() {
         </Link>
 
         <motion.div initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }}>
-          <h1 className="font-playfair text-3xl font-bold text-foreground mb-2">Complete Payment</h1>
-          <p className="text-muted-foreground mb-8">Secure payment powered by bank-grade encryption.</p>
+          <h1 className="font-playfair text-3xl font-bold text-foreground mb-2">{t('payment:completePayment')}</h1>
+          <p className="text-muted-foreground mb-8">{t('payment:securePaymentDesc')}</p>
 
           {/* Amount Summary */}
           <div className="bg-primary/5 rounded-2xl p-6 border border-primary/20 mb-8 flex items-center justify-between">
             <div>
-              <div className="text-sm text-muted-foreground">Amount to Pay</div>
+              <div className="text-sm text-muted-foreground">{t('payment:amountToPay')}</div>
               <div className="font-playfair text-3xl font-bold text-primary">{currency} {amount}</div>
             </div>
             <div className="flex items-center gap-2 text-sm text-emerald-600">
@@ -92,14 +92,13 @@ export default function Payment() {
 
           {/* Payment Method */}
           <div className="bg-white rounded-2xl p-6 border border-border shadow-sm mb-6">
-            <Label className="font-semibold text-foreground mb-4 block">Select Payment Method</Label>
+            <Label className="font-semibold text-foreground mb-4 block">{t('payment:selectMethod')}</Label>
             <RadioGroup value={method} onValueChange={setMethod} className="space-y-3">
               {paymentMethods.map(pm => (
                 <label
                   key={pm.value}
-                  className={`flex items-center gap-4 p-4 rounded-xl border-2 cursor-pointer transition-all ${
-                    method === pm.value ? 'border-primary bg-primary/5' : 'border-border hover:border-primary/30'
-                  }`}
+                  className={`flex items-center gap-4 p-4 rounded-xl border-2 cursor-pointer transition-all ${method === pm.value ? 'border-primary bg-primary/5' : 'border-border hover:border-primary/30'
+                    }`}
                 >
                   <RadioGroupItem value={pm.value} />
                   <span className="text-xl">{pm.icon}</span>
@@ -144,19 +143,19 @@ export default function Payment() {
                 {processing ? (
                   <span className="flex items-center gap-2">
                     <span className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin" />
-                    Processing...
+                    {t('payment:processing')}
                   </span>
                 ) : (
                   <span className="flex items-center gap-2">
                     <Lock className="w-5 h-5" />
-                    Pay {currency} {amount}
+                    {t('payment:pay')} {currency} {amount}
                   </span>
                 )}
               </Button>
 
               <div className="flex items-center justify-center gap-2 text-xs text-muted-foreground">
                 <Lock className="w-3 h-3" />
-                <span>Your payment information is encrypted and secure.</span>
+                <span>{t('payment:secureInfo')}</span>
               </div>
             </motion.form>
           )}

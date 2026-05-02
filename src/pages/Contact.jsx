@@ -31,7 +31,7 @@ const contactInfo = [
 
 export default function Contact() {
   const { language, currentLang } = useLanguage();
-  const tr = useTranslation(language);
+  const { t } = useTranslation(language);
   const [loading, setLoading] = useState(false);
   const [sent, setSent] = useState(false);
   const [form, setForm] = useState({ name: '', email: '', phone: '', subject: '', message: '' });
@@ -42,7 +42,7 @@ export default function Contact() {
     await contactMessageService.create(form);
     setLoading(false);
     setSent(true);
-    toast.success(tr.messageSent);
+    toast.success(t('contact:messageSent'));
     setForm({ name: '', email: '', phone: '', subject: '', message: '' });
   };
 
@@ -67,8 +67,8 @@ export default function Contact() {
               <MessageSquare className="w-4 h-4" />
               <span>تواصل معنا</span>
             </div>
-            <h1 className="font-playfair text-3xl sm:text-5xl lg:text-6xl font-bold text-white mb-4 italic">{tr.contactTitle}</h1>
-            <p className="text-white/80 text-lg sm:text-xl max-w-xl mx-auto italic font-medium">{tr.contactSubtitle}</p>
+            <h1 className="font-playfair text-3xl sm:text-5xl lg:text-6xl font-bold text-white mb-4 italic">{t('contact:contactTitle')}</h1>
+            <p className="text-white/80 text-lg sm:text-xl max-w-xl mx-auto italic font-medium">{t('contact:contactSubtitle')}</p>
           </motion.div>
         </div>
       </section>
@@ -125,7 +125,7 @@ export default function Contact() {
                       <item.icon className="w-5 h-5" />
                     </div>
                     <div>
-                      <div className="font-semibold text-foreground text-sm">{tr[item.titleKey]}</div>
+                      <div className="font-semibold text-foreground text-sm">{t(`contact:${item.titleKey}`)}</div>
                       <div className="text-muted-foreground text-sm mt-0.5">{item.value}</div>
                       {item.link && <div className="text-accent text-xs mt-1 font-medium italic">Click to open ↗</div>}
                     </div>
@@ -177,35 +177,35 @@ export default function Contact() {
                     <Check className="w-8 h-8 text-background" />
                   </div>
                   <h3 className=" text-2xl font-semibold text-foreground mb-2">Message Sent!</h3>
-                  <p className="text-muted-foreground mb-2 italic">{tr.messageSent}</p>
+                  <p className="text-muted-foreground mb-2 italic">{t('contact:messageSent')}</p>
                   <p className="font-amiri text-accent text-lg mb-6">جزاك الله خيرًا</p>
                   <Button onClick={() => setSent(false)} variant="outline" className="rounded-xl font-bold">Send Another Message</Button>
                 </div>
               ) : (
                 <form onSubmit={handleSubmit} className="space-y-5">
-                  <h2 className="font-playfair text-2xl font-semibold text-foreground mb-6">{tr.sendMessage}</h2>
+                  <h2 className="font-playfair text-2xl font-semibold text-foreground mb-6">{t('contact:sendMessage')}</h2>
                   <div className="grid sm:grid-cols-2 gap-4">
                     <div>
-                      <Label className="mb-2 block text-sm font-medium">{tr.yourName} *</Label>
+                      <Label className="mb-2 block text-sm font-medium">{t('contact:yourName')} *</Label>
                       <Input required value={form.name} onChange={e => setForm({ ...form, name: e.target.value })} className="rounded-xl h-11" />
                     </div>
                     <div>
-                      <Label className="mb-2 block text-sm font-medium">{tr.yourEmail} *</Label>
+                      <Label className="mb-2 block text-sm font-medium">{t('contact:yourEmail')} *</Label>
                       <Input type="email" required value={form.email} onChange={e => setForm({ ...form, email: e.target.value })} className="rounded-xl h-11" />
                     </div>
                   </div>
                   <div className="grid sm:grid-cols-2 gap-4">
                     <div>
-                      <Label className="mb-2 block text-sm font-medium">{tr.yourPhone}</Label>
+                      <Label className="mb-2 block text-sm font-medium">{t('contact:yourPhone')}</Label>
                       <Input type="tel" value={form.phone} onChange={e => setForm({ ...form, phone: e.target.value })} className="rounded-xl h-11" />
                     </div>
                     <div>
-                      <Label className="mb-2 block text-sm font-medium">{tr.subject} *</Label>
+                      <Label className="mb-2 block text-sm font-medium">{t('contact:subject')} *</Label>
                       <Input required value={form.subject} onChange={e => setForm({ ...form, subject: e.target.value })} className="rounded-xl h-11" />
                     </div>
                   </div>
                   <div>
-                    <Label className="mb-2 block text-sm font-medium">{tr.message} *</Label>
+                    <Label className="mb-2 block text-sm font-medium">{t('contact:message')} *</Label>
                     <Textarea required rows={5} value={form.message} onChange={e => setForm({ ...form, message: e.target.value })} className="resize-none rounded-xl" />
                   </div>
                   <Button
@@ -219,7 +219,7 @@ export default function Contact() {
                         Sending...
                       </span>
                     ) : (
-                      <span className="flex items-center gap-2"><Send className="w-4 h-4" /> {tr.sendMessage}</span>
+                      <span className="flex items-center gap-2"><Send className="w-4 h-4" /> {t('contact:sendMessage')}</span>
                     )}
                   </Button>
                 </form>

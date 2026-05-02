@@ -26,10 +26,10 @@ export default function FacultyStats() {
                 <Icon className="w-5 h-5 text-foreground" />
               </div>
               <div>
-                <div className="font-playfair font-bold text-xl text-foreground leading-none">
+                <div className="font-comic font-bold text-xl text-foreground leading-none">
                   {value}
                 </div>
-                <div className="text-xs text-muted-foreground mt-0.5">
+                <div className="text-xs text-muted-foreground mt-1">
                   {label}
                 </div>
               </div>

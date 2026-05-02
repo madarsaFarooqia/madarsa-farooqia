@@ -283,6 +283,7 @@ import TeacherCard from "@/components/teachers/TeacherCard";
 import CampaignCard from "@/components/fundraising/CampaignCard";
 import { fundraisingCampaignService, teacherService } from "@/services";
 import { AuthBackground } from "@/assets";
+import { FcDonate } from "react-icons/fc";
 
 const islamicVerses = [
   {
@@ -311,7 +312,7 @@ const stats = [
 
 export default function Home() {
   const { language } = useLanguage();
-  const tr = useTranslation(language);
+  const { t } = useTranslation(language);
   const [teachers, setTeachers] = useState([]);
   const [campaigns, setCampaigns] = useState([]);
 
@@ -365,10 +366,10 @@ export default function Home() {
             </div>
 
             <h1 className="font-playfair text-4xl sm:text-5xl lg:text-7xl font-bold text-white mb-6 leading-tight">
-              {tr.heroTitle}
+              {t("home:heroTitle")}
             </h1>
             <p className="text-xl text-white/80 mb-10 max-w-3xl mx-auto leading-relaxed">
-              {tr.heroSubtitle}
+              {t("home:heroSubtitle")}
             </p>
 
             <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
@@ -376,14 +377,14 @@ export default function Home() {
                 to="/teachers"
                 className="group flex items-center gap-3 px-8 py-4 bg-white text-primary font-semibold rounded-xl hover:shadow-2xl transition-all duration-300 hover:-translate-y-1"
               >
-                {tr.exploreTeachers}
+                {t("home:exploreTeachers")}
                 <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
               </Link>
               <Link
                 to="/donate"
                 className="flex items-center gap-3 px-8 py-4 gold-gradient text-foreground font-semibold rounded-xl hover:shadow-2xl transition-all duration-300 hover:-translate-y-1 shadow-lg"
               >
-                {tr.donatNow}
+                {t("home:donatNow")}
               </Link>
             </div>
           </motion.div>
@@ -420,7 +421,7 @@ export default function Home() {
                   {stat.value}
                 </div>
                 <div className="text-muted-foreground text-sm mt-1">
-                  {tr[stat.key]}
+                  {t(`home:${stat.key}`)}
                 </div>
               </motion.div>
             ))}
@@ -442,16 +443,16 @@ export default function Home() {
                 <span>Since 1999</span>
               </div>
               <h2 className="font-playfair text-4xl font-bold text-foreground mb-6">
-                {tr.aboutTitle}
+                {t("home:aboutTitle")}
               </h2>
               <p className="text-muted-foreground text-lg leading-relaxed mb-8">
-                {tr.aboutDesc}
+                {t("home:aboutDesc")}
               </p>
               <Link
                 to="/teachers"
                 className="inline-flex items-center gap-2 text-foreground font-semibold underline underline-offset-4 hover:gap-3 transition-all"
               >
-                {tr.exploreTeachers} <ArrowRight className="w-4 h-4" />
+                {t("home:exploreTeachers")} <ArrowRight className="w-4 h-4" />
               </Link>
             </motion.div>
             <motion.div
@@ -472,7 +473,7 @@ export default function Home() {
                   25+
                 </div>
                 <div className="text-sm text-muted-foreground">
-                  {tr.stats_years}
+                  {t("home:stats_years")}
                 </div>
               </div>
               <div className="absolute -top-6 -right-6 bg-accent rounded-2xl shadow-xl p-6">
@@ -480,7 +481,7 @@ export default function Home() {
                   5K+
                 </div>
                 <div className="text-sm text-accent-foreground/80">
-                  {tr.stats_graduates}
+                  {t("home:stats_graduates")}
                 </div>
               </div>
             </motion.div>
@@ -498,7 +499,7 @@ export default function Home() {
                 <span>Our Faculty</span>
               </div>
               <h2 className="font-playfair text-4xl font-bold text-foreground mb-4">
-                {tr.ourTeachers}
+                {t("home:ourTeachers")}
               </h2>
             </div>
             <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
@@ -510,7 +511,7 @@ export default function Home() {
                   viewport={{ once: true }}
                   transition={{ delay: i * 0.1 }}
                 >
-                  <TeacherCard teacher={teacher} language={language} tr={tr} />
+                  <TeacherCard teacher={teacher} language={language} t={t} />
                 </motion.div>
               ))}
             </div>
@@ -519,7 +520,7 @@ export default function Home() {
                 to="/teachers"
                 className="inline-flex items-center gap-2 px-6 py-3 border-2 border-foreground text-foreground font-semibold rounded-xl hover:bg-foreground hover:text-background transition-all"
               >
-                {tr.ourTeachers} <ArrowRight className="w-4 h-4" />
+                {t("home:ourTeachers")} <ArrowRight className="w-4 h-4" />
               </Link>
             </div>
           </div>
@@ -532,7 +533,7 @@ export default function Home() {
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="text-center mb-14">
               <h2 className="font-playfair text-4xl font-bold text-foreground mb-4">
-                {tr.ourCampaigns}
+                {t("home:ourCampaigns")}
               </h2>
             </div>
             <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
@@ -544,7 +545,7 @@ export default function Home() {
                   viewport={{ once: true }}
                   transition={{ delay: i * 0.1 }}
                 >
-                  <CampaignCard campaign={campaign} tr={tr} />
+                  <CampaignCard campaign={campaign} t={t} />
                 </motion.div>
               ))}
             </div>
@@ -553,7 +554,8 @@ export default function Home() {
                 to="/fundraising"
                 className="inline-flex items-center gap-2 px-6 py-3 bg-foreground text-background font-semibold rounded-xl hover:opacity-90 transition-opacity"
               >
-                {tr.fundraisingTitle} <ArrowRight className="w-4 h-4" />
+                {t("fundraising:fundraisingTitle")}{" "}
+                <ArrowRight className="w-4 h-4" />
               </Link>
             </div>
           </div>
@@ -668,13 +670,13 @@ export default function Home() {
       {/* CTA Banner */}
       <section className="relative py-24 overflow-hidden hero-gradient geometric-pattern">
         {/* Background Image Overlay */}
-        <div 
+        <div
           className="absolute inset-0 z-0 opacity-20 pointer-events-none"
-          style={{ 
+          style={{
             backgroundImage: `url(${AuthBackground})`,
-            backgroundSize: 'cover',
-            backgroundPosition: 'center',
-            filter: 'blur(1px)'
+            backgroundSize: "cover",
+            backgroundPosition: "center",
+            filter: "blur(1px)",
           }}
         />
 
@@ -684,7 +686,7 @@ export default function Home() {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
           >
-            <h2 className="font-playfair text-4xl sm:text-5xl font-bold text-white mb-6 italic italic">
+            <h2 className="font-comic text-4xl sm:text-5xl font-bold text-white mb-6">
               Support Our Mission
             </h2>
             <p className="text-white/80 text-xl mb-10 max-w-2xl mx-auto italic font-medium leading-relaxed">
@@ -693,9 +695,10 @@ export default function Home() {
             </p>
             <Link
               to="/donate"
-              className="inline-flex items-center gap-3 px-12 py-5 gold-gradient text-foreground font-bold rounded-xl hover:shadow-2xl transition-all text-xl hover:-translate-y-1 shadow-2xl active:scale-95"
+              className="inline-flex items-center gap-3 px-6 py-3 orange-gradient text-foreground font-bold rounded-xl hover:shadow-2xl transition-all text-xl hover:-translate-y-1 shadow-2xl active:scale-95"
             >
-              {tr.donatNow}
+              <FcDonate size={24} />
+              {t("home:donatNow")}
             </Link>
           </motion.div>
         </div>

@@ -237,7 +237,7 @@
 //                       to="/my-donations"
 //                       className="flex items-center gap-2"
 //                     >
-//                       <Heart className="w-4 h-4" /> {tr.myDonations}
+//                       <Heart className="w-4 h-4" /> {t('nav:myDonations')}
 //                     </Link>
 //                   </DropdownMenuItem>
 //                   {isAdmin && (
@@ -255,7 +255,7 @@
 //                     }}
 //                     className="text-destructive"
 //                   >
-//                     <LogOut className="w-4 h-4 mr-2" /> {tr.logout}
+//                     <LogOut className="w-4 h-4 mr-2" /> {t('nav:logout')}
 //                   </DropdownMenuItem>
 //                 </DropdownMenuContent>
 //               </DropdownMenu>
@@ -455,7 +455,7 @@ const LOGO_URL =
 
 export default function Navbar() {
   const { language, setLanguage, currentLang, languages } = useLanguage();
-  const tr = useTranslation(language);
+  const { t } = useTranslation(language);
   const [isOpen, setIsOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const [user, setUser] = useState(null);
@@ -503,11 +503,11 @@ export default function Navbar() {
   }, []);
 
   const navLinks = [
-    { href: "/", label: tr.home },
-    { href: "/teachers", label: tr.teachers },
-    { href: "/donate", label: tr.donate },
-    { href: "/fundraising", label: tr.fundraising },
-    { href: "/contact", label: tr.contact },
+    { href: "/", label: t('nav:home') },
+    { href: "/teachers", label: t('nav:teachers') },
+    { href: "/donate", label: t('nav:donate') },
+    { href: "/fundraising", label: t('nav:fundraising') },
+    { href: "/contact", label: t('nav:contact') },
   ];
 
   const institutionLinks = [
@@ -530,11 +530,10 @@ export default function Navbar() {
 
   return (
     <nav
-      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
-        scrolled
+      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${scrolled
           ? "bg-background/95 backdrop-blur-md shadow-sm border-b border-border"
           : "bg-transparent"
-      }`}
+        }`}
       dir={currentLang.dir}
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -566,15 +565,14 @@ export default function Navbar() {
               <Link
                 key={link.href}
                 to={link.href}
-                className={`px-3 py-2 rounded-lg text-sm font-medium transition-all duration-200 ${
-                  location.pathname === link.href
+                className={`px-3 py-2 rounded-lg text-sm font-medium transition-all duration-200 ${location.pathname === link.href
                     ? scrolled
                       ? "bg-foreground text-background"
                       : "bg-white/15 text-white"
                     : scrolled
                       ? "text-foreground hover:bg-secondary"
                       : "text-white/85 hover:text-white hover:bg-white/10"
-                }`}
+                  }`}
               >
                 {link.label}
               </Link>
@@ -584,15 +582,14 @@ export default function Navbar() {
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
                 <button
-                  className={`flex items-center gap-1 px-3 py-2 rounded-lg text-sm font-medium transition-all duration-200 ${
-                    ["/niswaan", "/masjid-hifz"].includes(location.pathname)
+                  className={`flex items-center gap-1 px-3 py-2 rounded-lg text-sm font-medium transition-all duration-200 ${["/niswaan", "/masjid-hifz"].includes(location.pathname)
                       ? scrolled
                         ? "bg-foreground text-background"
                         : "bg-white/15 text-white"
                       : scrolled
                         ? "text-foreground hover:bg-secondary"
                         : "text-white/85 hover:text-white hover:bg-white/10"
-                  }`}
+                    }`}
                 >
                   Institutions <ChevronDown className="w-3 h-3" />
                 </button>
@@ -636,11 +633,10 @@ export default function Navbar() {
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
                 <button
-                  className={`flex items-center gap-1.5 px-3 py-2 rounded-lg text-sm font-medium transition-all ${
-                    scrolled
+                  className={`flex items-center gap-1.5 px-3 py-2 rounded-lg text-sm font-medium transition-all ${scrolled
                       ? "text-foreground hover:bg-secondary"
                       : "text-white/85 hover:bg-white/10"
-                  }`}
+                    }`}
                 >
                   <Globe className="w-4 h-4" />
                   <span className="hidden lg:inline">
@@ -670,11 +666,10 @@ export default function Navbar() {
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
                   <button
-                    className={`flex items-center gap-2 px-3 py-2 rounded-lg text-sm font-medium transition-all ${
-                      scrolled
+                    className={`flex items-center gap-2 px-3 py-2 rounded-lg text-sm font-medium transition-all ${scrolled
                         ? "text-foreground hover:bg-secondary"
                         : "text-white/85 hover:bg-white/10"
-                    }`}
+                      }`}
                   >
                     <div className="w-7 h-7 rounded-full bg-accent/20 border border-accent/40 flex items-center justify-center text-xs font-bold text-foreground">
                       {user.full_name?.charAt(0)?.toUpperCase() || "U"}
@@ -695,7 +690,7 @@ export default function Navbar() {
                       to="/my-donations"
                       className="flex items-center gap-2"
                     >
-                      <Heart className="w-4 h-4" /> {tr.myDonations}
+                      <Heart className="w-4 h-4" /> {t('nav:myDonations')}
                     </Link>
                   </DropdownMenuItem>
                   <DropdownMenuItem asChild>
@@ -722,7 +717,7 @@ export default function Navbar() {
                     }}
                     className="text-destructive"
                   >
-                    <LogOut className="w-4 h-4 mr-2" /> {tr.logout}
+                    <LogOut className="w-4 h-4 mr-2" /> {t('nav:logout')}
                   </DropdownMenuItem>
                 </DropdownMenuContent>
               </DropdownMenu>
@@ -734,14 +729,14 @@ export default function Navbar() {
                   onClick={() => mockAuth.redirectToLogin()}
                   className={scrolled ? "" : "text-white hover:bg-white/10"}
                 >
-                  {tr.login}
+                  {t('nav:login')}
                 </Button>
                 <Button
                   size="sm"
                   onClick={() => mockAuth.redirectToLogin()}
                   className="gold-gradient text-foreground font-semibold border-0 shadow-sm"
                 >
-                  {tr.register}
+                  {t('nav:register')}
                 </Button>
               </div>
             )}
@@ -788,11 +783,10 @@ export default function Navbar() {
                   key={link.href}
                   to={link.href}
                   onClick={() => setIsOpen(false)}
-                  className={`flex items-center px-4 py-3 rounded-xl text-sm font-medium transition-colors ${
-                    location.pathname === link.href
+                  className={`flex items-center px-4 py-3 rounded-xl text-sm font-medium transition-colors ${location.pathname === link.href
                       ? "bg-foreground text-background"
                       : "text-foreground hover:bg-secondary"
-                  }`}
+                    }`}
                 >
                   {link.label}
                 </Link>
@@ -825,11 +819,10 @@ export default function Navbar() {
                       setLanguage(lang.code);
                       setIsOpen(false);
                     }}
-                    className={`px-3 py-1.5 rounded-full text-xs font-medium transition-colors ${
-                      language === lang.code
+                    className={`px-3 py-1.5 rounded-full text-xs font-medium transition-colors ${language === lang.code
                         ? "bg-foreground text-background"
                         : "bg-secondary text-muted-foreground"
-                    }`}
+                      }`}
                   >
                     {lang.flag} {lang.label}
                   </button>
@@ -844,7 +837,7 @@ export default function Navbar() {
                       onClick={() => setIsOpen(false)}
                       className="flex-1 text-center py-2.5 px-4 bg-secondary text-foreground rounded-xl text-sm font-medium"
                     >
-                      {tr.myDonations}
+                      {t('nav:myDonations')}
                     </Link>
                     {canAccessAdmin && (
                       <Link
@@ -862,7 +855,7 @@ export default function Navbar() {
                       }}
                       className="flex-1 text-center py-2.5 px-4 border border-border text-muted-foreground rounded-xl text-sm font-medium"
                     >
-                      {tr.logout}
+                      {t('nav:logout')}
                     </button>
                   </>
                 ) : (
@@ -871,13 +864,13 @@ export default function Navbar() {
                       onClick={() => mockAuth.redirectToLogin()}
                       className="flex-1 text-center py-2.5 px-4 border border-border rounded-xl text-sm font-medium"
                     >
-                      {tr.login}
+                      {t('nav:login')}
                     </button>
                     <button
                       onClick={() => mockAuth.redirectToLogin()}
                       className="flex-1 text-center py-2.5 px-4 gold-gradient rounded-xl text-sm font-semibold"
                     >
-                      {tr.register}
+                      {t('nav:register')}
                     </button>
                   </>
                 )}

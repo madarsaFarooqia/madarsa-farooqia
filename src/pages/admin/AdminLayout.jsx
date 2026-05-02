@@ -248,11 +248,10 @@ export default function AdminLayout() {
                   key={href}
                   to={href}
                   onClick={() => setSidebarOpen(false)}
-                  className={`flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium transition-all ${
-                    isActive(href)
-                      ? "bg-sidebar-primary text-sidebar-primary-foreground"
-                      : "text-sidebar-foreground/70 hover:bg-sidebar-accent hover:text-sidebar-foreground"
-                  }`}
+                  className={`flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium transition-all ${isActive(href)
+                    ? "bg-sidebar-primary text-sidebar-primary-foreground"
+                    : "text-sidebar-foreground/70 hover:bg-sidebar-accent hover:text-sidebar-foreground"
+                    }`}
                 >
                   <Icon size={16} />
                   {label}
@@ -264,11 +263,13 @@ export default function AdminLayout() {
       </nav>
       <div className="p-4 border-t border-sidebar-border">
         {user && (
-          <div className="flex items-center gap-3 mb-3 px-2">
-            <div className="w-8 h-8 rounded-full bg-sidebar-accent flex items-center justify-center text-sidebar-foreground font-bold text-sm shrink-0">
+          <div className=" flex w-full w-full justify-between">
+
+            {/* <div className="flex items-center gap-3 mb-3 px-2 bg-black/30"> */}
+            <div className="w-8 h-8 rounded-full bg-gray-200  bg-sidebar-accent flex items-center justify-center text-sidebar-foreground font-bold text-sm shrink-0">
               {user.full_name?.[0]?.toUpperCase() || "A"}
             </div>
-            <div className="flex-1 min-w-0">
+            <div className="flex-1 pl-2 min-w-0">
               <p className="text-sm font-medium text-sidebar-foreground truncate">
                 {user.full_name || "Admin"}
               </p>
@@ -276,14 +277,15 @@ export default function AdminLayout() {
                 {user.email}
               </p>
             </div>
+            {/* </div> */}
+            <button
+              onClick={handleLogout}
+              className="flex items-center gap-2 px-3 py-2 rounded-sm text-sm text-sidebar-foreground/60 hover:text-red-400 hover:bg-red-500/10 transition-all"
+            >
+              <LogOut size={16} />
+            </button>
           </div>
         )}
-        <button
-          onClick={handleLogout}
-          className="flex items-center gap-2 w-full px-3 py-2 rounded-xl text-sm text-sidebar-foreground/60 hover:text-red-400 hover:bg-red-500/10 transition-all"
-        >
-          <LogOut size={15} /> Sign Out
-        </button>
       </div>
     </>
   );

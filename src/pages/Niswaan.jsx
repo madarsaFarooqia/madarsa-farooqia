@@ -407,7 +407,7 @@ export default function Niswaan() {
                   key={lbl}
                   className="px-5 py-3 bg-white/10 backdrop-blur-sm rounded-2xl border border-white/20 text-center"
                 >
-                  <div className="font-playfair font-bold text-white text-xl">
+                  <div className="font-comic font-bold text-white text-xl">
                     {val}
                   </div>
                   <div className="text-white/60 text-xs">{lbl}</div>

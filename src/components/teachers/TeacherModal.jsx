@@ -160,7 +160,7 @@ import { X, Mail, Phone, BookOpen, Clock, Award, Star, GraduationCap } from 'luc
 import { motion, AnimatePresence } from 'framer-motion';
 import { Badge } from '@/components/ui/badge';
 
-export default function TeacherModal({ teacher, language, tr, onClose }) {
+export default function TeacherModal({ teacher, language, t, onClose }) {
   const displayName = (language !== 'en' && teacher[`name_${language}`])
     ? teacher[`name_${language}`]
     : teacher.name;
@@ -234,9 +234,9 @@ export default function TeacherModal({ teacher, language, tr, onClose }) {
             {/* Stats */}
             <div className="grid grid-cols-3 gap-4 mb-6">
               {[
-                { icon: Clock, label: tr.experience, value: teacher.experience_years ? `${teacher.experience_years}+` : 'N/A' },
-                { icon: BookOpen, label: tr.subjects, value: teacher.subjects?.length || 0 },
-                { icon: Award, label: tr.qualification, value: teacher.qualification ? '✓' : '—' },
+                { icon: Clock, label: t('teachers:experience'), value: teacher.experience_years ? `${teacher.experience_years}+` : 'N/A' },
+                { icon: BookOpen, label: t('teachers:subjects'), value: teacher.subjects?.length || 0 },
+                { icon: Award, label: t('teachers:qualification'), value: teacher.qualification ? '✓' : '—' },
               ].map((item, i) => (
                 <div key={i} className="bg-secondary/50 rounded-2xl p-4 text-center">
                   <item.icon className="w-5 h-5 text-accent mx-auto mb-2" />
@@ -260,7 +260,7 @@ export default function TeacherModal({ teacher, language, tr, onClose }) {
             {teacher.qualification && (
               <div className="mb-6">
                 <h3 className="font-semibold text-foreground mb-3 flex items-center gap-2">
-                  <GraduationCap className="w-4 h-4 text-accent" /> {tr.qualification}
+                  <GraduationCap className="w-4 h-4 text-accent" /> {t('teachers:qualification')}
                 </h3>
                 <p className="text-muted-foreground text-sm">{teacher.qualification}</p>
               </div>
@@ -270,7 +270,7 @@ export default function TeacherModal({ teacher, language, tr, onClose }) {
             {teacher.subjects?.length > 0 && (
               <div className="mb-6">
                 <h3 className="font-semibold text-foreground mb-3 flex items-center gap-2">
-                  <BookOpen className="w-4 h-4 text-accent" /> {tr.subjects}
+                  <BookOpen className="w-4 h-4 text-accent" /> {t('teachers:subjects')}
                 </h3>
                 <div className="flex flex-wrap gap-2">
                   {teacher.subjects.map((s, i) => (

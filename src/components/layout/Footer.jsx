@@ -10,7 +10,7 @@ const LOGO_URL =
 
 export default function Footer() {
   const { language, currentLang } = useLanguage();
-  const tr = useTranslation(language);
+  const { t } = useTranslation(language);
 
   return (
     <footer className="bg-foreground text-background" dir={currentLang.dir}>
@@ -61,11 +61,11 @@ export default function Footer() {
             </h4>
             <ul className="space-y-2.5">
               {[
-                { to: "/", label: tr.home },
-                { to: "/teachers", label: tr.teachers },
-                { to: "/donate", label: tr.donate },
-                { to: "/fundraising", label: tr.fundraising },
-                { to: "/contact", label: tr.contact },
+                { to: "/", label: t('nav:home') },
+                { to: "/teachers", label: t('nav:teachers') },
+                { to: "/donate", label: t('nav:donate') },
+                { to: "/fundraising", label: t('nav:fundraising') },
+                { to: "/contact", label: t('nav:contact') },
                 { to: "/coming-soon", label: "Coming Soon" },
               ].map((link) => (
                 <li key={link.to}>
@@ -83,7 +83,7 @@ export default function Footer() {
           {/* Contact */}
           <div>
             <h4 className="font-semibold text-accent mb-4 text-sm uppercase tracking-wider">
-              {tr.contact}
+              {t('nav:contact')}
             </h4>
             <ul className="space-y-3">
               <li className="flex items-start gap-3 text-sm text-background/60">
@@ -126,7 +126,7 @@ export default function Footer() {
               className="inline-flex items-center gap-2 px-5 py-2.5 gold-gradient text-foreground font-semibold rounded-xl text-sm hover:opacity-90 transition-opacity shadow-lg"
             >
               <Heart className="w-4 h-4" />
-              {tr.donatNow}
+              {t('home:donatNow')}
             </Link>
           </div>
         </div>
