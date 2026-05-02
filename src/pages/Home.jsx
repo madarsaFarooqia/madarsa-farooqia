@@ -282,6 +282,7 @@ import { useTranslation } from "@/lib/i18n";
 import TeacherCard from "@/components/teachers/TeacherCard";
 import CampaignCard from "@/components/fundraising/CampaignCard";
 import { fundraisingCampaignService, teacherService } from "@/services";
+import { AuthBackground } from "@/assets";
 
 const islamicVerses = [
   {
@@ -665,23 +666,34 @@ export default function Home() {
       </section>
 
       {/* CTA Banner */}
-      <section className="py-20 hero-gradient geometric-pattern">
-        <div className="max-w-4xl mx-auto px-4 text-center">
+      <section className="relative py-24 overflow-hidden hero-gradient geometric-pattern">
+        {/* Background Image Overlay */}
+        <div 
+          className="absolute inset-0 z-0 opacity-20 pointer-events-none"
+          style={{ 
+            backgroundImage: `url(${AuthBackground})`,
+            backgroundSize: 'cover',
+            backgroundPosition: 'center',
+            filter: 'blur(1px)'
+          }}
+        />
+
+        <div className="relative z-10 max-w-4xl mx-auto px-4 text-center">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
           >
-            <h2 className="font-playfair text-4xl font-bold text-white mb-6">
+            <h2 className="font-playfair text-4xl sm:text-5xl font-bold text-white mb-6 italic italic">
               Support Our Mission
             </h2>
-            <p className="text-white/80 text-lg mb-8 max-w-2xl mx-auto">
+            <p className="text-white/80 text-xl mb-10 max-w-2xl mx-auto italic font-medium leading-relaxed">
               Every donation, big or small, helps us provide quality Islamic
               education to students in need.
             </p>
             <Link
               to="/donate"
-              className="inline-flex items-center gap-3 px-10 py-4 gold-gradient text-foreground font-semibold rounded-xl hover:shadow-2xl transition-all text-lg hover:-translate-y-1 shadow-xl"
+              className="inline-flex items-center gap-3 px-12 py-5 gold-gradient text-foreground font-bold rounded-xl hover:shadow-2xl transition-all text-xl hover:-translate-y-1 shadow-2xl active:scale-95"
             >
               {tr.donatNow}
             </Link>

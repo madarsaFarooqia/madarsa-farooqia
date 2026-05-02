@@ -13,6 +13,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { toast } from 'sonner';
 import { useSearchParams } from 'react-router-dom';
 import DonationSuccessModal from '@/components/shared/DonationSuccessModal';
+import { FarooqiaLogo, AuthBackground } from "@/assets";
 
 const purposes = [
   { value: 'sadqa', icon: '💝', color: 'bg-secondary border-border' },
@@ -118,17 +119,32 @@ export default function Donate() {
   }
 
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-screen bg-background relative overflow-hidden">
       {/* Hero */}
-      <section className="hero-gradient geometric-pattern pt-32 pb-20">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <section className="relative hero-gradient geometric-pattern pt-32 pb-20 overflow-hidden">
+        {/* Background Image Overlay */}
+        <div 
+          className="absolute inset-0 z-0 opacity-20 pointer-events-none"
+          style={{ 
+            backgroundImage: `url(${AuthBackground})`,
+            backgroundSize: 'cover',
+            backgroundPosition: 'center',
+            filter: 'blur(1px)'
+          }}
+        />
+        
+        <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <motion.div initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} className="text-center">
-            <div className="inline-flex items-center gap-2 text-accent text-sm font-medium mb-4">
+            <div className="inline-flex items-center gap-2 text-accent text-sm font-bold mb-6 italic backdrop-blur-sm bg-white/5 px-4 py-1.5 rounded-full border border-white/10">
               <Heart className="w-4 h-4" />
               <span>Make a Difference</span>
             </div>
-            <h1 className="font-playfair text-4xl sm:text-5xl font-bold text-white mb-4">{tr.donateTitle}</h1>
-            <p className="text-white/70 text-lg max-w-2xl mx-auto">{tr.donateSubtitle}</p>
+            <h1 className="font-playfair text-4xl sm:text-6xl font-bold text-white mb-6 italic">
+              {tr.donateTitle}
+            </h1>
+            <p className="text-white/80 text-xl max-w-2xl mx-auto italic font-medium leading-relaxed">
+              {tr.donateSubtitle}
+            </p>
           </motion.div>
         </div>
       </section>
