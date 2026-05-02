@@ -20,7 +20,7 @@ const contactInfo = [
   {
     icon: MapPin,
     titleKey: 'address',
-    value: 'Husianabad, Mau, Uttar Pradesh 275101, India',
+    value: 'Husianabad, Adri, Mau, Uttar Pradesh 275101, India',
     link: MAPS_URL,
     color: 'bg-foreground text-background',
   },
@@ -104,7 +104,7 @@ export default function Contact() {
         {/* Location Pin overlay */}
         <div className="absolute top-4 left-4 bg-foreground text-background px-4 py-2 rounded-full text-xs font-semibold flex items-center gap-2 shadow-lg">
           <MapPin className="w-3.5 h-3.5 text-accent" />
-          Husianabad, Mau, UP — India
+          Husianabad, Adri, Mau, UPIndia
         </div>
       </motion.a>
 
@@ -113,7 +113,7 @@ export default function Contact() {
           <div className="grid lg:grid-cols-5 gap-8 lg:gap-12">
             {/* Contact Info */}
             <div className="lg:col-span-2 space-y-4">
-              <h2 className="font-playfair text-2xl font-bold text-foreground italic">Get In Touch</h2>
+              <h2 className="text-2xl font-bold text-foreground">Get In Touch</h2>
               <p className="text-muted-foreground text-sm leading-relaxed italic">
                 We welcome your questions, feedback, and admissions inquiries. Our team responds within 24 hours.
               </p>
@@ -169,43 +169,43 @@ export default function Contact() {
             <motion.div
               initial={{ opacity: 0, x: 20 }}
               animate={{ opacity: 1, x: 0 }}
-              className="lg:col-span-3 bg-card rounded-3xl p-6 sm:p-8 border border-border shadow-lg"
+              className="lg:col-span-3 bg-white h-fit rounded-3xl p-6 sm:p-8 border border-border shadow-lg"
             >
               {sent ? (
                 <div className="h-full flex flex-col items-center justify-center text-center py-10">
                   <div className="w-16 h-16 bg-foreground rounded-full flex items-center justify-center mb-4 shadow-xl">
                     <Check className="w-8 h-8 text-background" />
                   </div>
-                  <h3 className="font-playfair text-2xl font-bold text-foreground mb-2 italic">Message Sent!</h3>
+                  <h3 className=" text-2xl font-semibold text-foreground mb-2">Message Sent!</h3>
                   <p className="text-muted-foreground mb-2 italic">{tr.messageSent}</p>
                   <p className="font-amiri text-accent text-lg mb-6">جزاك الله خيرًا</p>
                   <Button onClick={() => setSent(false)} variant="outline" className="rounded-xl font-bold">Send Another Message</Button>
                 </div>
               ) : (
                 <form onSubmit={handleSubmit} className="space-y-5">
-                  <h2 className="font-playfair text-2xl font-bold text-foreground mb-6 italic">{tr.sendMessage}</h2>
+                  <h2 className="font-playfair text-2xl font-semibold text-foreground mb-6">{tr.sendMessage}</h2>
                   <div className="grid sm:grid-cols-2 gap-4">
                     <div>
-                      <Label className="mb-2 block text-sm font-bold italic">{tr.yourName} *</Label>
+                      <Label className="mb-2 block text-sm font-medium">{tr.yourName} *</Label>
                       <Input required value={form.name} onChange={e => setForm({ ...form, name: e.target.value })} className="rounded-xl h-11" />
                     </div>
                     <div>
-                      <Label className="mb-2 block text-sm font-bold italic">{tr.yourEmail} *</Label>
+                      <Label className="mb-2 block text-sm font-medium">{tr.yourEmail} *</Label>
                       <Input type="email" required value={form.email} onChange={e => setForm({ ...form, email: e.target.value })} className="rounded-xl h-11" />
                     </div>
                   </div>
                   <div className="grid sm:grid-cols-2 gap-4">
                     <div>
-                      <Label className="mb-2 block text-sm font-bold italic">{tr.yourPhone}</Label>
+                      <Label className="mb-2 block text-sm font-medium">{tr.yourPhone}</Label>
                       <Input type="tel" value={form.phone} onChange={e => setForm({ ...form, phone: e.target.value })} className="rounded-xl h-11" />
                     </div>
                     <div>
-                      <Label className="mb-2 block text-sm font-bold italic">{tr.subject} *</Label>
+                      <Label className="mb-2 block text-sm font-medium">{tr.subject} *</Label>
                       <Input required value={form.subject} onChange={e => setForm({ ...form, subject: e.target.value })} className="rounded-xl h-11" />
                     </div>
                   </div>
                   <div>
-                    <Label className="mb-2 block text-sm font-bold italic">{tr.message} *</Label>
+                    <Label className="mb-2 block text-sm font-medium">{tr.message} *</Label>
                     <Textarea required rows={5} value={form.message} onChange={e => setForm({ ...form, message: e.target.value })} className="resize-none rounded-xl" />
                   </div>
                   <Button
