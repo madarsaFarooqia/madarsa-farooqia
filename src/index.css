@@ -69,17 +69,29 @@
 }
 
 @layer base {
-  * { @apply border-border outline-ring/50; }
-  body { @apply bg-background text-foreground font-inter; }
-  h1, h2, h3 { @apply font-playfair; }
+  * {
+    @apply border-border outline-ring/50;
+  }
+
+  body {
+    @apply bg-background text-foreground font-sans;
+  }
+
+  h1,
+  h2,
+  h3 {
+    @apply font-playfair;
+  }
 }
 
-.font-arabic { font-family: 'Amiri', serif; }
+.font-arabic {
+  font-family: 'Amiri', serif;
+}
 
 .geometric-pattern {
   background-image:
-    radial-gradient(circle at 25px 25px, rgba(255,255,255,0.06) 2%, transparent 0%),
-    radial-gradient(circle at 75px 75px, rgba(255,255,255,0.04) 2%, transparent 0%);
+    radial-gradient(circle at 25px 25px, rgba(255, 255, 255, 0.06) 2%, transparent 0%),
+    radial-gradient(circle at 75px 75px, rgba(255, 255, 255, 0.04) 2%, transparent 0%);
   background-size: 100px 100px;
 }
 
@@ -92,36 +104,104 @@
   background: linear-gradient(135deg, hsl(43 70% 42%) 0%, hsl(43 80% 56%) 100%);
 }
 
+.blue-gradient {
+  background: linear-gradient(135deg, hsl(220 70% 40%) 0%, hsl(210 90% 60%) 100%);
+}
+.purple-gradient {
+  background: linear-gradient(135deg, hsl(260 60% 45%) 0%, hsl(280 80% 65%) 100%);
+}
+.red-gradient {
+  background: linear-gradient(135deg, hsl(0 75% 50%) 0%, hsl(15 85% 60%) 100%);
+}
+.red-gradient {
+  background: linear-gradient(135deg, hsl(0 75% 50%) 0%, hsl(15 85% 60%) 100%);
+}
+.green-gradient {
+  background: linear-gradient(135deg, hsl(145 60% 35%) 0%, hsl(160 70% 55%) 100%);
+}
+.teal-gradient {
+  background: linear-gradient(135deg, hsl(180 60% 35%) 0%, hsl(190 80% 55%) 100%);
+}
+.orange-gradient {
+  background: linear-gradient(135deg, hsl(25 85% 50%) 0%, hsl(35 95% 60%) 100%);
+}
+.pink-gradient {
+  background: linear-gradient(135deg, hsl(330 70% 50%) 0%, hsl(350 85% 65%) 100%);
+}
+.graphite-gradient {
+  background: linear-gradient(135deg, #0f0f0f 0%, #1c1c1c 50%, #2f2f2f 100%);
+}
+.ice-gradient {
+  background: linear-gradient(135deg, hsl(200 40% 92%) 0%, hsl(210 60% 85%) 100%);
+}
+.soft-gold-gradient {
+  background: linear-gradient(135deg, hsl(43 60% 55%) 0%, hsl(43 70% 65%) 100%);
+}
+.indigo-gradient {
+  background: linear-gradient(135deg, hsl(240 55% 45%) 0%, hsl(255 75% 65%) 100%);
+}
+.fire-gradient {
+  background: linear-gradient(135deg, hsl(10 80% 50%) 0%, hsl(40 90% 55%) 100%);
+}
+
 .card-hover {
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
+
 .card-hover:hover {
   transform: translateY(-4px);
-  box-shadow: 0 20px 60px rgba(0,0,0,0.12);
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.12);
 }
 
 @keyframes shimmer {
-  0% { background-position: -200% 0; }
-  100% { background-position: 200% 0; }
+  0% {
+    background-position: -200% 0;
+  }
+
+  100% {
+    background-position: 200% 0;
+  }
 }
+
 .shimmer {
-  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.15), transparent);
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.15), transparent);
   background-size: 200% 100%;
   animation: shimmer 1.5s infinite;
 }
 
 /* Islamic crescent loading spinner */
 @keyframes crescentSpin {
-  0% { transform: rotate(0deg); }
-  100% { transform: rotate(360deg); }
+  0% {
+    transform: rotate(0deg);
+  }
+
+  100% {
+    transform: rotate(360deg);
+  }
 }
-.crescent-spin { animation: crescentSpin 1.2s linear infinite; }
+
+.crescent-spin {
+  animation: crescentSpin 1.2s linear infinite;
+}
 
 /* Skeleton pulse */
 @keyframes skeletonPulse {
-  0%, 100% { opacity: 1; }
-  50% { opacity: 0.4; }
-}
-.skeleton { animation: skeletonPulse 1.8s ease-in-out infinite; @apply bg-muted rounded-lg; }
 
-[dir="rtl"] .rtl-flip { transform: scaleX(-1); }
+  0%,
+  100% {
+    opacity: 1;
+  }
+
+  50% {
+    opacity: 0.4;
+  }
+}
+
+.skeleton {
+  animation: skeletonPulse 1.8s ease-in-out infinite;
+  @apply bg-muted rounded-lg;
+}
+
+[dir="rtl"] .rtl-flip {
+  transform: scaleX(-1);
+}

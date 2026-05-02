@@ -13,7 +13,7 @@ import FacultyStats from '@/components/teachers/FacultyStats';
 
 export default function Teachers() {
   const { language } = useLanguage();
-  const tr = useTranslation(language);
+  const { t } = useTranslation(language);
   const [teachers, setTeachers] = useState([]);
   const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState('');
@@ -56,10 +56,10 @@ export default function Teachers() {
               <span>Our Scholars & Faculty</span>
             </div>
             <h1 className="font-playfair text-4xl sm:text-5xl lg:text-6xl font-bold text-white mb-5 leading-tight">
-              {tr.teachersTitle || 'Meet Our Scholars'}
+              {t('teachers:teachersTitle')}
             </h1>
             <p className="text-white/70 text-lg max-w-2xl mx-auto leading-relaxed">
-              {tr.teachersSubtitle || 'Dedicated scholars and teachers shaping the next generation of Islamic knowledge at Madrasa Farooqia.'}
+              {t('teachers:teachersSubtitle')}
             </p>
             {/* Quick Stats */}
             <div className="flex flex-wrap justify-center gap-6 mt-10">
@@ -71,8 +71,8 @@ export default function Teachers() {
                 <div key={label} className="flex items-center gap-3 px-5 py-3 bg-white/10 backdrop-blur-sm rounded-2xl border border-white/20">
                   <Icon className="w-5 h-5 text-accent" />
                   <div className="text-left">
-                    <div className="text-white font-playfair font-bold text-lg leading-none">{value}</div>
-                    <div className="text-white/60 text-xs mt-0.5">{label}</div>
+                    <div className="text-white font-comic font-bold text-lg leading-none">{value}</div>
+                    <div className="text-white/60 text-xs mt-2">{label}</div>
                   </div>
                 </div>
               ))}
@@ -129,7 +129,7 @@ export default function Teachers() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           {loading ? (
             <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-              {[1,2,3,4,5,6].map(i => (
+              {[1, 2, 3, 4, 5, 6].map(i => (
                 <div key={i} className="bg-card rounded-2xl overflow-hidden border border-border">
                   <div className="h-56 skeleton" />
                   <div className="p-5 space-y-3">
@@ -166,7 +166,7 @@ export default function Teachers() {
                       exit={{ opacity: 0, scale: 0.95 }}
                       transition={{ delay: i * 0.05 }}
                     >
-                      <TeacherCard teacher={teacher} language={language} tr={tr} />
+                      <TeacherCard teacher={teacher} language={language} t={t} />
                     </motion.div>
                   ))}
                 </AnimatePresence>

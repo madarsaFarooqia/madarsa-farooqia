@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { donationService } from '@/services';
+import { base44 } from '@/api/base44Client';
 import { Loader2, Search, Download, DollarSign } from 'lucide-react';
 import { Input } from '@/components/ui/input';
 import { format } from 'date-fns';
@@ -10,7 +10,7 @@ export default function DonationsAdmin() {
   const [search, setSearch] = useState('');
 
   useEffect(() => {
-    donationService.list('-created_date', 500)
+    base44.entities.Donation.list('-created_date', 500)
       .then(setDonations)
       .finally(() => setLoading(false));
   }, []);

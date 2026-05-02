@@ -5,9 +5,11 @@ module.exports = {
   theme: {
     extend: {
       fontFamily: {
+        sans: ['Arial', 'sans-serif'],
         inter: ['Inter', 'system-ui', 'sans-serif'],
         playfair: ['"Playfair Display"', 'Georgia', 'serif'],
         amiri: ['Amiri', 'serif'],
+        comic: ['"Comic Sans MS"', '"Comic Sans"', 'cursive'],
         jakarta: ['Inter', 'system-ui', 'sans-serif'],
         baskerville: ['"Playfair Display"', 'Georgia', 'serif'],
       },

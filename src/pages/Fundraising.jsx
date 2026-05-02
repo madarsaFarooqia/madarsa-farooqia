@@ -12,7 +12,7 @@ const COLORS = ['#0a0a0a', '#b8891a', '#374151', '#6b7280', '#111827', '#d4a53a'
 
 export default function Fundraising() {
   const { language } = useLanguage();
-  const tr = useTranslation(language);
+  const { t } = useTranslation(language);
   const [campaigns, setCampaigns] = useState([]);
   const [loading, setLoading] = useState(true);
 
@@ -50,8 +50,8 @@ export default function Fundraising() {
               <Target className="w-4 h-4" />
               <span>Fund Our Future</span>
             </div>
-            <h1 className="font-playfair text-4xl sm:text-5xl font-bold text-white mb-4">{tr.fundraisingTitle}</h1>
-            <p className="text-white/70 text-lg max-w-2xl mx-auto">{tr.fundraisingSubtitle}</p>
+            <h1 className="font-playfair text-4xl sm:text-5xl font-bold text-white mb-4">{t('fundraising:fundraisingTitle')}</h1>
+            <p className="text-white/70 text-lg max-w-2xl mx-auto">{t('fundraising:fundraisingSubtitle')}</p>
           </motion.div>
         </div>
       </section>
@@ -67,15 +67,15 @@ export default function Fundraising() {
               <div className="grid grid-cols-1 sm:grid-cols-3 gap-8 mb-8">
                 <div className="text-center">
                   <div className="font-playfair text-3xl font-bold text-primary">${totalCollected.toLocaleString()}</div>
-                  <div className="text-muted-foreground text-sm mt-1">{tr.raised}</div>
+                  <div className="text-muted-foreground text-sm mt-1">{t('fundraising:raised')}</div>
                 </div>
                 <div className="text-center">
                   <div className="font-playfair text-3xl font-bold text-accent">${totalGoal.toLocaleString()}</div>
-                  <div className="text-muted-foreground text-sm mt-1">{tr.goal}</div>
+                  <div className="text-muted-foreground text-sm mt-1">{t('fundraising:goal')}</div>
                 </div>
                 <div className="text-center">
                   <div className="font-playfair text-3xl font-bold text-foreground">{totalDonors.toLocaleString()}</div>
-                  <div className="text-muted-foreground text-sm mt-1">{tr.donors}</div>
+                  <div className="text-muted-foreground text-sm mt-1">{t('fundraising:donors')}</div>
                 </div>
               </div>
 
@@ -105,8 +105,8 @@ export default function Fundraising() {
                     <XAxis dataKey="name" tick={{ fontSize: 10 }} />
                     <YAxis tick={{ fontSize: 10 }} />
                     <Tooltip formatter={(v) => `$${v.toLocaleString()}`} />
-                    <Bar dataKey="collected" fill="#0a0a0a" name={tr.raised} radius={[4,4,0,0]} />
-                    <Bar dataKey="remaining" fill="#e5e7eb" name="Remaining" radius={[4,4,0,0]} />
+                    <Bar dataKey="collected" fill="#0a0a0a" name={t('fundraising:raised')} radius={[4, 4, 0, 0]} />
+                    <Bar dataKey="remaining" fill="#e5e7eb" name="Remaining" radius={[4, 4, 0, 0]} />
                   </BarChart>
                 </ResponsiveContainer>
               </div>
@@ -179,7 +179,7 @@ export default function Fundraising() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           {loading ? (
             <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-              {[1,2,3].map(i => <div key={i} className="bg-card rounded-2xl h-80 skeleton" />)}
+              {[1, 2, 3].map(i => <div key={i} className="bg-card rounded-2xl h-80 skeleton" />)}
             </div>
           ) : campaigns.length > 0 ? (
             <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
@@ -190,7 +190,7 @@ export default function Fundraising() {
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: i * 0.1 }}
                 >
-                  <CampaignCard campaign={campaign} tr={tr} />
+                  <CampaignCard campaign={campaign} t={t} />
                 </motion.div>
               ))}
             </div>

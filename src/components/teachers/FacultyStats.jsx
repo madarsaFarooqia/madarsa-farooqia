@@ -1,12 +1,12 @@
-import React from 'react';
-import { motion } from 'framer-motion';
-import { BookOpen, Clock, Users, Award } from 'lucide-react';
+import React from "react";
+import { motion } from "framer-motion";
+import { BookOpen, Clock, Users, Award } from "lucide-react";
 
 const stats = [
-  { icon: Users, value: '85+', label: 'Active Scholars' },
-  { icon: BookOpen, value: '12', label: 'Subjects Taught' },
-  { icon: Clock, value: '18 yrs', label: 'Avg. Experience' },
-  { icon: Award, value: '40+', label: 'Ijazah Holders' },
+  { icon: Users, value: "85+", label: "Active Scholars" },
+  { icon: BookOpen, value: "12", label: "Subjects Taught" },
+  { icon: Clock, value: "18 yrs", label: "Avg. Experience" },
+  { icon: Award, value: "40+", label: "Ijazah Holders" },
 ];
 
 export default function FacultyStats() {
@@ -26,8 +26,12 @@ export default function FacultyStats() {
                 <Icon className="w-5 h-5 text-foreground" />
               </div>
               <div>
-                <div className="font-playfair font-bold text-xl text-foreground leading-none">{value}</div>
-                <div className="text-xs text-muted-foreground mt-0.5">{label}</div>
+                <div className="font-comic font-bold text-xl text-foreground leading-none">
+                  {value}
+                </div>
+                <div className="text-xs text-muted-foreground mt-1">
+                  {label}
+                </div>
               </div>
             </motion.div>
           ))}

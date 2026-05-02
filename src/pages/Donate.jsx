@@ -13,6 +13,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { toast } from 'sonner';
 import { useSearchParams } from 'react-router-dom';
 import DonationSuccessModal from '@/components/shared/DonationSuccessModal';
+import { FarooqiaLogo, AuthBackground } from "@/assets";
 
 const purposes = [
   { value: 'sadqa', icon: '💝', color: 'bg-secondary border-border' },
@@ -32,7 +33,7 @@ const currencies = ['USD', 'INR', 'SAR', 'AED', 'GBP', 'EUR', 'TRY'];
 
 export default function Donate() {
   const { language } = useLanguage();
-  const tr = useTranslation(language);
+  const { t } = useTranslation(language);
   const [searchParams] = useSearchParams();
   const campaignId = searchParams.get('campaign');
 
@@ -58,7 +59,7 @@ export default function Donate() {
     authService.me().then(u => {
       setUser(u);
       setForm(f => ({ ...f, donorName: u.full_name || '', donorEmail: u.email || '' }));
-    }).catch(() => {});
+    }).catch(() => { });
   }, []);
 
   const finalAmount = form.customAmount ? parseFloat(form.customAmount) : form.amount;
@@ -118,17 +119,32 @@ export default function Donate() {
   }
 
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-screen bg-background relative overflow-hidden">
       {/* Hero */}
-      <section className="hero-gradient geometric-pattern pt-32 pb-20">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <section className="relative hero-gradient geometric-pattern pt-32 pb-20 overflow-hidden">
+        {/* Background Image Overlay */}
+        <div
+          className="absolute inset-0 z-0 opacity-20 pointer-events-none"
+          style={{
+            backgroundImage: `url(${AuthBackground})`,
+            backgroundSize: 'cover',
+            backgroundPosition: 'center',
+            filter: 'blur(1px)'
+          }}
+        />
+
+        <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <motion.div initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} className="text-center">
-            <div className="inline-flex items-center gap-2 text-accent text-sm font-medium mb-4">
+            <div className="inline-flex items-center gap-2 text-accent text-sm font-bold mb-6 italic backdrop-blur-sm bg-white/5 px-4 py-1.5 rounded-full border border-white/10">
               <Heart className="w-4 h-4" />
               <span>Make a Difference</span>
             </div>
-            <h1 className="font-playfair text-4xl sm:text-5xl font-bold text-white mb-4">{tr.donateTitle}</h1>
-            <p className="text-white/70 text-lg max-w-2xl mx-auto">{tr.donateSubtitle}</p>
+            <h1 className="font-playfair text-4xl sm:text-6xl font-bold text-white mb-6 italic">
+              {t('donate:donateTitle')}
+            </h1>
+            <p className="text-white/80 text-xl max-w-2xl mx-auto italic font-medium leading-relaxed">
+              {t('donate:donateSubtitle')}
+            </p>
           </motion.div>
         </div>
       </section>
@@ -144,7 +160,7 @@ export default function Donate() {
             {/* Purpose Selection */}
             <div className="mb-10">
               <Label className="text-lg font-semibold text-foreground mb-4 flex items-center gap-2">
-                <Sparkles className="w-5 h-5 text-accent" /> {tr.selectPurpose}
+                <Sparkles className="w-5 h-5 text-accent" /> {t('donate:selectPurpose')}
               </Label>
               <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-3 mt-4">
                 {purposes.map(p => (
@@ -152,14 +168,13 @@ export default function Donate() {
                     key={p.value}
                     type="button"
                     onClick={() => setForm({ ...form, purpose: p.value })}
-                    className={`p-4 rounded-2xl border-2 text-center transition-all ${
-                      form.purpose === p.value
+                    className={`p-4 rounded-2xl border-2 text-center transition-all ${form.purpose === p.value
                         ? 'border-primary bg-primary/5 shadow-md'
                         : `${p.color} hover:shadow-md`
-                    }`}
+                      }`}
                   >
                     <div className="text-2xl mb-1">{p.icon}</div>
-                    <div className="text-xs font-medium text-foreground">{tr[p.value]}</div>
+                    <div className="text-xs font-medium text-foreground">{t(`donate:${p.value}`)}</div>
                     {form.purpose === p.value && (
                       <Check className="w-4 h-4 text-primary mx-auto mt-1" />
                     )}
@@ -171,7 +186,7 @@ export default function Donate() {
             {/* Amount Selection */}
             <div className="mb-10">
               <Label className="text-lg font-semibold text-foreground mb-4 flex items-center gap-2">
-                <CreditCard className="w-5 h-5 text-accent" /> {tr.donationAmount}
+                <CreditCard className="w-5 h-5 text-accent" /> {t('donate:donationAmount')}
               </Label>
               <div className="flex gap-3 mb-4">
                 <Select value={form.currency} onValueChange={v => setForm({ ...form, currency: v })}>
@@ -189,11 +204,10 @@ export default function Donate() {
                     key={a}
                     type="button"
                     onClick={() => setForm({ ...form, amount: a, customAmount: '' })}
-                    className={`py-3 px-4 rounded-xl border-2 text-center font-semibold transition-all ${
-                      form.amount === a && !form.customAmount
+                    className={`py-3 px-4 rounded-xl border-2 text-center font-semibold transition-all ${form.amount === a && !form.customAmount
                         ? 'border-primary bg-primary text-primary-foreground shadow-md'
                         : 'border-border hover:border-primary/50'
-                    }`}
+                      }`}
                   >
                     {a}
                   </button>
@@ -203,7 +217,7 @@ export default function Donate() {
                 <span className="absolute left-4 top-1/2 -translate-y-1/2 text-muted-foreground font-medium">{form.currency}</span>
                 <Input
                   type="number"
-                  placeholder={tr.customAmount}
+                  placeholder={t('donate:customAmount')}
                   value={form.customAmount}
                   onChange={e => setForm({ ...form, customAmount: e.target.value })}
                   className="pl-14 text-lg h-12"
@@ -219,7 +233,7 @@ export default function Donate() {
                     <RefreshCw className="w-5 h-5 text-accent" />
                   </div>
                   <div>
-                    <Label className="font-semibold text-foreground cursor-pointer">{tr.recurringDonation}</Label>
+                    <Label className="font-semibold text-foreground cursor-pointer">{t('donate:recurringDonation')}</Label>
                     <p className="text-xs text-muted-foreground">Set up automatic monthly giving</p>
                   </div>
                 </div>
@@ -234,7 +248,7 @@ export default function Donate() {
                     {['monthly', 'quarterly', 'yearly'].map(f => (
                       <div key={f} className="flex items-center gap-2">
                         <RadioGroupItem value={f} id={f} />
-                        <Label htmlFor={f} className="cursor-pointer">{tr[f]}</Label>
+                        <Label htmlFor={f} className="cursor-pointer">{t(`donate:${f}`)}</Label>
                       </div>
                     ))}
                   </RadioGroup>
@@ -250,7 +264,7 @@ export default function Donate() {
                     <EyeOff className="w-5 h-5 text-primary" />
                   </div>
                   <div>
-                    <Label className="font-semibold text-foreground cursor-pointer">{tr.anonymous}</Label>
+                    <Label className="font-semibold text-foreground cursor-pointer">{t('donate:anonymous')}</Label>
                     <p className="text-xs text-muted-foreground">Your name won't be displayed publicly</p>
                   </div>
                 </div>
@@ -266,7 +280,7 @@ export default function Donate() {
               <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="mb-10 space-y-4">
                 <div>
                   <Label className="flex items-center gap-2 mb-2">
-                    <User className="w-4 h-4 text-muted-foreground" /> {tr.donorName}
+                    <User className="w-4 h-4 text-muted-foreground" /> {t('donate:donorName')}
                   </Label>
                   <Input
                     value={form.donorName}
@@ -277,7 +291,7 @@ export default function Donate() {
                 <div className="grid sm:grid-cols-2 gap-4">
                   <div>
                     <Label className="flex items-center gap-2 mb-2">
-                      <Mail className="w-4 h-4 text-muted-foreground" /> {tr.donorEmail}
+                      <Mail className="w-4 h-4 text-muted-foreground" /> {t('donate:donorEmail')}
                     </Label>
                     <Input
                       type="email"
@@ -288,7 +302,7 @@ export default function Donate() {
                   </div>
                   <div>
                     <Label className="flex items-center gap-2 mb-2">
-                      <Phone className="w-4 h-4 text-muted-foreground" /> {tr.donorPhone}
+                      <Phone className="w-4 h-4 text-muted-foreground" /> {t('donate:donorPhone')}
                     </Label>
                     <Input
                       type="tel"
@@ -319,7 +333,7 @@ export default function Donate() {
                 ) : (
                   <>
                     <Heart className="w-5 h-5 mr-2" />
-                    {tr.payNow}
+                    {t('donate:payNow')}
                   </>
                 )}
               </Button>
