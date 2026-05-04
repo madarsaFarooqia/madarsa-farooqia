@@ -1,12 +1,13 @@
 import React from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
 import { motion } from "framer-motion";
 import { Mail, Lock, ArrowRight } from "lucide-react";
-import { FaGoogle, FaGithub } from "react-icons/fa";
+import { FaGoogle } from "react-icons/fa";
 import { toast } from "sonner";
+import { useAuth } from "@/lib/AuthContext";
 
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
@@ -28,6 +29,9 @@ const loginSchema = z.object({
 });
 
 const Login = () => {
+  const { login, isLoggingIn } = useAuth();
+  const navigate = useNavigate();
+
   const form = useForm({
     resolver: zodResolver(loginSchema),
     defaultValues: {
@@ -37,9 +41,14 @@ const Login = () => {
     },
   });
 
-  const onSubmit = (data) => {
-    console.log("Login data:", data);
-    toast.success("Login attempt successful! (Demo)");
+  const onSubmit = async (data) => {
+    try {
+      await login(data);
+      toast.success("Welcome back! You are now logged in to Darul Uloom Farooqia");
+      navigate("/");
+    } catch (error) {
+      toast.error(error.message || "Login failed");
+    }
   };
 
   return (
@@ -74,7 +83,7 @@ const Login = () => {
           </motion.div>
           <div className="space-y-4">
             <h1 className="text-4xl font-bold tracking-tight text-primary font-playfair">
-              Madrasa Farooqia
+              Madarsah Darul Uloom Farooqia
             </h1>
             <p className="text-lg text-muted-foreground font-inter">
               Empowering the next generation of scholars with traditional values and modern excellence.
@@ -182,8 +191,8 @@ const Login = () => {
                 )}
               />
 
-              <Button type="submit" className="w-full h-11 text-base font-semibold transition-all hover:scale-[1.01] active:scale-[0.99]">
-                Sign In
+              <Button type="submit" disabled={isLoggingIn} className="w-full h-11 text-base font-semibold transition-all hover:scale-[1.01] active:scale-[0.99]">
+                {isLoggingIn ? "Signing In..." : "Sign In"}
                 <ArrowRight className="ml-2 h-4 w-4" />
               </Button>
             </form>
@@ -205,10 +214,6 @@ const Login = () => {
               <FaGoogle className="mr-2 h-4 w-4 text-red-500" />
               Google
             </Button>
-            {/* <Button variant="outline" className="h-11 hover:bg-slate-50 transition-colors">
-              <FaGithub className="mr-2 h-4 w-4" />
-              GitHub
-            </Button> */}
           </div>
 
           <p className="text-center text-sm text-muted-foreground">

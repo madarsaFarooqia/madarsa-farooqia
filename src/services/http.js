@@ -1,8 +1,3 @@
-/**
- * Low-level HTTP helpers for your backend.
- * Set REACT_APP_API_URL (e.g. http://localhost:4000) or leave empty to use same-origin /api/* paths.
- */
-
 import { isMockApiEnabled } from '@/mocks/config';
 import { handleMockRequest } from '@/mocks/handlers';
 
@@ -25,7 +20,7 @@ export function setStoredToken(token) {
 }
 
 export function getApiBase() {
-  return (process.env.REACT_APP_API_URL || '').replace(/\/$/, '');
+  return (process.env.REACT_APP_API_URL || 'http://localhost:8080').replace(/\/$/, '');
 }
 
 export class ApiError extends Error {

@@ -406,7 +406,7 @@
 // }
 
 import React, { useState, useEffect } from "react";
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import {
   Menu,
   X,
@@ -423,6 +423,7 @@ import {
 import { useLanguage } from "@/lib/LanguageContext";
 import { useTranslation } from "@/lib/i18n";
 import { Button } from "@/components/ui/button";
+import { useAuth } from "@/lib/AuthContext";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -432,33 +433,16 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { motion, AnimatePresence } from "framer-motion";
 
-const mockAuth = {
-  me: async () => {
-    return {
-      id: 1,
-      full_name: "Admin User",
-      role: "admin",
-    };
-  },
-
-  logout: async () => {
-    console.log("Logged out");
-  },
-
-  redirectToLogin: () => {
-    alert("Redirect to login");
-  },
-};
-
 const LOGO_URL =
   "https://media.base44.com/images/public/69e13339ea1b0b97c63a7ecc/b4db5ec8f_farooqia_logo_withBg.png";
 
 export default function Navbar() {
   const { language, setLanguage, currentLang, languages } = useLanguage();
+  const { user, logout } = useAuth();
+  const navigate = useNavigate();
   const { t } = useTranslation(language);
   const [isOpen, setIsOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
-  const [user, setUser] = useState(null);
   const [dark, setDark] = useState(() => {
     if (typeof window !== "undefined") {
       return (
@@ -471,12 +455,7 @@ export default function Navbar() {
   });
   const location = useLocation();
 
-  useEffect(() => {
-    mockAuth
-      .me()
-      .then(setUser)
-      .catch(() => setUser(null));
-  }, []);
+
 
   useEffect(() => {
     const handleScroll = () => setScrolled(window.scrollY > 20);
@@ -531,8 +510,8 @@ export default function Navbar() {
   return (
     <nav
       className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${scrolled
-          ? "bg-background/95 backdrop-blur-md shadow-sm border-b border-border"
-          : "bg-transparent"
+        ? "bg-background/95 backdrop-blur-md shadow-sm border-b border-border"
+        : "bg-transparent"
         }`}
       dir={currentLang.dir}
     >
@@ -566,12 +545,12 @@ export default function Navbar() {
                 key={link.href}
                 to={link.href}
                 className={`px-3 py-2 rounded-lg text-sm font-medium transition-all duration-200 ${location.pathname === link.href
-                    ? scrolled
-                      ? "bg-foreground text-background"
-                      : "bg-white/15 text-white"
-                    : scrolled
-                      ? "text-foreground hover:bg-secondary"
-                      : "text-white/85 hover:text-white hover:bg-white/10"
+                  ? scrolled
+                    ? "bg-foreground text-background"
+                    : "bg-white/15 text-white"
+                  : scrolled
+                    ? "text-foreground hover:bg-secondary"
+                    : "text-white/85 hover:text-white hover:bg-white/10"
                   }`}
               >
                 {link.label}
@@ -583,12 +562,12 @@ export default function Navbar() {
               <DropdownMenuTrigger asChild>
                 <button
                   className={`flex items-center gap-1 px-3 py-2 rounded-lg text-sm font-medium transition-all duration-200 ${["/niswaan", "/masjid-hifz"].includes(location.pathname)
-                      ? scrolled
-                        ? "bg-foreground text-background"
-                        : "bg-white/15 text-white"
-                      : scrolled
-                        ? "text-foreground hover:bg-secondary"
-                        : "text-white/85 hover:text-white hover:bg-white/10"
+                    ? scrolled
+                      ? "bg-foreground text-background"
+                      : "bg-white/15 text-white"
+                    : scrolled
+                      ? "text-foreground hover:bg-secondary"
+                      : "text-white/85 hover:text-white hover:bg-white/10"
                     }`}
                 >
                   Institutions <ChevronDown className="w-3 h-3" />
@@ -634,8 +613,8 @@ export default function Navbar() {
               <DropdownMenuTrigger asChild>
                 <button
                   className={`flex items-center gap-1.5 px-3 py-2 rounded-lg text-sm font-medium transition-all ${scrolled
-                      ? "text-foreground hover:bg-secondary"
-                      : "text-white/85 hover:bg-white/10"
+                    ? "text-foreground hover:bg-secondary"
+                    : "text-white/85 hover:bg-white/10"
                     }`}
                 >
                   <Globe className="w-4 h-4" />
@@ -667,8 +646,8 @@ export default function Navbar() {
                 <DropdownMenuTrigger asChild>
                   <button
                     className={`flex items-center gap-2 px-3 py-2 rounded-lg text-sm font-medium transition-all ${scrolled
-                        ? "text-foreground hover:bg-secondary"
-                        : "text-white/85 hover:bg-white/10"
+                      ? "text-foreground hover:bg-secondary"
+                      : "text-white/85 hover:bg-white/10"
                       }`}
                   >
                     <div className="w-7 h-7 rounded-full bg-accent/20 border border-accent/40 flex items-center justify-center text-xs font-bold text-foreground">
@@ -712,8 +691,7 @@ export default function Navbar() {
                   <DropdownMenuSeparator />
                   <DropdownMenuItem
                     onClick={async () => {
-                      await mockAuth.logout();
-                      setUser(null);
+                      await logout("/");
                     }}
                     className="text-destructive"
                   >
@@ -726,14 +704,14 @@ export default function Navbar() {
                 <Button
                   variant="ghost"
                   size="sm"
-                  onClick={() => mockAuth.redirectToLogin()}
+                  onClick={() => navigate("/login")}
                   className={scrolled ? "" : "text-white hover:bg-white/10"}
                 >
                   {t('nav:login')}
                 </Button>
                 <Button
                   size="sm"
-                  onClick={() => mockAuth.redirectToLogin()}
+                  onClick={() => navigate("/signup")}
                   className="gold-gradient text-foreground font-semibold border-0 shadow-sm"
                 >
                   {t('nav:register')}
@@ -784,8 +762,8 @@ export default function Navbar() {
                   to={link.href}
                   onClick={() => setIsOpen(false)}
                   className={`flex items-center px-4 py-3 rounded-xl text-sm font-medium transition-colors ${location.pathname === link.href
-                      ? "bg-foreground text-background"
-                      : "text-foreground hover:bg-secondary"
+                    ? "bg-foreground text-background"
+                    : "text-foreground hover:bg-secondary"
                     }`}
                 >
                   {link.label}
@@ -820,8 +798,8 @@ export default function Navbar() {
                       setIsOpen(false);
                     }}
                     className={`px-3 py-1.5 rounded-full text-xs font-medium transition-colors ${language === lang.code
-                        ? "bg-foreground text-background"
-                        : "bg-secondary text-muted-foreground"
+                      ? "bg-foreground text-background"
+                      : "bg-secondary text-muted-foreground"
                       }`}
                   >
                     {lang.flag} {lang.label}
@@ -850,8 +828,7 @@ export default function Navbar() {
                     )}
                     <button
                       onClick={async () => {
-                        await mockAuth.logout();
-                        setUser(null);
+                        await logout("/");
                       }}
                       className="flex-1 text-center py-2.5 px-4 border border-border text-muted-foreground rounded-xl text-sm font-medium"
                     >
@@ -861,13 +838,19 @@ export default function Navbar() {
                 ) : (
                   <>
                     <button
-                      onClick={() => mockAuth.redirectToLogin()}
+                      onClick={() => {
+                        setIsOpen(false);
+                        navigate("/login");
+                      }}
                       className="flex-1 text-center py-2.5 px-4 border border-border rounded-xl text-sm font-medium"
                     >
                       {t('nav:login')}
                     </button>
                     <button
-                      onClick={() => mockAuth.redirectToLogin()}
+                      onClick={() => {
+                        setIsOpen(false);
+                        navigate("/signup");
+                      }}
                       className="flex-1 text-center py-2.5 px-4 gold-gradient rounded-xl text-sm font-semibold"
                     >
                       {t('nav:register')}

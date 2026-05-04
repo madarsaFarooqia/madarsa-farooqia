@@ -1,5 +1,5 @@
 import React from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
@@ -7,6 +7,7 @@ import { motion } from "framer-motion";
 import { Mail, Lock, User, ArrowRight, ShieldCheck, Phone } from "lucide-react";
 import { FaGoogle } from "react-icons/fa";
 import { toast } from "sonner";
+import { useAuth } from "@/lib/AuthContext";
 
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
@@ -33,6 +34,9 @@ const signupSchema = z.object({
 });
 
 const Signup = () => {
+  const { register, isRegistering } = useAuth();
+  const navigate = useNavigate();
+
   const form = useForm({
     resolver: zodResolver(signupSchema),
     defaultValues: {
@@ -45,9 +49,16 @@ const Signup = () => {
     },
   });
 
-  const onSubmit = (data) => {
-    console.log("Signup data:", data);
-    toast.success("Account request submitted successfully!");
+  const onSubmit = async (values) => {
+    try {
+      // Remove confirmPassword before sending to backend
+      const { confirmPassword, ...registerData } = values;
+      await register(registerData);
+      toast.success("Account created successfully! Please sign in.");
+      navigate("/login");
+    } catch (error) {
+      toast.error(error.message || "Registration failed");
+    }
   };
 
   return (
@@ -246,8 +257,8 @@ const Signup = () => {
               </div>
 
               <div className="pt-2">
-                <Button type="submit" className="w-full h-11 text-base font-semibold transition-all hover:scale-[1.01] active:scale-[0.99]">
-                  Request Registration
+                <Button type="submit" disabled={isRegistering} className="w-full h-11 text-base font-semibold transition-all hover:scale-[1.01] active:scale-[0.99]">
+                  {isRegistering ? "Registering..." : "Create Account"}
                   <ArrowRight className="ml-2 h-4 w-4" />
                 </Button>
               </div>
@@ -270,10 +281,6 @@ const Signup = () => {
               <FaGoogle className="mr-2 h-4 w-4 text-red-500" />
               Google
             </Button>
-            {/* <Button variant="outline" className="h-11 hover:bg-slate-50 transition-colors">
-              <FaGithub className="mr-2 h-4 w-4" />
-              GitHub
-            </Button> */}
           </div>
 
           <p className="text-center text-sm text-muted-foreground pt-4">
