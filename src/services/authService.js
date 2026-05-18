@@ -29,6 +29,19 @@ export const authService = {
     return response;
   },
 
+  async forgotPassword(email) {
+    return await http.post('/auth/forgot-password', { email });
+  },
+
+  async resetPassword(data) {
+    // data: { token, newPassword }
+    return await http.post('/auth/reset-password', data);
+  },
+
+  async updateLanguagePreference(language) {
+    return await http.put('/auth/language', { language });
+  },
+
   logout(redirectTo) {
     setStoredToken(null);
     if (typeof window !== 'undefined' && redirectTo) {

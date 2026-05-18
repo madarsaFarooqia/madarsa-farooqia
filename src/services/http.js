@@ -20,7 +20,7 @@ export function setStoredToken(token) {
 }
 
 export function getApiBase() {
-  return (process.env.REACT_APP_API_URL || 'http://localhost:8080').replace(/\/$/, '');
+  return (process.env.REACT_APP_API_URL || 'http://localhost:8081').replace(/\/$/, '');
 }
 
 export class ApiError extends Error {
@@ -104,6 +104,7 @@ export async function apiRequest(method, path, { query, body, headers, signal } 
       Accept: 'application/json',
       ...(body !== undefined ? { 'Content-Type': 'application/json' } : {}),
       ...(token ? { Authorization: `Bearer ${token}` } : {}),
+      'Accept-Language': typeof window !== 'undefined' ? (window.localStorage.getItem('madrasa_lang') || 'en') : 'en',
       ...headers,
     },
     body: body !== undefined ? JSON.stringify(body) : undefined,
