@@ -1,8 +1,8 @@
 // import React from 'react';
 // import { X, Mail, Phone, BookOpen, Clock, Award, Star, GraduationCap } from 'lucide-react';
 // import { motion, AnimatePresence } from 'framer-motion';
-// import { Badge } from '@/components/ui/badge';
-// import { normalizeSubjectList, teacherExperienceYears } from '@/lib/utils';
+// import { Badge } from '../ui/badge';
+// import { normalizeSubjectList, teacherExperienceYears } from '../../lib/utils';
 
 // export default function TeacherModal({ teacher, language, tr, onClose }) {
 //   const subjects = normalizeSubjectList(teacher.subjects);
@@ -158,7 +158,7 @@
 import React from 'react';
 import { X, Mail, Phone, BookOpen, Clock, Award, Star, GraduationCap } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Badge } from '@/components/ui/badge';
+import { Badge } from '../ui/badge';
 
 export default function TeacherModal({ teacher, language, t, onClose }) {
   const displayName = (language !== 'en' && teacher[`name_${language}`])

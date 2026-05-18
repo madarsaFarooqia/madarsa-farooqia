@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { eventService } from '@/services';
+import { eventService } from '../services';
 import EventCard from '../components/events/EventCard';
 import SectionHeader from '../components/shared/SectionHeader';
 import { Loader2 } from 'lucide-react';

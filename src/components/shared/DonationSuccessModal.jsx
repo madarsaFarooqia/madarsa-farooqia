@@ -1,7 +1,7 @@
 // import { motion, AnimatePresence } from 'framer-motion';
 // import { Check, Download, Heart, X } from 'lucide-react';
 // import { Link } from 'react-router-dom';
-// import { Button } from '@/components/ui/button';
+// import { Button } from '../ui/button';
 // import { format } from 'date-fns';
 
 // const islamicQuotes = [
@@ -149,9 +149,9 @@ import {
   Star,
 } from "lucide-react";
 import { Link } from "react-router-dom";
-import { Button } from "@/components/ui/button";
+import { Button } from "../ui/button";
 import { format } from "date-fns";
-import { generateReceiptId, downloadReceipt } from "@/lib/receiptGenerator";
+import { generateReceiptId, downloadReceipt } from "../../lib/receiptGenerator";
 
 const islamicQuotes = [
   { text: "Charity does not decrease wealth.", source: "Sahih Muslim" },

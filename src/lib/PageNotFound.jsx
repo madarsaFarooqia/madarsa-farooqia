@@ -2,7 +2,7 @@ import { Link, useLocation } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
 import { Home, ArrowLeft } from 'lucide-react';
 import { motion } from 'framer-motion';
-import { FarooqiaLogo, AuthBackground } from "@/assets";
+import { FarooqiaLogo, AuthBackground } from "../assets";
 
 // Mocking auth service for demonstration as seen in previous implementation
 const base44 = {

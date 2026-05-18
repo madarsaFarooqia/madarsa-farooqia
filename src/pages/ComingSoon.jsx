@@ -1,7 +1,7 @@
 import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
 import { ArrowLeft, BookOpen, GraduationCap, Star } from 'lucide-react';
-import { FarooqiaLogo, AuthBackground } from "@/assets";
+import { FarooqiaLogo, AuthBackground } from "../assets";
 
 const upcomingFeatures = [
   { icon: BookOpen, title: 'Online Courses', desc: 'Full Quran & Islamic Sciences e-learning platform' },

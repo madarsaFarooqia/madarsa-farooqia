@@ -2,7 +2,7 @@
 // import { motion } from 'framer-motion';
 // import { BookOpen, Heart, Clock, Users, Star, ChevronRight, Calendar } from 'lucide-react';
 // import { Link } from 'react-router-dom';
-// import InstitutionTabs from '@/components/institutions/InstitutionTabs';
+// import InstitutionTabs from '../components/institutions/InstitutionTabs';
 
 // const schedule = [
 //   { time: 'Fajr – 6:00 AM', activity: 'Morning Hifz Session (2 hrs)' },
@@ -186,7 +186,7 @@ import {
   MapPin,
 } from "lucide-react";
 import { Link } from "react-router-dom";
-import InstitutionTabs from "@/components/institutions/InstitutionTabs";
+import InstitutionTabs from "../components/institutions/InstitutionTabs";
 
 const schedule = [
   {

@@ -6,7 +6,7 @@ import {
   campaignService,
   donationService,
   registrationService,
-} from '@/services';
+} from '../../services';
 import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { Users, GraduationCap, Calendar, Heart, DollarSign, FileText, TrendingUp, ArrowUpRight } from 'lucide-react';

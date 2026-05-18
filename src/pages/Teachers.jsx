@@ -1,15 +1,15 @@
 import React, { useEffect, useState, useMemo } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Search, Filter, BookOpen, Users, Award, GraduationCap, Star, Clock, ChevronRight, Mail, Phone } from 'lucide-react';
-import { useLanguage } from '@/lib/LanguageContext';
-import { useTranslation } from '@/lib/i18n';
-import { teacherService } from '@/services';
-import { Input } from '@/components/ui/input';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Badge } from '@/components/ui/badge';
-import TeacherCard from '@/components/teachers/TeacherCard';
-import InstitutionTabs from '@/components/institutions/InstitutionTabs';
-import FacultyStats from '@/components/teachers/FacultyStats';
+import { useLanguage } from '../lib/LanguageContext';
+import { useTranslation } from '../lib/i18n';
+import { teacherService } from '../services';
+import { Input } from '../components/ui/input';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '../components/ui/select';
+import { Badge } from '../components/ui/badge';
+import TeacherCard from '../components/teachers/TeacherCard';
+import InstitutionTabs from '../components/institutions/InstitutionTabs';
+import FacultyStats from '../components/teachers/FacultyStats';
 
 export default function Teachers() {
   const { language } = useLanguage();

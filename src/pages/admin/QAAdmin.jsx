@@ -7,8 +7,8 @@ import {
   Reply,
   Trash2,
 } from "lucide-react";
-import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
+import { Input } from "../../components/ui/input";
+import { Button } from "../../components/ui/button";
 import { format } from "date-fns";
 
 export default function QAAdmin() {

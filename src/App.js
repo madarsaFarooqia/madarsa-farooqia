@@ -1,50 +1,50 @@
-import { Toaster } from "@/components/ui/toaster";
+import { Toaster } from "./components/ui/toaster";
 import { Toaster as SonnerToaster } from "sonner";
 import { QueryClientProvider } from "@tanstack/react-query";
-import { queryClientInstance } from "@/lib/query-client";
+import { queryClientInstance } from "./lib/query-client";
 import { BrowserRouter as Router, Route, Routes, Navigate } from "react-router-dom";
 
-import { AuthProvider, useAuth } from "@/lib/AuthContext";
-import { LanguageProvider } from "@/lib/LanguageContext";
+import { AuthProvider, useAuth } from "./lib/AuthContext";
+import { LanguageProvider } from "./lib/LanguageContext";
 
-import PageNotFound from "@/lib/PageNotFound";
-import UserNotRegisteredError from "@/components/UserNotRegisteredError";
-import LoadingSpinner from "@/components/shared/LoadingSpinner";
+import PageNotFound from "./lib/PageNotFound";
+import UserNotRegisteredError from "./components/UserNotRegisteredError";
+import LoadingSpinner from "./components/shared/LoadingSpinner";
 
-import Layout from "@/components/layout/Layout";
+import Layout from "./components/layout/Layout";
 
 // Public pages
-import Home from "@/pages/Home";
-import Teachers from "@/pages/Teachers";
-import Donate from "@/pages/Donate";
-import Fundraising from "@/pages/Fundraising";
-import Contact from "@/pages/Contact";
-import MyDonations from "@/pages/MyDonations";
-import Payment from "@/pages/Payment";
-import ComingSoon from "@/pages/ComingSoon";
-import Niswaan from "@/pages/Niswaan";
-import MasjidHifz from "@/pages/MasjidHifz";
-import ReceiptViewer from "@/pages/ReceiptViewer";
+import Home from "./pages/Home";
+import Teachers from "./pages/Teachers";
+import Donate from "./pages/Donate";
+import Fundraising from "./pages/Fundraising";
+import Contact from "./pages/Contact";
+import MyDonations from "./pages/MyDonations";
+import Payment from "./pages/Payment";
+import ComingSoon from "./pages/ComingSoon";
+import Niswaan from "./pages/Niswaan";
+import MasjidHifz from "./pages/MasjidHifz";
+import ReceiptViewer from "./pages/ReceiptViewer";
 
 // Auth pages
-import Login from "@/pages/auth/Login";
-import Signup from "@/pages/auth/Signup";
-import ForgotPassword from "@/pages/auth/ForgotPassword";
-import ResetPassword from "@/pages/auth/ResetPassword";
+import Login from "./pages/auth/Login";
+import Signup from "./pages/auth/Signup";
+import ForgotPassword from "./pages/auth/ForgotPassword";
+import ResetPassword from "./pages/auth/ResetPassword";
 
 // Admin
-import AdminLayout from "@/pages/admin/AdminLayout";
-import AdminDashboard from "@/pages/admin/AdminDashboard";
-import TeachersAdmin from "@/pages/admin/TeachersAdmin";
-import StudentsAdmin from "@/pages/admin/StudentsAdmin";
-import EventsAdmin from "@/pages/admin/EventsAdmin";
-import RegistrationsAdmin from "@/pages/admin/RegistrationsAdmin";
-import CampaignsPro from "@/pages/admin/CampaignsPro";
-import DonationsPro from "@/pages/admin/DonationsPro";
-import ReportsAdmin from "@/pages/admin/ReportsAdmin";
-import BlogAdmin from "@/pages/admin/BlogAdmin";
-import QAAdmin from "@/pages/admin/QAAdmin";
-import InfrastructureAdmin from "@/pages/admin/InfrastructureAdmin";
+import AdminLayout from "./pages/admin/AdminLayout";
+import AdminDashboard from "./pages/admin/AdminDashboard";
+import TeachersAdmin from "./pages/admin/TeachersAdmin";
+import StudentsAdmin from "./pages/admin/StudentsAdmin";
+import EventsAdmin from "./pages/admin/EventsAdmin";
+import RegistrationsAdmin from "./pages/admin/RegistrationsAdmin";
+import CampaignsPro from "./pages/admin/CampaignsPro";
+import DonationsPro from "./pages/admin/DonationsPro";
+import ReportsAdmin from "./pages/admin/ReportsAdmin";
+import BlogAdmin from "./pages/admin/BlogAdmin";
+import QAAdmin from "./pages/admin/QAAdmin";
+import InfrastructureAdmin from "./pages/admin/InfrastructureAdmin";
 
 /* ---------------- AUTH LOADING WRAPPER ---------------- */
 

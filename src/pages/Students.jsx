@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { studentService } from '@/services';
+import { studentService } from '../services';
 import StudentCard from '../components/students/StudentCard';
 import SectionHeader from '../components/shared/SectionHeader';
 import { Loader2 } from 'lucide-react';

@@ -8,10 +8,10 @@
 //   FileText,
 //   Clock,
 // } from "lucide-react";
-// import { Input } from "@/components/ui/input";
-// import { Button } from "@/components/ui/button";
+// import { Input } from "../../components/ui/input";
+// import { Button } from "../../components/ui/button";
 // import { format } from "date-fns";
-// import BlogPostModal from "@/components/admin/BlogPostModal";
+// import BlogPostModal from "../../components/admin/BlogPostModal";
 
 // export default function BlogAdmin() {
 //   const [posts, setPosts] = useState([]);
@@ -270,12 +270,12 @@
 
 import { useState, useEffect } from "react";
 import { Plus, Edit2, Trash2, Search, FileText, Download } from "lucide-react";
-import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
+import { Input } from "../../components/ui/input";
+import { Button } from "../../components/ui/button";
 import { format } from "date-fns";
 import { toast } from "sonner";
-import BlogPostModal from "@/components/admin/BlogPostModal";
-import DeleteConfirmModal from "@/components/shared/DeleteConfirmModal";
+import BlogPostModal from "../../components/admin/BlogPostModal";
+import DeleteConfirmModal from "../../components/shared/DeleteConfirmModal";
 
 export default function BlogAdmin() {
   const [posts, setPosts] = useState([]);

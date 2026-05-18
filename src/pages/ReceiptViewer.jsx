@@ -9,12 +9,12 @@ import {
   QrCode,
 } from "lucide-react";
 import { Link, useNavigate } from "react-router-dom";
-import { Button } from "@/components/ui/button";
+import { Button } from "../components/ui/button";
 import {
   generateReceiptId,
   downloadReceipt,
   TAX_RULES,
-} from "@/lib/receiptGenerator";
+} from "../lib/receiptGenerator";
 import { format } from "date-fns";
 
 const purposeIcons = {

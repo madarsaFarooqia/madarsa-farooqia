@@ -12,16 +12,16 @@
 //   Sun,
 //   LayoutDashboard,
 // } from "lucide-react";
-// import { useLanguage } from "@/lib/LanguageContext";
-// import { useTranslation } from "@/lib/i18n";
-// import { Button } from "@/components/ui/button";
+// import { useLanguage } from "../../lib/LanguageContext";
+// import { useTranslation } from "../../lib/i18n";
+// import { Button } from "../ui/button";
 // import {
 //   DropdownMenu,
 //   DropdownMenuContent,
 //   DropdownMenuItem,
 //   DropdownMenuTrigger,
 //   DropdownMenuSeparator,
-// } from "@/components/ui/dropdown-menu";
+// } from "../ui/dropdown-menu";
 // import { motion, AnimatePresence } from "framer-motion";
 
 // // 🔥 MOCK AUTH (temporary)
@@ -420,17 +420,17 @@ import {
   LayoutDashboard,
   FileText,
 } from "lucide-react";
-import { useLanguage } from "@/lib/LanguageContext";
-import { useTranslation } from "@/lib/i18n";
-import { Button } from "@/components/ui/button";
-import { useAuth } from "@/lib/AuthContext";
+import { useLanguage } from "../../lib/LanguageContext";
+import { useTranslation } from "../../lib/i18n";
+import { Button } from "../ui/button";
+import { useAuth } from "../../lib/AuthContext";
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
   DropdownMenuSeparator,
-} from "@/components/ui/dropdown-menu";
+} from "../ui/dropdown-menu";
 import { motion, AnimatePresence } from "framer-motion";
 
 const LOGO_URL =

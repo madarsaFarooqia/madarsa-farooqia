@@ -7,8 +7,8 @@ import {
   AlertCircle,
   CheckCircle2,
 } from "lucide-react";
-import { Badge } from "@/components/ui/badge";
-import { Progress } from "@/components/ui/progress";
+import { Badge } from "../ui/badge";
+import { Progress } from "../ui/progress";
 
 export default function CampaignCard({ campaign, t }) {
   const percentage = campaign.goal_amount

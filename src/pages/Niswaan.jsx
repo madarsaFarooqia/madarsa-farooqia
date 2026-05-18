@@ -2,7 +2,7 @@
 // import { motion } from 'framer-motion';
 // import { GraduationCap, Heart, Shield, BookOpen, Users, Star, ChevronRight } from 'lucide-react';
 // import { Link } from 'react-router-dom';
-// import InstitutionTabs from '@/components/institutions/InstitutionTabs';
+// import InstitutionTabs from '../components/institutions/InstitutionTabs';
 
 // const courses = [
 //   { name: 'Hifz al-Quran', desc: 'Complete memorisation of the Holy Quran with Tajweed', duration: '3–4 years' },
@@ -183,7 +183,7 @@ import {
   Hash,
 } from "lucide-react";
 import { Link } from "react-router-dom";
-import InstitutionTabs from "@/components/institutions/InstitutionTabs";
+import InstitutionTabs from "../components/institutions/InstitutionTabs";
 
 const courses = [
   {

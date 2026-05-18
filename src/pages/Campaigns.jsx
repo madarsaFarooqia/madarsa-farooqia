@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { campaignService, donationService } from '@/services';
+import { campaignService, donationService } from '../services';
 import CampaignCard from '../components/campaigns/CampaignCard';
 import SectionHeader from '../components/shared/SectionHeader';
 import GeometricProgress from '../components/campaigns/GeometricProgress';

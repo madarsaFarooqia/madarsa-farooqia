@@ -1,14 +1,14 @@
 import { useState, useEffect } from 'react';
-import { getEntityService } from '@/services';
+import { getEntityService } from '../../services';
 import { Loader2, Plus, Pencil, Trash2, X, Check, Search } from 'lucide-react';
-import { Input } from '@/components/ui/input';
-import { Button } from '@/components/ui/button';
-import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
-import { Label } from '@/components/ui/label';
-import { Textarea } from '@/components/ui/textarea';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Switch } from '@/components/ui/switch';
-import { useToast } from '@/components/ui/use-toast';
+import { Input } from '../ui/input';
+import { Button } from '../ui/button';
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from '../ui/dialog';
+import { Label } from '../ui/label';
+import { Textarea } from '../ui/textarea';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '../ui/select';
+import { Switch } from '../ui/switch';
+import { useToast } from '../ui/use-toast';
 import { format } from 'date-fns';
 
 export default function EntityManager({ entityName, title, fields, displayField = 'name', sortField = '-created_date' }) {
@@ -188,7 +188,7 @@ export default function EntityManager({ entityName, title, fields, displayField 
 // import { motion } from "framer-motion";
 // import SectionHeader from "../shared/SectionHeader";
 // import CampaignCard from "../campaigns/CampaignCard";
-// import { donateService } from "@/mocks/donateService";
+// import { donateService } from "../../mocks/donateService";
 
 // const CATEGORIES = [
 //   "All",

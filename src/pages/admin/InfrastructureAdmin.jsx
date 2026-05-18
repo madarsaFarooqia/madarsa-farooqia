@@ -1,8 +1,8 @@
 import { useState, useEffect } from "react";
 import { Building2, Plus, Edit2, Trash2, Search, Download } from "lucide-react";
-import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
-import { Label } from "@/components/ui/label";
+import { Input } from "../../components/ui/input";
+import { Button } from "../../components/ui/button";
+import { Label } from "../../components/ui/label";
 import { format } from "date-fns";
 
 const STATUS_OPTS = ["planning", "in_progress", "completed", "on_hold"];

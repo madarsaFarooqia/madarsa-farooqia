@@ -7,10 +7,10 @@ import { motion } from "framer-motion";
 import { Mail, Lock, User, ArrowRight, ShieldCheck, Phone } from "lucide-react";
 import { FaGoogle } from "react-icons/fa";
 import { toast } from "sonner";
-import { useAuth } from "@/lib/AuthContext";
+import { useAuth } from "../../lib/AuthContext";
 
-import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
+import { Input } from "../../components/ui/input";
+import { Button } from "../../components/ui/button";
 import {
   Form,
   FormControl,
@@ -18,8 +18,8 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from "@/components/ui/form";
-import { FarooqiaLogo, AuthBackground } from "@/assets";
+} from "../../components/ui/form";
+import { FarooqiaLogo, AuthBackground } from "../../assets";
 
 const signupSchema = z.object({
   firstName: z.string().min(2, { message: "First name is required" }),

@@ -1,9 +1,9 @@
 import { useState } from 'react';
 import { X } from 'lucide-react';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import { fundraisingCampaignService } from '@/services';
+import { Button } from '../ui/button';
+import { Input } from '../ui/input';
+import { Label } from '../ui/label';
+import { fundraisingCampaignService } from '../../services';
 
 const CATEGORIES = ['building', 'education', 'infrastructure', 'equipment', 'scholarship', 'food_program', 'orphan_care', 'general'];
 const PRIORITIES = ['low', 'medium', 'high', 'urgent'];

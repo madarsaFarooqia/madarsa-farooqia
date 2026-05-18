@@ -1,8 +1,8 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import { FaFacebook, FaTwitter, FaInstagram, FaYoutube } from "react-icons/fa";
-import { useLanguage } from "@/lib/LanguageContext";
-import { useTranslation } from "@/lib/i18n";
+import { useLanguage } from "../../lib/LanguageContext";
+import { useTranslation } from "../../lib/i18n";
 import { Heart, Mail, Phone, MapPin } from "lucide-react";
 
 const LOGO_URL =

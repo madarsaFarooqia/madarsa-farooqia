@@ -1,6 +1,6 @@
 import { Outlet, Link, useLocation, useNavigate } from "react-router-dom";
 import { useState } from "react";
-import { useAuth } from "@/lib/AuthContext";
+import { useAuth } from "../../lib/AuthContext";
 import {
   LayoutDashboard,
   Users,

@@ -2,12 +2,12 @@
 // import { Link } from 'react-router-dom';
 // import { motion } from 'framer-motion';
 // import { ArrowRight, BookOpen, Users, Award, Star, ChevronDown, Globe2, Sparkles } from 'lucide-react';
-// import { useLanguage } from '@/lib/LanguageContext';
-// import { useTranslation } from '@/lib/i18n';
-// import { teacherService, fundraisingCampaignService } from '@/services';
-// import { SITE_LOGO_URL } from '@/lib/constants';
-// import TeacherCard from '@/components/teachers/TeacherCard';
-// import CampaignCard from '@/components/fundraising/CampaignCard';
+// import { useLanguage } from '../lib/LanguageContext';
+// import { useTranslation } from '../lib/i18n';
+// import { teacherService, fundraisingCampaignService } from '../services';
+// import { SITE_LOGO_URL } from '../lib/constants';
+// import TeacherCard from '../components/teachers/TeacherCard';
+// import CampaignCard from '../components/fundraising/CampaignCard';
 
 // const stats = [
 //   { key: 'stats_students', value: '2,400+', icon: Users },
@@ -277,12 +277,12 @@ import {
   GraduationCap,
   Building2,
 } from "lucide-react";
-import { useLanguage } from "@/lib/LanguageContext";
-import { useTranslation } from "@/lib/i18n";
-import TeacherCard from "@/components/teachers/TeacherCard";
-import CampaignCard from "@/components/fundraising/CampaignCard";
-import { fundraisingCampaignService, teacherService } from "@/services";
-import { AuthBackground } from "@/assets";
+import { useLanguage } from "../lib/LanguageContext";
+import { useTranslation } from "../lib/i18n";
+import TeacherCard from "../components/teachers/TeacherCard";
+import CampaignCard from "../components/fundraising/CampaignCard";
+import { fundraisingCampaignService, teacherService } from "../services";
+import { AuthBackground } from "../assets";
 import { FcDonate } from "react-icons/fc";
 
 const islamicVerses = [

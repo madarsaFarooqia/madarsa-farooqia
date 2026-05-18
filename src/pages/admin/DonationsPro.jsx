@@ -7,10 +7,10 @@ import {
   FileText,
   QrCode,
 } from "lucide-react";
-import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
+import { Input } from "../../components/ui/input";
+import { Button } from "../../components/ui/button";
 import { format } from "date-fns";
-import { generateReceiptId, downloadReceipt } from "@/lib/receiptGenerator";
+import { generateReceiptId, downloadReceipt } from "../../lib/receiptGenerator";
 
 export default function DonationsPro() {
   const [donations, setDonations] = useState([]);

@@ -7,8 +7,8 @@ import { motion } from "framer-motion";
 import { Lock, ArrowRight, ShieldCheck, CheckCircle2 } from "lucide-react";
 import { toast } from "sonner";
 
-import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
+import { Input } from "../../components/ui/input";
+import { Button } from "../../components/ui/button";
 import {
   Form,
   FormControl,
@@ -16,8 +16,8 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from "@/components/ui/form";
-import { FarooqiaLogo, AuthBackground } from "@/assets";
+} from "../../components/ui/form";
+import { FarooqiaLogo, AuthBackground } from "../../assets";
 
 const resetPasswordSchema = z.object({
   password: z.string().min(8, { message: "Password must be at least 8 characters" }),

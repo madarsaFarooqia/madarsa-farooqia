@@ -12,11 +12,11 @@ import {
   CheckCircle2,
   Download,
 } from "lucide-react";
-import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
+import { Input } from "../../components/ui/input";
+import { Button } from "../../components/ui/button";
+import { Badge } from "../../components/ui/badge";
 import { format } from "date-fns";
-import CampaignFormModal from "@/components/admin/CampaignFormModal";
+import CampaignFormModal from "../../components/admin/CampaignFormModal";
 
 export default function CampaignsPro() {
   const [campaigns, setCampaigns] = useState([]);

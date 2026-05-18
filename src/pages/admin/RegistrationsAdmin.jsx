@@ -1,10 +1,10 @@
 import { useState, useEffect } from 'react';
-import { registrationService } from '@/services';
+import { registrationService } from '../../services';
 import { Loader2, Search, Check, X, Eye } from 'lucide-react';
-import { Input } from '@/components/ui/input';
-import { Button } from '@/components/ui/button';
-import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
-import { useToast } from '@/components/ui/use-toast';
+import { Input } from '../../components/ui/input';
+import { Button } from '../../components/ui/button';
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from '../../components/ui/dialog';
+import { useToast } from '../../components/ui/use-toast';
 import { format } from 'date-fns';
 
 export default function RegistrationsAdmin() {

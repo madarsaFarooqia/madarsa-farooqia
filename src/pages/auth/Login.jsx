@@ -7,11 +7,11 @@ import { motion } from "framer-motion";
 import { Mail, Lock, ArrowRight } from "lucide-react";
 import { FaGoogle } from "react-icons/fa";
 import { toast } from "sonner";
-import { useAuth } from "@/lib/AuthContext";
+import { useAuth } from "../../lib/AuthContext";
 
-import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
-import { Checkbox } from "@/components/ui/checkbox";
+import { Input } from "../../components/ui/input";
+import { Button } from "../../components/ui/button";
+import { Checkbox } from "../../components/ui/checkbox";
 import {
   Form,
   FormControl,
@@ -19,8 +19,8 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from "@/components/ui/form";
-import { FarooqiaLogo, AuthBackground } from "@/assets";
+} from "../../components/ui/form";
+import { FarooqiaLogo, AuthBackground } from "../../assets";
 
 const loginSchema = z.object({
   email: z.string().email({ message: "Invalid email address" }),
