@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
 import { Target, TrendingUp, Users, PieChart, BarChart2, AlertCircle } from 'lucide-react';
-import { useLanguage } from '@/lib/LanguageContext';
-import { useTranslation } from '@/lib/i18n';
-import { fundraisingCampaignService } from '@/services';
-import CampaignCard from '@/components/fundraising/CampaignCard';
-import { Progress } from '@/components/ui/progress';
+import { useLanguage } from '../lib/LanguageContext';
+import { useTranslation } from '../lib/i18n';
+import { fundraisingCampaignService } from '../services';
+import CampaignCard from '../components/fundraising/CampaignCard';
+import { Progress } from '../components/ui/progress';
 import { RadialBarChart, RadialBar, BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, Cell, PieChart as RePieChart, Pie } from 'recharts';
 
 const COLORS = ['#0a0a0a', '#b8891a', '#374151', '#6b7280', '#111827', '#d4a53a', '#1f2937', '#4b5563'];

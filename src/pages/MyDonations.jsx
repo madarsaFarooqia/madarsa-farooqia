@@ -2,11 +2,11 @@
 // import { motion } from 'framer-motion';
 // import { Heart, Calendar, DollarSign, RefreshCw, TrendingUp, Award, ArrowRight } from 'lucide-react';
 // import { Link } from 'react-router-dom';
-// import { useLanguage } from '@/lib/LanguageContext';
-// import { useTranslation } from '@/lib/i18n';
-// import { authService, donationService } from '@/services';
-// import { Badge } from '@/components/ui/badge';
-// import { Button } from '@/components/ui/button';
+// import { useLanguage } from '../lib/LanguageContext';
+// import { useTranslation } from '../lib/i18n';
+// import { authService, donationService } from '../services';
+// import { Badge } from '../components/ui/badge';
+// import { Button } from '../components/ui/button';
 // import { format } from 'date-fns';
 // import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, PieChart, Pie, Cell } from 'recharts';
 
@@ -232,10 +232,10 @@ import {
   Zap,
 } from "lucide-react";
 import { Link } from "react-router-dom";
-import { useLanguage } from "@/lib/LanguageContext";
-import { useTranslation } from "@/lib/i18n";
-import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
+import { useLanguage } from "../lib/LanguageContext";
+import { useTranslation } from "../lib/i18n";
+import { Badge } from "../components/ui/badge";
+import { Button } from "../components/ui/button";
 import { format } from "date-fns";
 import {
   BarChart,
@@ -251,7 +251,7 @@ import {
   Area,
   CartesianGrid,
 } from "recharts";
-import { downloadReceipt } from "@/lib/receiptGenerator";
+import { downloadReceipt } from "../lib/receiptGenerator";
 
 const mockAuth = {
   me: async () => {
@@ -719,7 +719,7 @@ export default function MyDonations() {
                         </div>
                         {d.status === "completed" && (
                           <button
-                            onClick={() => downloadReceipt(d, "IN")}
+                            onClick={() => downloadReceipt(d, "IN", language)}
                             className="opacity-0 group-hover:opacity-100 transition-opacity p-2 hover:bg-secondary rounded-lg shrink-0"
                             title="Download Receipt"
                           >

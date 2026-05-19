@@ -1,7 +1,7 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
 import { useMutation } from '@tanstack/react-query';
-import { authService } from '@/services/authService';
-import { useAuth } from '@/lib/AuthContext';
+import { authService } from '../services/authService';
+import { useAuth } from './AuthContext';
 import { languages } from './i18n';
 
 const LanguageContext = createContext();

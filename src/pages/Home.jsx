@@ -2,12 +2,12 @@
 // import { Link } from 'react-router-dom';
 // import { motion } from 'framer-motion';
 // import { ArrowRight, BookOpen, Users, Award, Star, ChevronDown, Globe2, Sparkles } from 'lucide-react';
-// import { useLanguage } from '@/lib/LanguageContext';
-// import { useTranslation } from '@/lib/i18n';
-// import { teacherService, fundraisingCampaignService } from '@/services';
-// import { SITE_LOGO_URL } from '@/lib/constants';
-// import TeacherCard from '@/components/teachers/TeacherCard';
-// import CampaignCard from '@/components/fundraising/CampaignCard';
+// import { useLanguage } from '../lib/LanguageContext';
+// import { useTranslation } from '../lib/i18n';
+// import { teacherService, fundraisingCampaignService } from '../services';
+// import { SITE_LOGO_URL } from '../lib/constants';
+// import TeacherCard from '../components/teachers/TeacherCard';
+// import CampaignCard from '../components/fundraising/CampaignCard';
 
 // const stats = [
 //   { key: 'stats_students', value: '2,400+', icon: Users },
@@ -277,31 +277,15 @@ import {
   GraduationCap,
   Building2,
 } from "lucide-react";
-import { useLanguage } from "@/lib/LanguageContext";
-import { useTranslation } from "@/lib/i18n";
-import TeacherCard from "@/components/teachers/TeacherCard";
-import CampaignCard from "@/components/fundraising/CampaignCard";
-import { fundraisingCampaignService, teacherService } from "@/services";
-import { AuthBackground } from "@/assets";
+import { useLanguage } from "../lib/LanguageContext";
+import { useTranslation } from "../lib/i18n";
+import TeacherCard from "../components/teachers/TeacherCard";
+import CampaignCard from "../components/fundraising/CampaignCard";
+import { fundraisingCampaignService, teacherService } from "../services";
+import { AuthBackground } from "../assets";
 import { FcDonate } from "react-icons/fc";
 
-const islamicVerses = [
-  {
-    arabic: "اقْرَأْ بِاسْمِ رَبِّكَ الَّذِي خَلَقَ",
-    trans: "Read in the name of your Lord who created.",
-    src: "Quran 96:1 — First Revelation",
-  },
-  {
-    arabic: "وَمَن يَتَّقِ اللَّهَ يَجْعَل لَّهُ مَخْرَجًا",
-    trans: "Whoever fears Allah — He will make for him a way out.",
-    src: "Quran 65:2",
-  },
-  {
-    arabic: "طَلَبُ الْعِلْمِ فَرِيضَةٌ عَلَى كُلِّ مُسْلِمٍ",
-    trans: "Seeking knowledge is an obligation upon every Muslim.",
-    src: "Ibn Majah",
-  },
-];
+
 
 const stats = [
   { key: "stats_students", value: "2,400+", icon: Users },
@@ -315,6 +299,48 @@ export default function Home() {
   const { t } = useTranslation(language);
   const [teachers, setTeachers] = useState([]);
   const [campaigns, setCampaigns] = useState([]);
+
+  const islamicVerses = [
+    {
+      arabic: "اقْرَأْ بِاسْمِ رَبِّكَ الَّذِي خَلَقَ",
+      trans: t("home:verse1_trans", "Read in the name of your Lord who created."),
+      src: t("home:verse1_src", "Quran 96:1 — First Revelation"),
+    },
+    {
+      arabic: "وَمَن يَتَّقِ اللَّهَ يَجْعَل لَّهُ مَخْرَجًا",
+      trans: t("home:verse2_trans", "Whoever fears Allah — He will make for him a way out."),
+      src: t("home:verse2_src", "Quran 65:2"),
+    },
+    {
+      arabic: "طَلَبُ الْعِلْمِ فَرِيضَةٌ عَلَى كُلِّ مُسْلِمٍ",
+      trans: t("home:verse3_trans", "Seeking knowledge is an obligation upon every Muslim."),
+      src: t("home:verse3_src", "Ibn Majah"),
+    },
+  ];
+
+  const branches = [
+    {
+      title: t("home:branch1_title", "Madrasa Farooqia"),
+      sub: t("home:branch1_sub", "Main Institution"),
+      desc: t("home:branch1_desc", "Full Islamic curriculum — Alim course, Arabic, Tajweed, and primary education for boys. Est. 1999."),
+      href: "/teachers",
+      emoji: "📚",
+    },
+    {
+      title: t("home:branch2_title", "Niswaan Branch"),
+      sub: t("home:branch2_sub", "Girls Madrasa"),
+      desc: t("home:branch2_desc", "Dedicated Islamic education for girls — Hifz, Alimah course, Tajweed in a fully segregated environment. Est. 2003."),
+      href: "/niswaan",
+      emoji: "👩‍🎓",
+    },
+    {
+      title: t("home:branch3_title", "Masjid & Hifz"),
+      sub: t("home:branch3_sub", "Quran Memorisation"),
+      desc: t("home:branch3_desc", "The spiritual heart — daily prayers, dedicated Hifz program with Ijazah-chain teachers. Est. 1999."),
+      href: "/masjid-hifz",
+      emoji: "🕌",
+    },
+  ];
 
   // useEffect(() => {
   //   base44.entities.Teacher.list('-created_date', 3).then(setTeachers).catch(() => {});
@@ -440,7 +466,7 @@ export default function Home() {
             >
               <div className="inline-flex items-center gap-2 text-accent font-semibold text-sm mb-4">
                 <Globe2 className="w-4 h-4" />
-                <span>Since 1999</span>
+                <span>{t("home:since1999", "Since 1999")}</span>
               </div>
               <h2 className="font-playfair text-4xl font-bold text-foreground mb-6">
                 {t("home:aboutTitle")}
@@ -496,7 +522,7 @@ export default function Home() {
             <div className="text-center mb-14">
               <div className="inline-flex items-center gap-2 text-accent font-semibold text-sm mb-4">
                 <BookOpen className="w-4 h-4" />
-                <span>Our Faculty</span>
+                <span>{t("home:ourFaculty", "Our Faculty")}</span>
               </div>
               <h2 className="font-playfair text-4xl font-bold text-foreground mb-4">
                 {t("home:ourTeachers")}
@@ -567,10 +593,10 @@ export default function Home() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-10">
             <p className="text-background/40 text-xs uppercase tracking-widest mb-2">
-              Guided by Quran & Sunnah
+              {t("home:guidedByQuran", "Guided by Quran & Sunnah")}
             </p>
             <h2 className="font-playfair text-3xl font-bold text-background">
-              Words That Guide Us
+              {t("home:wordsThatGuideUs", "Words That Guide Us")}
             </h2>
           </div>
           <div className="grid md:grid-cols-3 gap-6">
@@ -601,43 +627,17 @@ export default function Home() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-12">
             <div className="inline-flex items-center gap-2 text-accent font-semibold text-sm mb-4">
-              <Building2 className="w-4 h-4" /> Our Institutions
+              <Building2 className="w-4 h-4" /> {t("home:ourInstitutions", "Our Institutions")}
             </div>
             <h2 className="font-playfair text-3xl font-bold text-foreground mb-3">
-              Three Institutions, One Mission
+              {t("home:threeInstitutionsOneMission", "Three Institutions, One Mission")}
             </h2>
             <p className="text-muted-foreground">
-              Madrasa Farooqia operates three distinct institutions — each
-              serving a unique need of the Muslim community.
+              {t("home:branchesDesc", "Madrasa Farooqia operates three distinct institutions — each serving a unique need of the Muslim community.")}
             </p>
           </div>
           <div className="grid md:grid-cols-3 gap-6">
-            {[
-              {
-                title: "Madrasa Farooqia",
-                sub: "Main Institution",
-                desc: "Full Islamic curriculum — Alim course, Arabic, Tajweed, and primary education for boys. Est. 1999.",
-                href: "/teachers",
-                icon: BookOpen,
-                emoji: "📚",
-              },
-              {
-                title: "Niswaan Branch",
-                sub: "Girls Madrasa",
-                desc: "Dedicated Islamic education for girls — Hifz, Alimah course, Tajweed in a fully segregated environment. Est. 2003.",
-                href: "/niswaan",
-                icon: GraduationCap,
-                emoji: "👩‍🎓",
-              },
-              {
-                title: "Masjid & Hifz",
-                sub: "Quran Memorisation",
-                desc: "The spiritual heart — daily prayers, dedicated Hifz program with Ijazah-chain teachers. Est. 1999.",
-                href: "/masjid-hifz",
-                icon: BookOpen,
-                emoji: "🕌",
-              },
-            ].map(({ title, sub, desc, href, emoji }) => (
+            {branches.map(({ title, sub, desc, href, emoji }) => (
               <motion.div
                 key={title}
                 initial={{ opacity: 0, y: 20 }}
@@ -659,7 +659,7 @@ export default function Home() {
                   to={href}
                   className="inline-flex items-center gap-2 text-sm font-semibold text-foreground hover:gap-3 transition-all"
                 >
-                  Learn More <ArrowRight className="w-4 h-4" />
+                  {t("common:learnMore", "Learn More")} <ArrowRight className="w-4 h-4" />
                 </Link>
               </motion.div>
             ))}
@@ -687,11 +687,10 @@ export default function Home() {
             viewport={{ once: true }}
           >
             <h2 className="font-comic text-4xl sm:text-5xl font-bold text-white mb-6">
-              Support Our Mission
+              {t("home:supportOurMission", "Support Our Mission")}
             </h2>
             <p className="text-white/80 text-xl mb-10 max-w-2xl mx-auto italic font-medium leading-relaxed">
-              Every donation, big or small, helps us provide quality Islamic
-              education to students in need.
+              {t("home:ctaDescription", "Every donation, big or small, helps us provide quality Islamic education to students in need.")}
             </p>
             <Link
               to="/donate"

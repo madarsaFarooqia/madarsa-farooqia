@@ -1,8 +1,8 @@
 // import React, { useState } from 'react';
 // import { BookOpen, Clock } from 'lucide-react';
-// import { Badge } from '@/components/ui/badge';
+// import { Badge } from '../ui/badge';
 // import TeacherModal from './TeacherModal';
-// import { normalizeSubjectList, teacherExperienceYears } from '@/lib/utils';
+// import { normalizeSubjectList, teacherExperienceYears } from '../../lib/utils';
 
 // export default function TeacherCard({ teacher, language, tr }) {
 //   const [showModal, setShowModal] = useState(false);
@@ -95,7 +95,7 @@
 
 import React, { useState } from "react";
 import { BookOpen, Clock, Star } from "lucide-react";
-import { Badge } from "@/components/ui/badge";
+import { Badge } from "../ui/badge";
 import TeacherModal from "./TeacherModal";
 
 export default function TeacherCard({ teacher, language, t }) {

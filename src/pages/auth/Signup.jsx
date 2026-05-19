@@ -7,10 +7,10 @@ import { motion } from "framer-motion";
 import { Mail, Lock, User, ArrowRight, ShieldCheck, Phone } from "lucide-react";
 import { FaGoogle } from "react-icons/fa";
 import { toast } from "sonner";
-import { useAuth } from "@/lib/AuthContext";
+import { useAuth } from "../../lib/AuthContext";
 
-import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
+import { Input } from "../../components/ui/input";
+import { Button } from "../../components/ui/button";
 import {
   Form,
   FormControl,
@@ -18,24 +18,28 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from "@/components/ui/form";
-import { FarooqiaLogo, AuthBackground } from "@/assets";
-
-const signupSchema = z.object({
-  firstName: z.string().min(2, { message: "First name is required" }),
-  lastName: z.string().min(2, { message: "Last name is required" }),
-  email: z.string().email({ message: "Invalid email address" }),
-  phoneNumber: z.string().optional(),
-  password: z.string().min(8, { message: "Password must be at least 8 characters" }),
-  confirmPassword: z.string(),
-}).refine((data) => data.password === data.confirmPassword, {
-  message: "Passwords don't match",
-  path: ["confirmPassword"],
-});
+} from "../../components/ui/form";
+import { FarooqiaLogo, AuthBackground } from "../../assets";
+import { useLanguage } from "../../lib/LanguageContext";
+import { useTranslation } from "../../lib/i18n";
 
 const Signup = () => {
   const { register, isRegistering } = useAuth();
   const navigate = useNavigate();
+  const { language } = useLanguage();
+  const { t } = useTranslation(language);
+
+  const signupSchema = z.object({
+    firstName: z.string().min(2, { message: t("signup:first_name_err", "First name is required") }),
+    lastName: z.string().min(2, { message: t("signup:last_name_err", "Last name is required") }),
+    email: z.string().email({ message: t("signup:invalid_email", "Invalid email address") }),
+    phoneNumber: z.string().optional(),
+    password: z.string().min(8, { message: t("signup:min_length", "Password must be at least 8 characters") }),
+    confirmPassword: z.string(),
+  }).refine((data) => data.password === data.confirmPassword, {
+    message: t("signup:match_error", "Passwords don't match"),
+    path: ["confirmPassword"],
+  });
 
   const form = useForm({
     resolver: zodResolver(signupSchema),
@@ -54,10 +58,10 @@ const Signup = () => {
       // Remove confirmPassword before sending to backend
       const { confirmPassword, ...registerData } = values;
       await register(registerData);
-      toast.success("Account created successfully! Please sign in.");
+      toast.success(t("signup:success_toast", "Account created successfully! Please sign in."));
       navigate("/login");
     } catch (error) {
-      toast.error(error.message || "Registration failed");
+      toast.error(error.message || t("signup:failed_toast", "Registration failed"));
     }
   };
 
@@ -93,10 +97,10 @@ const Signup = () => {
           </motion.div>
           <div className="space-y-4">
             <h1 className="text-4xl font-bold tracking-tight text-primary font-playfair">
-              Join Our Community
+              {t("signup:left_title", "Join Our Community")}
             </h1>
             <p className="text-lg text-muted-foreground font-inter">
-              Begin your journey with Madrasa Farooqia. Create an account to access student resources, faculty tools, and administrative portals.
+              {t("signup:left_desc", "Begin your journey with Madrasa Farooqia. Create an account to access student resources, faculty tools, and administrative portals.")}
             </p>
           </div>
           <div className="flex justify-center space-x-6 pt-4 text-primary/60">
@@ -116,9 +120,9 @@ const Signup = () => {
           className="w-full max-w-[520px] space-y-8 my-auto"
         >
           <div className="text-center lg:text-left space-y-2">
-            <h2 className="text-3xl font-bold tracking-tight">Create Account</h2>
+            <h2 className="text-3xl font-bold tracking-tight">{t("signup:right_title", "Create Account")}</h2>
             <p className="text-muted-foreground">
-              Enter your details to request access to the platform.
+              {t("signup:right_desc", "Enter your details to request access to the platform.")}
             </p>
           </div>
 
@@ -130,7 +134,7 @@ const Signup = () => {
                   name="firstName"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>First Name</FormLabel>
+                      <FormLabel>{t("signup:first_name_label", "First Name")}</FormLabel>
                       <FormControl>
                         <div className="relative">
                           <User className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
@@ -151,7 +155,7 @@ const Signup = () => {
                   name="lastName"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Last Name</FormLabel>
+                      <FormLabel>{t("signup:last_name_label", "Last Name")}</FormLabel>
                       <FormControl>
                         <div className="relative">
                           <User className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
@@ -173,7 +177,7 @@ const Signup = () => {
                 name="email"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Email Address</FormLabel>
+                    <FormLabel>{t("signup:email_label", "Email Address")}</FormLabel>
                     <FormControl>
                       <div className="relative">
                         <Mail className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
@@ -194,7 +198,7 @@ const Signup = () => {
                 name="phoneNumber"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Phone Number (Optional)</FormLabel>
+                    <FormLabel>{t("signup:phone_label", "Phone Number (Optional)")}</FormLabel>
                     <FormControl>
                       <div className="relative">
                         <Phone className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
@@ -216,7 +220,7 @@ const Signup = () => {
                   name="password"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Password</FormLabel>
+                      <FormLabel>{t("signup:password_label", "Password")}</FormLabel>
                       <FormControl>
                         <div className="relative">
                           <Lock className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
@@ -238,7 +242,7 @@ const Signup = () => {
                   name="confirmPassword"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Confirm Password</FormLabel>
+                      <FormLabel>{t("signup:confirm_password_label", "Confirm Password")}</FormLabel>
                       <FormControl>
                         <div className="relative">
                           <Lock className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
@@ -258,7 +262,7 @@ const Signup = () => {
 
               <div className="pt-2">
                 <Button type="submit" disabled={isRegistering} className="w-full h-11 text-base font-semibold transition-all hover:scale-[1.01] active:scale-[0.99]">
-                  {isRegistering ? "Registering..." : "Create Account"}
+                  {isRegistering ? t("signup:registering", "Registering...") : t("signup:create_account_btn", "Create Account")}
                   <ArrowRight className="ml-2 h-4 w-4" />
                 </Button>
               </div>
@@ -271,7 +275,7 @@ const Signup = () => {
             </div>
             <div className="relative flex justify-center text-xs uppercase">
               <span className="bg-background px-2 text-muted-foreground">
-                Or sign up with
+                {t("signup:continue_with", "Or sign up with")}
               </span>
             </div>
           </div>
@@ -279,17 +283,17 @@ const Signup = () => {
           <div className="grid grid-cols-1 gap-4">
             <Button variant="outline" className="h-11 hover:bg-red-50 transition-colors">
               <FaGoogle className="mr-2 h-4 w-4 text-red-500" />
-              Google
+              {t("signup:google_btn", "Google")}
             </Button>
           </div>
 
           <p className="text-center text-sm text-muted-foreground pt-4">
-            Already have an account?{" "}
+            {t("signup:have_account", "Already have an account?")}{" "}
             <Link
               to="/login"
               className="font-semibold text-primary hover:underline underline-offset-4"
             >
-              Sign In
+              {t("signup:sign_in", "Sign In")}
             </Link>
           </p>
         </motion.div>

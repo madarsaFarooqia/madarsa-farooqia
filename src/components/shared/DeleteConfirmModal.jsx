@@ -1,6 +1,6 @@
 import { motion, AnimatePresence } from 'framer-motion';
 import { Trash2, X, AlertTriangle } from 'lucide-react';
-import { Button } from '@/components/ui/button';
+import { Button } from '../ui/button';
 
 export default function DeleteConfirmModal({ isOpen, onClose, onConfirm, title = 'Delete Item', message = 'Are you sure you want to delete this? This action cannot be undone.', loading = false }) {
   if (!isOpen) return null;

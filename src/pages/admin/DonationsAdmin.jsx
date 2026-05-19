@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
-import { base44 } from '@/api/base44Client';
+import { base44 } from '../../api/base44Client';
 import { Loader2, Search, Download, DollarSign } from 'lucide-react';
-import { Input } from '@/components/ui/input';
+import { Input } from '../../components/ui/input';
 import { format } from 'date-fns';
 
 export default function DonationsAdmin() {

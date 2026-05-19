@@ -1,5 +1,5 @@
-import { isMockApiEnabled } from '@/mocks/config';
-import { handleMockRequest } from '@/mocks/handlers';
+import { isMockApiEnabled } from '../mocks/config';
+import { handleMockRequest } from '../mocks/handlers';
 
 const DEFAULT_TOKEN_KEY = 'madrasa_access_token';
 

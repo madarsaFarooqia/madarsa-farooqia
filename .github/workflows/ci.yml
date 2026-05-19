@@ -1,0 +1,40 @@
+name: CI
+
+on:
+  push:
+    branches: [ main, development ]
+  pull_request:
+    branches: [ main, development ]
+
+jobs:
+  build:
+    name: Build & Test
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Use Node.js 18
+        uses: actions/setup-node@v4
+        with:
+          node-version: 18
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Run build
+        env:
+          CI: true
+        run: npm run build --if-present
+
+      - name: Run tests
+        env:
+          CI: true
+        run: |
+          # Run tests in CI mode and fail if any test fails
+          npm test -- --watchAll=false || (echo "Tests failed" && exit 1)
+
+      # Archive step removed — CI only (no CD). Add artifact upload later if needed.

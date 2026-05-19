@@ -1,7 +1,7 @@
 import React, { createContext, useContext, useEffect } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import { authService } from "@/services/authService";
-import { getStoredToken } from "@/services/http";
+import { authService } from "../services/authService";
+import { getStoredToken } from "../services/http";
 
 const AuthContext = createContext();
 

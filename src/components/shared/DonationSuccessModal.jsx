@@ -1,7 +1,7 @@
 // import { motion, AnimatePresence } from 'framer-motion';
 // import { Check, Download, Heart, X } from 'lucide-react';
 // import { Link } from 'react-router-dom';
-// import { Button } from '@/components/ui/button';
+// import { Button } from '../ui/button';
 // import { format } from 'date-fns';
 
 // const islamicQuotes = [
@@ -149,9 +149,11 @@ import {
   Star,
 } from "lucide-react";
 import { Link } from "react-router-dom";
-import { Button } from "@/components/ui/button";
+import { Button } from "../ui/button";
 import { format } from "date-fns";
-import { generateReceiptId, downloadReceipt } from "@/lib/receiptGenerator";
+import { useLanguage } from "../../lib/LanguageContext";
+import { useTranslation } from "../../lib/i18n";
+import { generateReceiptId, downloadReceipt } from "../../lib/receiptGenerator";
 
 const islamicQuotes = [
   { text: "Charity does not decrease wealth.", source: "Sahih Muslim" },
@@ -190,11 +192,13 @@ export default function DonationSuccessModal({
   onClose,
   onDonateAgain,
 }) {
+  const { language } = useLanguage();
+  const { t } = useTranslation(language);
   const quote = islamicQuotes[Math.floor(Math.random() * islamicQuotes.length)];
   const receiptId = generateReceiptId(donation);
   const now = format(new Date(), "PPP");
 
-  const handleDownload = () => downloadReceipt(donation, "IN");
+  const handleDownload = () => downloadReceipt(donation, "IN", language);
 
   return (
     <AnimatePresence>
@@ -257,10 +261,10 @@ export default function DonationSuccessModal({
                   جزاك الله خيرًا
                 </h2>
                 <p className="font-playfair text-xl font-bold text-foreground">
-                  JazakAllah Khair
+                  {t("donate:jazakAllah", "JazakAllah Khair")}
                 </p>
                 <p className="text-muted-foreground text-sm mt-1">
-                  Your donation has been received
+                  {t("donate:donationReceived", "Your donation has been received")}
                 </p>
               </motion.div>
             </div>
@@ -286,27 +290,27 @@ export default function DonationSuccessModal({
 
               <div className="space-y-2 text-sm">
                 <div className="flex justify-between items-center">
-                  <span className="text-muted-foreground">Amount Donated</span>
+                  <span className="text-muted-foreground">{t("donate:amountDonated", "Amount Donated")}</span>
                   <span className="font-playfair font-bold text-xl text-foreground">
                     {donation.currency}{" "}
                     {Number(donation.amount).toLocaleString()}
                   </span>
                 </div>
                 <div className="flex justify-between">
-                  <span className="text-muted-foreground">Purpose</span>
+                  <span className="text-muted-foreground">{t("myDonations:donationPurpose", "Purpose")}</span>
                   <span className="font-medium capitalize text-foreground">
-                    {donation.purpose?.replace(/_/g, " ")}
+                    {t(`donate:${donation.purpose}`, donation.purpose?.replace(/_/g, " "))}
                   </span>
                 </div>
                 <div className="flex justify-between">
-                  <span className="text-muted-foreground">Date</span>
+                  <span className="text-muted-foreground">{t("myDonations:donationDate", "Date")}</span>
                   <span className="text-foreground">{now}</span>
                 </div>
                 <div className="flex justify-between">
-                  <span className="text-muted-foreground">Status</span>
+                  <span className="text-muted-foreground">{t("myDonations:donationStatus", "Status")}</span>
                   <span className="inline-flex items-center gap-1 bg-foreground text-background px-2.5 py-0.5 rounded-full text-xs font-medium">
                     <span className="w-1.5 h-1.5 rounded-full bg-green-400" />{" "}
-                    Completed
+                    {t("fundraising:completed", "Completed")}
                   </span>
                 </div>
               </div>
@@ -315,7 +319,7 @@ export default function DonationSuccessModal({
               <div className="flex items-center gap-2 mt-4 pt-3 border-t border-border">
                 <QrCode className="w-4 h-4 text-accent shrink-0" />
                 <p className="text-xs text-muted-foreground">
-                  PDF receipt includes QR verification code for tax compliance
+                  {t("donate:successReceiptNote", "PDF receipt includes QR verification code for tax compliance")}
                 </p>
               </div>
             </motion.div>
@@ -336,14 +340,14 @@ export default function DonationSuccessModal({
                   variant="outline"
                   className="flex items-center gap-2 rounded-xl h-11"
                 >
-                  <Download className="w-4 h-4" /> Tax Receipt
+                  <Download className="w-4 h-4" /> {t("nav:taxReceipts", "Tax Receipt")}
                 </Button>
                 <Button
                   asChild
                   className="rounded-xl h-11 bg-foreground text-background hover:bg-foreground/90"
                 >
                   <Link to="/receipts">
-                    <FileText className="w-4 h-4 mr-1" /> All Receipts
+                    <FileText className="w-4 h-4 mr-1" /> {t("donate:allReceipts", "All Receipts")}
                   </Link>
                 </Button>
               </div>
@@ -353,7 +357,7 @@ export default function DonationSuccessModal({
                 className="w-full rounded-xl h-11"
               >
                 <Link to="/my-donations">
-                  <Heart className="w-4 h-4 mr-1" /> My Donations Dashboard
+                  <Heart className="w-4 h-4 mr-1" /> {t("nav:myDonations", "My Donations Dashboard")}
                 </Link>
               </Button>
               <Button
@@ -361,7 +365,7 @@ export default function DonationSuccessModal({
                 variant="ghost"
                 className="w-full text-sm text-muted-foreground hover:text-foreground"
               >
-                Donate Again
+                {t("donate:donateAgain", "Donate Again")}
               </Button>
             </div>
           </div>

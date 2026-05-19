@@ -1,15 +1,15 @@
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import { MapPin, Phone, Mail, Clock, Send, MessageSquare, Check, Navigation } from 'lucide-react';
-import { useLanguage } from '@/lib/LanguageContext';
-import { useTranslation } from '@/lib/i18n';
-import { contactMessageService } from '@/services';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import { Textarea } from '@/components/ui/textarea';
+import { useLanguage } from '../lib/LanguageContext';
+import { useTranslation } from '../lib/i18n';
+import { contactMessageService } from '../services';
+import { Button } from '../components/ui/button';
+import { Input } from '../components/ui/input';
+import { Label } from '../components/ui/label';
+import { Textarea } from '../components/ui/textarea';
 import { toast } from 'sonner';
-import { FarooqiaLogo, AuthBackground } from "@/assets";
+import { FarooqiaLogo, AuthBackground } from "../assets";
 
 // Real coordinates: Husianabad, Mau, UP, India
 const MAPS_QUERY = 'Madarsa+Farooqia+Husianabad+Mau+Uttar+Pradesh+India';
