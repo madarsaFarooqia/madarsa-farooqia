@@ -21,16 +21,20 @@ import {
   FormMessage,
 } from "../../components/ui/form";
 import { FarooqiaLogo, AuthBackground } from "../../assets";
-
-const loginSchema = z.object({
-  email: z.string().email({ message: "Invalid email address" }),
-  password: z.string().min(6, { message: "Password must be at least 6 characters" }),
-  rememberMe: z.boolean().default(false),
-});
+import { useLanguage } from "../../lib/LanguageContext";
+import { useTranslation } from "../../lib/i18n";
 
 const Login = () => {
   const { login, isLoggingIn } = useAuth();
   const navigate = useNavigate();
+  const { language } = useLanguage();
+  const { t } = useTranslation(language);
+
+  const loginSchema = z.object({
+    email: z.string().email({ message: t("login:invalid_email", "Invalid email address") }),
+    password: z.string().min(6, { message: t("login:min_length", "Password must be at least 6 characters") }),
+    rememberMe: z.boolean().default(false),
+  });
 
   const form = useForm({
     resolver: zodResolver(loginSchema),
@@ -44,10 +48,10 @@ const Login = () => {
   const onSubmit = async (data) => {
     try {
       await login(data);
-      toast.success("Welcome back! You are now logged in to Darul Uloom Farooqia");
+      toast.success(t("login:success_toast", "Welcome back! You are now logged in to Darul Uloom Farooqia"));
       navigate("/");
     } catch (error) {
-      toast.error(error.message || "Login failed");
+      toast.error(error.message || t("login:failed_toast", "Login failed"));
     }
   };
 
@@ -83,10 +87,10 @@ const Login = () => {
           </motion.div>
           <div className="space-y-4">
             <h1 className="text-4xl font-bold tracking-tight text-primary font-playfair">
-              Madarsah Darul Uloom Farooqia
+              {t("login:left_title", "Madarsah Darul Uloom Farooqia")}
             </h1>
             <p className="text-lg text-muted-foreground font-inter">
-              Empowering the next generation of scholars with traditional values and modern excellence.
+              {t("login:left_desc", "Empowering the next generation of scholars with traditional values and modern excellence.")}
             </p>
           </div>
           <div className="grid grid-cols-3 gap-4 pt-8">
@@ -113,9 +117,9 @@ const Login = () => {
           className="w-full max-w-[440px] space-y-8"
         >
           <div className="text-center lg:text-left space-y-2">
-            <h2 className="text-3xl font-bold tracking-tight">Welcome Back</h2>
+            <h2 className="text-3xl font-bold tracking-tight">{t("login:right_title", "Welcome Back")}</h2>
             <p className="text-muted-foreground">
-              Please enter your credentials to access your portal.
+              {t("login:right_desc", "Please enter your credentials to access your portal.")}
             </p>
           </div>
 
@@ -126,7 +130,7 @@ const Login = () => {
                 name="email"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Email</FormLabel>
+                    <FormLabel>{t("login:email_label", "Email")}</FormLabel>
                     <FormControl>
                       <div className="relative">
                         <Mail className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
@@ -148,12 +152,12 @@ const Login = () => {
                 render={({ field }) => (
                   <FormItem>
                     <div className="flex items-center justify-between">
-                      <FormLabel>Password</FormLabel>
+                      <FormLabel>{t("login:password_label", "Password")}</FormLabel>
                       <Link
                         to="/forgot-password"
                         className="text-sm font-medium text-primary hover:underline underline-offset-4"
                       >
-                        Forgot password?
+                        {t("login:forgot_password", "Forgot password?")}
                       </Link>
                     </div>
                     <FormControl>
@@ -185,14 +189,14 @@ const Login = () => {
                       />
                     </FormControl>
                     <FormLabel htmlFor="remember" className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 cursor-pointer">
-                      Remember me
+                      {t("login:remember_me", "Remember me")}
                     </FormLabel>
                   </FormItem>
                 )}
               />
 
               <Button type="submit" disabled={isLoggingIn} className="w-full h-11 text-base font-semibold transition-all hover:scale-[1.01] active:scale-[0.99]">
-                {isLoggingIn ? "Signing In..." : "Sign In"}
+                {isLoggingIn ? t("login:signing_in", "Signing In...") : t("login:sign_in", "Sign In")}
                 <ArrowRight className="ml-2 h-4 w-4" />
               </Button>
             </form>
@@ -204,7 +208,7 @@ const Login = () => {
             </div>
             <div className="relative flex justify-center text-xs uppercase">
               <span className="bg-background px-2 text-muted-foreground">
-                Or continue with
+                {t("login:continue_with", "Or continue with")}
               </span>
             </div>
           </div>
@@ -212,17 +216,17 @@ const Login = () => {
           <div className="grid grid-cols-1 gap-4">
             <Button variant="outline" className="h-11 hover:bg-red-50 transition-colors">
               <FaGoogle className="mr-2 h-4 w-4 text-red-500" />
-              Google
+              {t("login:google_btn", "Google")}
             </Button>
           </div>
 
           <p className="text-center text-sm text-muted-foreground">
-            Don&apos;t have an account?{" "}
+            {t("login:no_account", "Don't have an account?")}{" "}
             <Link
               to="/signup"
               className="font-semibold text-primary hover:underline underline-offset-4"
             >
-              Request Access
+              {t("login:request_access", "Request Access")}
             </Link>
           </p>
         </motion.div>

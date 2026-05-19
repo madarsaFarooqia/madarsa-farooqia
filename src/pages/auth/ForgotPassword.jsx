@@ -18,12 +18,17 @@ import {
   FormMessage,
 } from "../../components/ui/form";
 import { FarooqiaLogo, AuthBackground } from "../../assets";
-
-const forgotPasswordSchema = z.object({
-  email: z.string().email({ message: "Invalid email address" }),
-});
+import { useLanguage } from "../../lib/LanguageContext";
+import { useTranslation } from "../../lib/i18n";
 
 const ForgotPassword = () => {
+  const { language } = useLanguage();
+  const { t } = useTranslation(language);
+
+  const forgotPasswordSchema = z.object({
+    email: z.string().email({ message: t("forgot:invalid_email", "Invalid email address") }),
+  });
+
   const form = useForm({
     resolver: zodResolver(forgotPasswordSchema),
     defaultValues: {
@@ -33,7 +38,7 @@ const ForgotPassword = () => {
 
   const onSubmit = (data) => {
     console.log("Forgot password request:", data);
-    toast.success("Password reset link sent to your email!");
+    toast.success(t("forgot:success_toast", "Password reset link sent to your email!"));
   };
 
   return (
@@ -68,10 +73,10 @@ const ForgotPassword = () => {
           </motion.div>
           <div className="space-y-4">
             <h1 className="text-3xl font-bold tracking-tight text-primary font-playfair">
-              Reset Your Password
+              {t("forgot:left_title", "Reset Your Password")}
             </h1>
             <p className="text-muted-foreground font-inter">
-              Don't worry, it happens to the best of us. We'll help you get back into your account in no time.
+              {t("forgot:left_desc", "Don't worry, it happens to the best of us. We'll help you get back into your account in no time.")}
             </p>
           </div>
         </div>
@@ -86,9 +91,9 @@ const ForgotPassword = () => {
           className="w-full max-w-[400px] space-y-8"
         >
           <div className="text-center lg:text-left space-y-2">
-            <h2 className="text-3xl font-bold tracking-tight">Forgot Password?</h2>
+            <h2 className="text-3xl font-bold tracking-tight">{t("forgot:right_title", "Forgot Password?")}</h2>
             <p className="text-muted-foreground text-sm">
-              Enter your registered email address and we'll send you a link to reset your password.
+              {t("forgot:right_desc", "Enter your registered email address and we'll send you a link to reset your password.")}
             </p>
           </div>
 
@@ -99,7 +104,7 @@ const ForgotPassword = () => {
                 name="email"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Email Address</FormLabel>
+                    <FormLabel>{t("forgot:email_label", "Email Address")}</FormLabel>
                     <FormControl>
                       <div className="relative">
                         <Mail className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
@@ -116,7 +121,7 @@ const ForgotPassword = () => {
               />
 
               <Button type="submit" className="w-full h-11 text-base font-semibold">
-                Send Reset Link
+                {t("forgot:send_btn", "Send Reset Link")}
                 <ArrowRight className="ml-2 h-4 w-4" />
               </Button>
             </form>
@@ -128,7 +133,7 @@ const ForgotPassword = () => {
               className="inline-flex items-center text-sm font-medium text-muted-foreground hover:text-primary transition-colors"
             >
               <ArrowLeft className="mr-2 h-4 w-4" />
-              Back to Login
+              {t("forgot:back_login", "Back to Login")}
             </Link>
           </div>
         </motion.div>

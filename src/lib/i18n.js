@@ -17,18 +17,13 @@ const translations = { en, ar, ur, hi, tr };
 export const useTranslation = (lang) => {
   const data = translations[lang] || translations.en;
 
-  /**
-   * Translates a key. Supports namespace:key format.
-   * @param {string} key - The key to translate (e.g., 'contact:yourEmail')
-   * @returns {string} - The translated text
-   */
-  const t = (key) => {
+  const t = (key, defaultText) => {
     if (!key) return '';
 
     // Support namespace:key
     if (key.includes(':')) {
       const [ns, actualKey] = key.split(':');
-      return data[ns]?.[actualKey] || actualKey;
+      return data[ns]?.[actualKey] || defaultText || actualKey;
     }
 
     // Fallback to common or search in all namespaces
@@ -39,7 +34,7 @@ export const useTranslation = (lang) => {
       if (data[ns][key]) return data[ns][key];
     }
 
-    return key;
+    return defaultText || key;
   };
 
   return { t };

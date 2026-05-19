@@ -20,47 +20,53 @@ import {
   ChevronRight,
   ExternalLink,
 } from "lucide-react";
+import { useLanguage } from "../../lib/LanguageContext";
+import { useTranslation } from "../../lib/i18n";
 
-const navGroups = [
-  {
-    label: null,
-    items: [{ label: "Dashboard", href: "/admin", icon: LayoutDashboard }],
-  },
-  {
-    label: "Academic",
-    items: [
-      { label: "Teachers", href: "/admin/teachers", icon: Users },
-      { label: "Students", href: "/admin/students", icon: GraduationCap },
-      { label: "Registrations", href: "/admin/registrations", icon: FileText },
-      { label: "Events", href: "/admin/events", icon: Calendar },
-    ],
-  },
-  {
-    label: "Donations",
-    items: [
-      { label: "Campaigns", href: "/admin/campaigns-pro", icon: Heart },
-      { label: "Donations", href: "/admin/donations-pro", icon: DollarSign },
-      { label: "Reports", href: "/admin/reports", icon: BarChart2 },
-    ],
-  },
-  {
-    label: "Content",
-    items: [
-      { label: "Blog & News", href: "/admin/blog", icon: PenSquare },
-      { label: "Messages / Q&A", href: "/admin/messages", icon: MessageSquare },
-      {
-        label: "Infrastructure",
-        href: "/admin/infrastructure",
-        icon: Building2,
-      },
-    ],
-  },
-];
+// Navigation groups will be dynamically generated inside the component to support live translation.
 
 export default function AdminLayout() {
   const location = useLocation();
   const { user, logout } = useAuth();
   const [sidebarOpen, setSidebarOpen] = useState(false);
+  const { language, currentLang } = useLanguage();
+  const { t } = useTranslation(language);
+
+  const navGroups = [
+    {
+      label: null,
+      items: [{ label: t("admin:dashboard", "Dashboard"), href: "/admin", icon: LayoutDashboard }],
+    },
+    {
+      label: t("admin:academic", "Academic"),
+      items: [
+        { label: t("admin:teachers", "Teachers"), href: "/admin/teachers", icon: Users },
+        { label: t("admin:students", "Students"), href: "/admin/students", icon: GraduationCap },
+        { label: t("admin:registrations", "Registrations"), href: "/admin/registrations", icon: FileText },
+        { label: t("admin:events", "Events"), href: "/admin/events", icon: Calendar },
+      ],
+    },
+    {
+      label: t("admin:donations", "Donations"),
+      items: [
+        { label: t("admin:campaigns", "Campaigns"), href: "/admin/campaigns-pro", icon: Heart },
+        { label: t("admin:donationsTitle", "Donations"), href: "/admin/donations-pro", icon: DollarSign },
+        { label: t("admin:reports", "Reports"), href: "/admin/reports", icon: BarChart2 },
+      ],
+    },
+    {
+      label: t("admin:content", "Content"),
+      items: [
+        { label: t("admin:blogNews", "Blog & News"), href: "/admin/blog", icon: PenSquare },
+        { label: t("admin:messagesQA", "Messages / Q&A"), href: "/admin/messages", icon: MessageSquare },
+        {
+          label: t("admin:infrastructure", "Infrastructure"),
+          href: "/admin/infrastructure",
+          icon: Building2,
+        },
+      ],
+    },
+  ];
 
   const handleLogout = () => {
     logout("/login");
@@ -84,7 +90,7 @@ export default function AdminLayout() {
               Madrasa Farooqia
             </p>
             <p className="text-xs text-sidebar-foreground/50 flex items-center gap-1">
-              Admin Panel <ExternalLink size={10} />
+              {t("admin:panelTitle", "Admin Panel")} <ExternalLink size={10} />
             </p>
           </div>
         </Link>
@@ -143,14 +149,16 @@ export default function AdminLayout() {
   );
 
   return (
-    <div className="min-h-screen bg-background flex">
+    <div className="min-h-screen bg-background flex" dir={currentLang.dir}>
       {/* Desktop Sidebar */}
-      <aside className="hidden lg:flex flex-col w-64 bg-sidebar fixed top-0 left-0 bottom-0 z-30 border-r border-sidebar-border">
+      <aside className={`hidden lg:flex flex-col w-64 bg-sidebar fixed top-0 bottom-0 z-30 ${
+        currentLang.dir === 'rtl' ? 'right-0 border-l border-sidebar-border' : 'left-0 border-r border-sidebar-border'
+      }`}>
         <SidebarContent />
       </aside>
 
       {/* Mobile Header */}
-      <div className="lg:hidden fixed top-0 left-0 right-0 h-14 bg-card border-b border-border flex items-center px-4 z-40 gap-3">
+      <div className={`lg:hidden fixed top-0 left-0 right-0 h-14 bg-card border-b border-border flex items-center px-4 z-40 gap-3`}>
         <button
           onClick={() => setSidebarOpen(true)}
           className="p-2 text-foreground hover:bg-muted rounded-lg"
@@ -158,7 +166,7 @@ export default function AdminLayout() {
           <Menu size={20} />
         </button>
         <span className="font-playfair font-bold text-foreground">
-          Madrasa Admin
+          {t("admin:mobileTitle", "Madrasa Admin")}
         </span>
       </div>
 
@@ -169,10 +177,12 @@ export default function AdminLayout() {
             className="absolute inset-0 bg-black/50"
             onClick={() => setSidebarOpen(false)}
           />
-          <aside className="absolute left-0 top-0 bottom-0 w-72 bg-sidebar flex flex-col">
+          <aside className={`absolute top-0 bottom-0 w-72 bg-sidebar flex flex-col ${
+            currentLang.dir === 'rtl' ? 'right-0' : 'left-0'
+          }`}>
             <div className="p-4 flex items-center justify-between border-b border-sidebar-border">
               <span className="font-playfair font-bold text-sidebar-foreground">
-                Navigation
+                {t("admin:navigation", "Navigation")}
               </span>
               <button
                 onClick={() => setSidebarOpen(false)}
@@ -187,7 +197,9 @@ export default function AdminLayout() {
       )}
 
       {/* Main Content */}
-      <main className="flex-1 lg:ml-64 p-4 sm:p-6 lg:p-8 pt-20 lg:pt-8 min-h-screen overflow-auto">
+      <main className={`flex-1 p-4 sm:p-6 lg:p-8 pt-20 lg:pt-8 min-h-screen overflow-auto ${
+        currentLang.dir === 'rtl' ? 'lg:mr-64 lg:ml-0' : 'lg:ml-64 lg:mr-0'
+      }`}>
         <Outlet />
       </main>
     </div>

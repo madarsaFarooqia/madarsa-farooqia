@@ -18,6 +18,8 @@ import {
   AlertCircle,
   Target,
 } from "lucide-react";
+import { useLanguage } from "../../lib/LanguageContext";
+import { useTranslation } from "../../lib/i18n";
 import { format, subDays, startOfMonth } from "date-fns";
 import {
   BarChart,
@@ -72,6 +74,8 @@ const generateCampaigns = () =>
   }));
 
 export default function AdminDashboard() {
+  const { language } = useLanguage();
+  const { t } = useTranslation(language);
   const [stats, setStats] = useState({
     teachers: 0,
     students: 0,
@@ -187,6 +191,32 @@ export default function AdminDashboard() {
     setLoading(false);
   }, []);
 
+  const getPurposeLabel = (p) => {
+    switch (p?.toLowerCase()) {
+      case "education": return t("admin:education", "Islamic Education");
+      case "mosque":
+      case "masjid": return t("admin:masjid", "Masjid Project");
+      case "zakat": return t("admin:zakat", "Zakat");
+      case "general": return t("admin:general", "General");
+      default: return p;
+    }
+  };
+
+  const getStatusLabel = (s) => {
+    switch (s) {
+      case "completed": return t("admin:completed", "Completed");
+      case "pending": return t("admin:pending", "Pending");
+      case "failed": return t("admin:failed", "Failed");
+      case "refunded": return t("admin:refunded", "Refunded");
+      case "active": return t("admin:statusActive", "Active");
+      case "paused": return t("admin:statusPaused", "Paused");
+      case "cancelled": return t("admin:statusCancelled", "Cancelled");
+      case "approved": return t("admin:approved", "Approved");
+      case "rejected": return t("admin:rejected", "Rejected");
+      default: return s;
+    }
+  };
+
   const PIE_COLORS = [
     "#1a1a1a",
     "#b8860b",
@@ -198,44 +228,44 @@ export default function AdminDashboard() {
 
   const statCards = [
     {
-      label: "Total Raised",
+      label: t("admin:totalRaised", "Total Raised"),
       value: `$${stats.raised.toLocaleString()}`,
       icon: DollarSign,
-      href: "/admin/donations",
+      href: "/admin/donations-pro",
       highlight: true,
     },
     {
-      label: "Active Campaigns",
+      label: t("admin:activeCampaigns", "Active Campaigns"),
       value: stats.campaigns,
       icon: Heart,
       href: "/admin/campaigns-pro",
     },
     {
-      label: "Teachers",
+      label: t("admin:teachers", "Teachers"),
       value: stats.teachers,
       icon: Users,
       href: "/admin/teachers",
     },
     {
-      label: "Students",
+      label: t("admin:students", "Students"),
       value: stats.students,
       icon: GraduationCap,
       href: "/admin/students",
     },
     {
-      label: "Donations",
+      label: t("admin:donationsTitle", "Donations"),
       value: stats.donations,
       icon: TrendingUp,
       href: "/admin/donations-pro",
     },
     {
-      label: "Registrations",
+      label: t("admin:registrations", "Registrations"),
       value: stats.registrations,
       icon: FileText,
       href: "/admin/registrations",
     },
     {
-      label: "Unread Messages",
+      label: t("admin:unreadMessages", "Unread Messages"),
       value: stats.messages,
       icon: MessageSquare,
       href: "/admin/messages",
@@ -247,17 +277,17 @@ export default function AdminDashboard() {
       <div className="flex items-center justify-between mb-8">
         <div>
           <h1 className="font-playfair font-bold text-3xl text-foreground">
-            Admin Dashboard
+            {t("admin:adminDashboard", "Admin Dashboard")}
           </h1>
           <p className="text-muted-foreground text-sm mt-1">
-            Madrasa Farooqia — Enterprise Control Panel
+            {t("admin:controlPanelSubtitle", "Madrasa Farooqia — Enterprise Control Panel")}
           </p>
         </div>
         <Link
           to="/"
           className="hidden sm:flex items-center gap-2 px-4 py-2 rounded-lg bg-secondary text-sm font-medium text-foreground hover:bg-muted transition-colors"
         >
-          View Website <ArrowUpRight size={14} />
+          {t("admin:viewWebsite", "View Website")} <ArrowUpRight size={14} />
         </Link>
       </div>
 
@@ -302,7 +332,7 @@ export default function AdminDashboard() {
         {/* Monthly Trend */}
         <div className="lg:col-span-2 bg-card border border-border rounded-xl p-6">
           <h2 className="font-playfair font-bold text-lg text-foreground mb-5">
-            Monthly Donation Trend
+            {t("admin:monthlyDonationTrend", "Monthly Donation Trend")}
           </h2>
           <ResponsiveContainer width="100%" height={200}>
             <BarChart data={monthlyTrend}>
@@ -312,7 +342,7 @@ export default function AdminDashboard() {
               />
               <XAxis dataKey="month" tick={{ fontSize: 12 }} />
               <YAxis tick={{ fontSize: 12 }} />
-              <Tooltip formatter={(v) => [`$${v}`, "Amount"]} />
+              <Tooltip formatter={(v) => [`$${v}`, t("admin:amountLabel", "Amount")]} />
               <Bar
                 dataKey="amount"
                 fill="hsl(var(--foreground))"
@@ -325,7 +355,7 @@ export default function AdminDashboard() {
         {/* Category Breakdown */}
         <div className="bg-card border border-border rounded-xl p-6">
           <h2 className="font-playfair font-bold text-lg text-foreground mb-5">
-            By Category
+            {t("admin:byCategory", "By Category")}
           </h2>
           {donationsByCategory.length > 0 ? (
             <ResponsiveContainer width="100%" height={200}>
@@ -347,7 +377,7 @@ export default function AdminDashboard() {
             </ResponsiveContainer>
           ) : (
             <div className="h-[200px] flex items-center justify-center text-muted-foreground text-sm">
-              No data yet
+              {t("admin:noDataYet", "No data yet")}
             </div>
           )}
         </div>
@@ -358,13 +388,13 @@ export default function AdminDashboard() {
         <div className="bg-card border border-border rounded-xl p-6 mb-6">
           <div className="flex items-center justify-between mb-5">
             <h2 className="font-playfair font-bold text-lg text-foreground">
-              Campaign Progress
+              {t("admin:campaignProgress", "Campaign Progress")}
             </h2>
             <Link
               to="/admin/campaigns-pro"
               className="text-xs text-muted-foreground hover:text-foreground"
             >
-              Manage All →
+              {t("admin:manageAll", "Manage All →")}
             </Link>
           </div>
           <div className="space-y-4">
@@ -393,7 +423,7 @@ export default function AdminDashboard() {
                     />
                   </div>
                   <div className="text-xs text-muted-foreground mt-1">
-                    {pct.toFixed(1)}% funded · {c.status}
+                    {pct.toFixed(1)}% {t("admin:funded", "funded")} · {getStatusLabel(c.status)}
                   </div>
                 </div>
               );
@@ -407,18 +437,18 @@ export default function AdminDashboard() {
         <div className="bg-card border border-border rounded-xl p-6">
           <div className="flex items-center justify-between mb-5">
             <h2 className="font-playfair font-bold text-lg text-foreground">
-              Recent Donations
+              {t("admin:recentDonations", "Recent Donations")}
             </h2>
             <Link
               to="/admin/donations-pro"
               className="text-xs text-muted-foreground hover:text-foreground"
             >
-              View All →
+              {t("admin:manageAll", "Manage All →")}
             </Link>
           </div>
           <div className="space-y-3">
             {recentDonations.length === 0 ? (
-              <p className="text-sm text-muted-foreground">No donations yet.</p>
+              <p className="text-sm text-muted-foreground">{t("admin:noDonationsYet", "No donations yet.")}</p>
             ) : (
               recentDonations.map((d) => (
                 <div
@@ -427,10 +457,10 @@ export default function AdminDashboard() {
                 >
                   <div className="min-w-0">
                     <p className="text-sm font-medium text-foreground truncate">
-                      {d.is_anonymous ? "Anonymous" : d.donor_name || "Unknown"}
+                      {d.is_anonymous ? t("admin:anonymous", "Anonymous") : d.donor_name || t("admin:unknown", "Unknown")}
                     </p>
                     <p className="text-xs text-muted-foreground">
-                      {d.purpose || "general"} · {d.receipt_id || "—"}
+                      {getPurposeLabel(d.purpose)} · {d.receipt_id || "—"}
                     </p>
                   </div>
                   <div className="text-right shrink-0 ml-3">
@@ -441,7 +471,7 @@ export default function AdminDashboard() {
                     <span
                       className={`text-xs px-2 py-0.5 rounded-full ${d.status === "completed" ? "bg-foreground text-background" : "bg-secondary text-muted-foreground"}`}
                     >
-                      {d.status}
+                      {getStatusLabel(d.status)}
                     </span>
                   </div>
                 </div>
@@ -454,19 +484,19 @@ export default function AdminDashboard() {
         <div className="bg-card border border-border rounded-xl p-6">
           <div className="flex items-center justify-between mb-5">
             <h2 className="font-playfair font-bold text-lg text-foreground">
-              Recent Registrations
+              {t("admin:recentRegistrations", "Recent Registrations")}
             </h2>
             <Link
               to="/admin/registrations"
               className="text-xs text-muted-foreground hover:text-foreground"
             >
-              View All →
+              {t("admin:manageAll", "Manage All →")}
             </Link>
           </div>
           <div className="space-y-3">
             {recentRegs.length === 0 ? (
               <p className="text-sm text-muted-foreground">
-                No registrations yet.
+                {t("admin:noRegistrationsYet", "No registrations yet.")}
               </p>
             ) : (
               recentRegs.map((r) => (
@@ -491,7 +521,7 @@ export default function AdminDashboard() {
                           : "bg-secondary text-muted-foreground"
                     }`}
                   >
-                    {r.status}
+                    {getStatusLabel(r.status)}
                   </span>
                 </div>
               ))

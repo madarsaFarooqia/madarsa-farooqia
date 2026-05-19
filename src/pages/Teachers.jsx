@@ -53,7 +53,7 @@ export default function Teachers() {
           <motion.div initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} className="text-center">
             <div className="inline-flex items-center gap-2 text-accent text-sm font-medium mb-5 px-4 py-2 bg-white/10 backdrop-blur-sm rounded-full border border-white/20">
               <BookOpen className="w-4 h-4" />
-              <span>Our Scholars & Faculty</span>
+              <span>{t("teachers:ourScholarsFaculty", "Our Scholars & Faculty")}</span>
             </div>
             <h1 className="font-playfair text-4xl sm:text-5xl lg:text-6xl font-bold text-white mb-5 leading-tight">
               {t('teachers:teachersTitle')}
@@ -64,9 +64,9 @@ export default function Teachers() {
             {/* Quick Stats */}
             <div className="flex flex-wrap justify-center gap-6 mt-10">
               {[
-                { icon: Users, label: 'Faculty Members', value: '85+' },
-                { icon: Award, label: 'Avg. Experience', value: '18 yrs' },
-                { icon: GraduationCap, label: 'Graduates Produced', value: '5,000+' },
+                { icon: Users, label: t("teachers:facultyMembers", "Faculty Members"), value: '85+' },
+                { icon: Award, label: t("teachers:avgExperience", "Avg. Experience"), value: '18 yrs' },
+                { icon: GraduationCap, label: t("teachers:graduatesProduced", "Graduates Produced"), value: '5,000+' },
               ].map(({ icon: Icon, label, value }) => (
                 <div key={label} className="flex items-center gap-3 px-5 py-3 bg-white/10 backdrop-blur-sm rounded-2xl border border-white/20">
                   <Icon className="w-5 h-5 text-accent" />
@@ -94,7 +94,7 @@ export default function Teachers() {
             <div className="relative flex-1 w-full">
               <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
               <Input
-                placeholder="Search by name, subject, or specialization..."
+                placeholder={t("teachers:searchPlaceholder", "Search by name, subject, or specialization...")}
                 value={search}
                 onChange={(e) => setSearch(e.target.value)}
                 className="pl-10 bg-background"
@@ -103,10 +103,10 @@ export default function Teachers() {
             <Select value={specialization} onValueChange={setSpecialization}>
               <SelectTrigger className="w-full sm:w-60">
                 <Filter className="w-4 h-4 mr-2 text-muted-foreground" />
-                <SelectValue placeholder="All Specializations" />
+                <SelectValue placeholder={t("teachers:allSpecializations", "All Specializations")} />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="all">All Specializations</SelectItem>
+                <SelectItem value="all">{t("teachers:allSpecializations", "All Specializations")}</SelectItem>
                 {specializations.map(s => (
                   <SelectItem key={s} value={s}>{s}</SelectItem>
                 ))}
@@ -117,7 +117,7 @@ export default function Teachers() {
                 onClick={() => { setSearch(''); setSpecialization('all'); }}
                 className="text-xs text-muted-foreground hover:text-foreground underline underline-offset-2 whitespace-nowrap"
               >
-                Clear filters
+                {t("teachers:clearFilters", "Clear filters")}
               </button>
             )}
           </div>
@@ -148,11 +148,16 @@ export default function Teachers() {
               <div className="flex items-center justify-between mb-8">
                 <div className="flex items-center gap-2 text-muted-foreground text-sm">
                   <Users className="w-4 h-4" />
-                  <span><strong className="text-foreground">{filtered.length}</strong> Scholar{filtered.length !== 1 ? 's' : ''} Found</span>
+                  <span>
+                    <strong className="text-foreground">{filtered.length}</strong>{" "}
+                    {filtered.length !== 1
+                      ? t("teachers:scholarsFound", "Scholars Found")
+                      : t("teachers:scholarFound", "Scholar Found")}
+                  </span>
                 </div>
                 {search && (
                   <Badge variant="outline" className="text-xs">
-                    Results for: "{search}"
+                    {t("teachers:resultsFor", "Results for:")} "{search}"
                   </Badge>
                 )}
               </div>
@@ -175,10 +180,20 @@ export default function Teachers() {
           ) : (
             <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="text-center py-24">
               <BookOpen className="w-16 h-16 text-muted-foreground/20 mx-auto mb-4" />
-              <h3 className="font-playfair text-2xl font-bold text-foreground mb-2">No Scholars Found</h3>
-              <p className="text-muted-foreground mb-6">Try adjusting your search or filters.</p>
-              <button onClick={() => { setSearch(''); setSpecialization('all'); }} className="text-sm font-medium text-foreground underline underline-offset-4">
-                Clear all filters
+              <h3 className="font-playfair text-2xl font-bold text-foreground mb-2">
+                {t("teachers:noScholarsFound", "No Scholars Found")}
+              </h3>
+              <p className="text-muted-foreground mb-6">
+                {t("teachers:adjustFilters", "Try adjusting your search or filters.")}
+              </p>
+              <button
+                onClick={() => {
+                  setSearch("");
+                  setSpecialization("all");
+                }}
+                className="text-sm font-medium text-foreground underline underline-offset-4"
+              >
+                {t("teachers:clearAllFilters", "Clear all filters")}
               </button>
             </motion.div>
           )}
@@ -189,15 +204,17 @@ export default function Teachers() {
       <section className="py-16 bg-card border-t border-border">
         <div className="max-w-4xl mx-auto px-4 text-center">
           <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }}>
-            <h2 className="font-playfair text-3xl font-bold text-foreground mb-4">Join Our Faculty</h2>
+            <h2 className="font-playfair text-3xl font-bold text-foreground mb-4">
+              {t("teachers:joinFaculty", "Join Our Faculty")}
+            </h2>
             <p className="text-muted-foreground mb-8 max-w-xl mx-auto">
-              Are you a qualified Islamic scholar interested in teaching? We welcome dedicated educators to join our mission.
+              {t("teachers:joinFacultyDesc", "Are you a qualified Islamic scholar interested in teaching? We welcome dedicated educators to join our mission.")}
             </p>
             <a
               href="/contact"
               className="inline-flex items-center gap-2 px-8 py-3 bg-foreground text-background font-semibold rounded-xl hover:opacity-90 transition-opacity"
             >
-              Get In Touch <ChevronRight className="w-4 h-4" />
+              {t("teachers:getInTouch", "Get In Touch")} <ChevronRight className="w-4 h-4" />
             </a>
           </motion.div>
         </div>

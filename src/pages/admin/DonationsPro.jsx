@@ -11,8 +11,12 @@ import { Input } from "../../components/ui/input";
 import { Button } from "../../components/ui/button";
 import { format } from "date-fns";
 import { generateReceiptId, downloadReceipt } from "../../lib/receiptGenerator";
+import { useLanguage } from "../../lib/LanguageContext";
+import { useTranslation } from "../../lib/i18n";
 
 export default function DonationsPro() {
+  const { language } = useLanguage();
+  const { t } = useTranslation(language);
   const [donations, setDonations] = useState([]);
   const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState("");
@@ -20,11 +24,6 @@ export default function DonationsPro() {
   const [statusFilter, setStatusFilter] = useState("all");
   const [dateFrom, setDateFrom] = useState("");
   const [dateTo, setDateTo] = useState("");
-
-  // useEffect(() => {
-  //   base44.entities.Donation.list('-created_date', 500)
-  //     .then(setDonations).finally(() => setLoading(false));
-  // }, []);
 
   useEffect(() => {
     setLoading(true);
@@ -57,22 +56,43 @@ export default function DonationsPro() {
     ...new Set(donations.map((d) => d.purpose).filter(Boolean)),
   ];
 
+  const getPurposeLabel = (p) => {
+    switch (p?.toLowerCase()) {
+      case "education": return t("admin:education", "Islamic Education");
+      case "mosque":
+      case "masjid": return t("admin:masjid", "Masjid Project");
+      case "zakat": return t("admin:zakat", "Zakat");
+      case "general": return t("admin:general", "General");
+      default: return p;
+    }
+  };
+
+  const getStatusLabel = (s) => {
+    switch (s) {
+      case "completed": return t("admin:completed", "Completed");
+      case "pending": return t("admin:pending", "Pending");
+      case "failed": return t("admin:failed", "Failed");
+      case "refunded": return t("admin:refunded", "Refunded");
+      default: return s;
+    }
+  };
+
   const exportCSV = () => {
     const rows = [
       [
-        "Receipt ID",
-        "Donor",
-        "Email",
-        "Amount",
-        "Currency",
-        "Purpose",
-        "Status",
-        "Recurring",
-        "Date",
+        t("admin:receiptId", "Receipt ID"),
+        t("admin:donor", "Donor"),
+        t("admin:email", "Email"),
+        t("admin:amount", "Amount"),
+        t("admin:currency", "Currency"),
+        t("admin:purpose", "Purpose"),
+        t("admin:status", "Status"),
+        t("admin:recurring", "Recurring"),
+        t("admin:date", "Date"),
       ],
       ...filtered.map((d) => [
         generateReceiptId(d),
-        d.is_anonymous ? "Anonymous" : d.donor_name || "",
+        d.is_anonymous ? t("admin:anonymous", "Anonymous") : d.donor_name || "",
         d.donor_email || "",
         d.amount,
         d.currency || "USD",
@@ -99,21 +119,21 @@ export default function DonationsPro() {
         (d) => `
       <tr style="border-bottom:1px solid #eee">
         <td style="padding:8px;font-size:11px">${generateReceiptId(d)}</td>
-        <td style="padding:8px">${d.is_anonymous ? "Anonymous" : d.donor_name || ""}</td>
+        <td style="padding:8px">${d.is_anonymous ? t("admin:anonymous", "Anonymous") : d.donor_name || ""}</td>
         <td style="padding:8px">${d.amount} ${d.currency || "USD"}</td>
-        <td style="padding:8px">${d.purpose || "general"}</td>
-        <td style="padding:8px">${d.status}</td>
+        <td style="padding:8px">${getPurposeLabel(d.purpose)}</td>
+        <td style="padding:8px">${getStatusLabel(d.status)}</td>
         <td style="padding:8px">${d.created_date ? format(new Date(d.created_date), "MMM d, yyyy") : ""}</td>
       </tr>`,
       )
       .join("");
     const html = `
-      <html><head><title>Donation Report — Madrasa Farooqia</title>
+      <html><head><title>${t("admin:donationReport", "Donation Report")} — Madrasa Farooqia</title>
       <style>body{font-family:serif;padding:30px}h1{font-size:20px}table{width:100%;border-collapse:collapse}th{background:#111;color:#fff;padding:8px;text-align:left;font-size:12px}</style></head>
       <body>
-        <h1>Donation Report — Madrasa Farooqia</h1>
-        <p style="color:#666;font-size:13px">Generated: ${format(new Date(), "PPPp")} · Total: $${totalRaised.toLocaleString()}</p>
-        <table><thead><tr><th>Receipt ID</th><th>Donor</th><th>Amount</th><th>Purpose</th><th>Status</th><th>Date</th></tr></thead>
+        <h1>${t("admin:donationReport", "Donation Report")} — Madrasa Farooqia</h1>
+        <p style="color:#666;font-size:13px">${t("admin:generated", "Generated")}: ${format(new Date(), "PPPp")} · ${t("admin:total", "Total")}: $${totalRaised.toLocaleString()}</p>
+        <table><thead><tr><th>${t("admin:receiptId", "Receipt ID")}</th><th>${t("admin:donor", "Donor")}</th><th>${t("admin:amount", "Amount")}</th><th>${t("admin:purpose", "Purpose")}</th><th>${t("admin:status", "Status")}</th><th>${t("admin:date", "Date")}</th></tr></thead>
         <tbody>${rows}</tbody></table>
       </body></html>`;
     const w = window.open("", "_blank");
@@ -127,20 +147,20 @@ export default function DonationsPro() {
       <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mb-6">
         <div>
           <h1 className="font-playfair font-bold text-3xl text-foreground">
-            Donations
+            {t("admin:donationsTitle", "Donations")}
           </h1>
           <p className="text-muted-foreground text-sm mt-1">
-            Full donation management & reporting
+            {t("admin:fullDonationManagement", "Full donation management & reporting")}
           </p>
         </div>
         <div className="flex gap-2">
           <Button variant="outline" size="sm" onClick={exportCSV}>
             <Download size={14} className="mr-2" />
-            CSV
+            {t("admin:csv", "CSV")}
           </Button>
           <Button variant="outline" size="sm" onClick={exportPDF}>
             <FileText size={14} className="mr-2" />
-            PDF
+            {t("admin:pdfReport", "PDF")}
           </Button>
         </div>
       </div>
@@ -148,14 +168,14 @@ export default function DonationsPro() {
       {/* Summary */}
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
         {[
-          { label: "Total Raised", value: `$${totalRaised.toLocaleString()}` },
-          { label: "Total Records", value: filtered.length },
+          { label: t("admin:totalRaised", "Total Raised"), value: `$${totalRaised.toLocaleString()}` },
+          { label: t("admin:totalRecords", "Total Records"), value: filtered.length },
           {
-            label: "Recurring",
+            label: t("admin:recurring", "Recurring"),
             value: filtered.filter((d) => d.is_recurring).length,
           },
           {
-            label: "Anonymous",
+            label: t("admin:anonymous", "Anonymous"),
             value: filtered.filter((d) => d.is_anonymous).length,
           },
         ].map(({ label, value }) => (
@@ -174,7 +194,7 @@ export default function DonationsPro() {
       {/* Filters */}
       <div className="bg-card border border-border rounded-xl p-4 mb-6 space-y-3">
         <div className="flex items-center gap-2 text-sm font-medium text-foreground mb-2">
-          <Filter size={14} /> Filters
+          <Filter size={14} /> {t("admin:filters", "Filters")}
         </div>
         <div className="flex flex-wrap gap-3">
           <div className="relative flex-1 min-w-[200px]">
@@ -183,7 +203,7 @@ export default function DonationsPro() {
               className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground"
             />
             <Input
-              placeholder="Search donor, email, receipt ID..."
+              placeholder={t("admin:searchDonationsPlaceholder", "Search donor, email, receipt ID...")}
               value={search}
               onChange={(e) => setSearch(e.target.value)}
               className="pl-8 text-sm"
@@ -194,10 +214,10 @@ export default function DonationsPro() {
             onChange={(e) => setPurposeFilter(e.target.value)}
             className="border border-input bg-background rounded-md px-3 py-2 text-sm min-w-[140px]"
           >
-            <option value="all">All Purposes</option>
+            <option value="all">{t("admin:allPurposes", "All Purposes")}</option>
             {purposes.map((p) => (
               <option key={p} value={p}>
-                {p}
+                {getPurposeLabel(p)}
               </option>
             ))}
           </select>
@@ -206,25 +226,25 @@ export default function DonationsPro() {
             onChange={(e) => setStatusFilter(e.target.value)}
             className="border border-input bg-background rounded-md px-3 py-2 text-sm"
           >
-            <option value="all">All Status</option>
-            <option value="completed">Completed</option>
-            <option value="pending">Pending</option>
-            <option value="failed">Failed</option>
-            <option value="refunded">Refunded</option>
+            <option value="all">{t("admin:allStatus", "All Status")}</option>
+            <option value="completed">{t("admin:completed", "Completed")}</option>
+            <option value="pending">{t("admin:pending", "Pending")}</option>
+            <option value="failed">{t("admin:failed", "Failed")}</option>
+            <option value="refunded">{t("admin:refunded", "Refunded")}</option>
           </select>
           <Input
             type="date"
             value={dateFrom}
             onChange={(e) => setDateFrom(e.target.value)}
             className="w-auto text-sm"
-            placeholder="From"
+            placeholder={t("admin:fromDate", "From")}
           />
           <Input
             type="date"
             value={dateTo}
             onChange={(e) => setDateTo(e.target.value)}
             className="w-auto text-sm"
-            placeholder="To"
+            placeholder={t("admin:toDate", "To")}
           />
           {(search ||
             purposeFilter !== "all" ||
@@ -241,7 +261,7 @@ export default function DonationsPro() {
               }}
               className="text-xs text-muted-foreground hover:text-foreground underline"
             >
-              Clear
+              {t("admin:clear", "Clear")}
             </button>
           )}
         </div>
@@ -258,7 +278,7 @@ export default function DonationsPro() {
         ) : filtered.length === 0 ? (
           <div className="text-center py-16 text-muted-foreground">
             <DollarSign size={40} className="mx-auto mb-3 opacity-20" />
-            <p>No donations match your filters.</p>
+            <p>{t("admin:noDonationsMatch", "No donations match your filters.")}</p>
           </div>
         ) : (
           <div className="overflow-x-auto">
@@ -266,14 +286,14 @@ export default function DonationsPro() {
               <thead className="bg-secondary/50 border-b border-border">
                 <tr>
                   {[
-                    "Receipt ID",
-                    "Donor",
-                    "Amount",
-                    "Purpose",
-                    "Method",
-                    "Recurring",
-                    "Status",
-                    "Date",
+                    t("admin:receiptId", "Receipt ID"),
+                    t("admin:donor", "Donor"),
+                    t("admin:amount", "Amount"),
+                    t("admin:purpose", "Purpose"),
+                    t("admin:method", "Method"),
+                    t("admin:recurring", "Recurring"),
+                    t("admin:status", "Status"),
+                    t("admin:date", "Date"),
                     "",
                   ].map((h) => (
                     <th
@@ -296,7 +316,7 @@ export default function DonationsPro() {
                     </td>
                     <td className="p-4">
                       <p className="font-medium text-foreground">
-                        {d.is_anonymous ? "Anonymous" : d.donor_name || "—"}
+                        {d.is_anonymous ? t("admin:anonymous", "Anonymous") : d.donor_name || "—"}
                       </p>
                       <p className="text-xs text-muted-foreground">
                         {d.donor_email || ""}
@@ -308,7 +328,7 @@ export default function DonationsPro() {
                     </td>
                     <td className="p-4">
                       <span className="inline-block px-2 py-0.5 bg-secondary rounded-full text-xs capitalize">
-                        {d.purpose || "general"}
+                        {getPurposeLabel(d.purpose)}
                       </span>
                     </td>
                     <td className="p-4 text-muted-foreground text-xs capitalize">
@@ -317,11 +337,11 @@ export default function DonationsPro() {
                     <td className="p-4">
                       {d.is_recurring ? (
                         <span className="text-xs px-2 py-0.5 bg-accent/20 text-accent rounded-full">
-                          ✓ {d.recurring_frequency}
+                          ✓ {t("admin:monthly", "monthly")}
                         </span>
                       ) : (
                         <span className="text-xs text-muted-foreground">
-                          One-time
+                          {t("admin:oneTime", "One-time")}
                         </span>
                       )}
                     </td>
@@ -337,7 +357,7 @@ export default function DonationsPro() {
                                 : "bg-secondary text-muted-foreground"
                         }`}
                       >
-                        {d.status}
+                        {getStatusLabel(d.status)}
                       </span>
                     </td>
                     <td className="p-4 text-muted-foreground text-xs whitespace-nowrap">
@@ -348,11 +368,11 @@ export default function DonationsPro() {
                     <td className="p-4">
                       {d.status === "completed" && (
                         <button
-                          onClick={() => downloadReceipt(d, "IN")}
-                          title="Download Tax Receipt"
+                          onClick={() => downloadReceipt(d, "IN", language)}
+                          title={t("admin:downloadTaxReceipt", "Download Tax Receipt")}
                           className="flex items-center gap-1 text-xs text-muted-foreground hover:text-foreground hover:bg-secondary px-2 py-1.5 rounded-lg transition-colors"
                         >
-                          <QrCode size={13} /> Receipt
+                          <QrCode size={13} /> {t("admin:receipt", "Receipt")}
                         </button>
                       )}
                     </td>

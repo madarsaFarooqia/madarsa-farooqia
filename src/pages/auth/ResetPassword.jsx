@@ -18,19 +18,23 @@ import {
   FormMessage,
 } from "../../components/ui/form";
 import { FarooqiaLogo, AuthBackground } from "../../assets";
-
-const resetPasswordSchema = z.object({
-  password: z.string().min(8, { message: "Password must be at least 8 characters" }),
-  confirmPassword: z.string(),
-}).refine((data) => data.password === data.confirmPassword, {
-  message: "Passwords don't match",
-  path: ["confirmPassword"],
-});
+import { useLanguage } from "../../lib/LanguageContext";
+import { useTranslation } from "../../lib/i18n";
 
 const ResetPassword = () => {
   const { token } = useParams();
   const navigate = useNavigate();
   const [isSuccess, setIsSuccess] = React.useState(false);
+  const { language } = useLanguage();
+  const { t } = useTranslation(language);
+
+  const resetPasswordSchema = z.object({
+    password: z.string().min(8, { message: t("reset:min_length", "Password must be at least 8 characters") }),
+    confirmPassword: z.string(),
+  }).refine((data) => data.password === data.confirmPassword, {
+    message: t("reset:match_error", "Passwords don't match"),
+    path: ["confirmPassword"],
+  });
 
   const form = useForm({
     resolver: zodResolver(resetPasswordSchema),
@@ -42,7 +46,7 @@ const ResetPassword = () => {
 
   const onSubmit = (data) => {
     console.log("Reset password data:", data);
-    toast.success("Password has been reset successfully!");
+    toast.success(t("reset:success_toast", "Password has been reset successfully!"));
     setIsSuccess(true);
     // In a real app, you might redirect after a delay
     setTimeout(() => navigate("/login"), 3000);
@@ -62,13 +66,13 @@ const ResetPassword = () => {
             </div>
           </div>
           <div className="space-y-2">
-            <h2 className="text-2xl font-bold">Password Reset Complete</h2>
+            <h2 className="text-2xl font-bold">{t("reset:complete_title", "Password Reset Complete")}</h2>
             <p className="text-muted-foreground">
-              Your password has been successfully updated. You will be redirected to the login page shortly.
+              {t("reset:complete_desc", "Your password has been successfully updated. You will be redirected to the login page shortly.")}
             </p>
           </div>
           <Button asChild className="w-full">
-            <Link to="/login">Go to Login</Link>
+            <Link to="/login">{t("reset:go_login", "Go to Login")}</Link>
           </Button>
         </motion.div>
       </div>
@@ -107,15 +111,15 @@ const ResetPassword = () => {
           </motion.div>
           <div className="space-y-4">
             <h1 className="text-3xl font-bold tracking-tight text-primary font-playfair">
-              Secure Your Account
+              {t("reset:left_title", "Secure Your Account")}
             </h1>
             <p className="text-muted-foreground font-inter">
-              Choose a strong password that you haven't used before. Your security is our top priority.
+              {t("reset:left_desc", "Choose a strong password that you haven't used before. Your security is our top priority.")}
             </p>
           </div>
           <div className="flex justify-center items-center space-x-2 text-primary/60">
             <ShieldCheck className="h-6 w-6" />
-            <span className="text-sm font-medium uppercase tracking-wider italic">Encryption Active</span>
+            <span className="text-sm font-medium uppercase tracking-wider italic">{t("reset:encryption", "Encryption Active")}</span>
           </div>
         </div>
       </motion.div>
@@ -129,9 +133,9 @@ const ResetPassword = () => {
           className="w-full max-w-[400px] space-y-8"
         >
           <div className="text-center lg:text-left space-y-2">
-            <h2 className="text-3xl font-bold tracking-tight">Set New Password</h2>
+            <h2 className="text-3xl font-bold tracking-tight">{t("reset:right_title", "Set New Password")}</h2>
             <p className="text-muted-foreground text-sm">
-              Please enter your new password below. Ensure it meets the security requirements.
+              {t("reset:right_desc", "Please enter your new password below. Ensure it meets the security requirements.")}
             </p>
           </div>
 
@@ -142,7 +146,7 @@ const ResetPassword = () => {
                 name="password"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>New Password</FormLabel>
+                    <FormLabel>{t("reset:new_pass_label", "New Password")}</FormLabel>
                     <FormControl>
                       <div className="relative">
                         <Lock className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
@@ -164,7 +168,7 @@ const ResetPassword = () => {
                 name="confirmPassword"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Confirm New Password</FormLabel>
+                    <FormLabel>{t("reset:confirm_pass_label", "Confirm New Password")}</FormLabel>
                     <FormControl>
                       <div className="relative">
                         <Lock className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
@@ -182,7 +186,7 @@ const ResetPassword = () => {
               />
 
               <Button type="submit" className="w-full h-11 text-base font-semibold">
-                Reset Password
+                {t("reset:reset_btn", "Reset Password")}
                 <ArrowRight className="ml-2 h-4 w-4" />
               </Button>
             </form>
@@ -193,7 +197,7 @@ const ResetPassword = () => {
               to="/login" 
               className="text-sm font-medium text-muted-foreground hover:text-primary transition-colors"
             >
-              Cancel and go back
+              {t("reset:cancel", "Cancel and go back")}
             </Link>
           </div>
         </motion.div>

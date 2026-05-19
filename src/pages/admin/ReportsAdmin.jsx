@@ -28,6 +28,8 @@ import {
   Cell,
   Legend,
 } from "recharts";
+import { useLanguage } from "../../lib/LanguageContext";
+import { useTranslation } from "../../lib/i18n";
 
 const PIE_COLORS = [
   "#1a1a1a",
@@ -40,6 +42,8 @@ const PIE_COLORS = [
 ];
 
 export default function ReportsAdmin() {
+  const { language } = useLanguage();
+  const { t } = useTranslation(language);
   const [donations, setDonations] = useState([]);
   const [loading, setLoading] = useState(true);
   const [dateFrom, setDateFrom] = useState(
@@ -97,11 +101,11 @@ export default function ReportsAdmin() {
     const categoryRows = categoryData
       .map(
         (c) =>
-          `<tr><td style="padding:6px 12px">${c.name}</td><td style="padding:6px 12px">$${c.value.toLocaleString()}</td><td style="padding:6px 12px">${((c.value / totalAmount) * 100).toFixed(1)}%</td></tr>`,
+          `<tr><td style="padding:6px 12px">${t(`admin:${c.name}`, c.name)}</td><td style="padding:6px 12px">$${c.value.toLocaleString()}</td><td style="padding:6px 12px">${((c.value / totalAmount) * 100).toFixed(1)}%</td></tr>`,
       )
       .join("");
     const html = `
-      <html><head><title>Financial Report — Madrasa Farooqia</title>
+      <html><head><title>${t("admin:financialReport", "Financial Report")} — Madrasa Farooqia</title>
       <style>
         body{font-family:Georgia,serif;padding:40px;color:#111}
         h1{font-size:22px;margin-bottom:4px}
@@ -117,16 +121,16 @@ export default function ReportsAdmin() {
       </style></head>
       <body>
         <div class="watermark">MADRASA FAROOQIA</div>
-        <h1>📊 Financial Report — Madrasa Farooqia</h1>
-        <div class="sub">Period: ${dateFrom} to ${dateTo} · Generated: ${format(new Date(), "PPPp")}</div>
+        <h1>📊 ${t("admin:financialReport", "Financial Report")} — Madrasa Farooqia</h1>
+        <div class="sub">${t("admin:period", "Period")}: ${dateFrom} ${t("admin:to", "to")} ${dateTo} · ${t("admin:generated", "Generated")}: ${format(new Date(), "PPPp")}</div>
         <div class="grid">
-          <div class="stat"><div class="stat-val">$${totalAmount.toLocaleString()}</div><div class="stat-lbl">Total Raised</div></div>
-          <div class="stat"><div class="stat-val">${filtered.length}</div><div class="stat-lbl">Total Donations</div></div>
-          <div class="stat"><div class="stat-val">$${avgDonation.toFixed(0)}</div><div class="stat-lbl">Avg Donation</div></div>
-          <div class="stat"><div class="stat-val">${recurringCount}</div><div class="stat-lbl">Recurring Donors</div></div>
+          <div class="stat"><div class="stat-val">$${totalAmount.toLocaleString()}</div><div class="stat-lbl">${t("admin:totalRaised", "Total Raised")}</div></div>
+          <div class="stat"><div class="stat-val">${filtered.length}</div><div class="stat-lbl">${t("admin:totalDonations", "Total Donations")}</div></div>
+          <div class="stat"><div class="stat-val">$${avgDonation.toFixed(0)}</div><div class="stat-lbl">${t("admin:avgDonation", "Avg Donation")}</div></div>
+          <div class="stat"><div class="stat-val">${recurringCount}</div><div class="stat-lbl">${t("admin:recurringDonors", "Recurring Donors")}</div></div>
         </div>
-        <h2 style="font-size:16px;margin-bottom:12px">Donation by Category</h2>
-        <table><thead><tr><th>Category</th><th>Amount</th><th>% of Total</th></tr></thead>
+        <h2 style="font-size:16px;margin-bottom:12px">${t("admin:donationByCategory", "Donation by Category")}</h2>
+        <table><thead><tr><th>${t("admin:category", "Category")}</th><th>${t("admin:amount", "Amount")}</th><th>${t("admin:percentOfTotal", "% of Total")}</th></tr></thead>
         <tbody>${categoryRows}</tbody></table>
       </body></html>`;
     const w = window.open("", "_blank");
@@ -165,20 +169,20 @@ export default function ReportsAdmin() {
       <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mb-6">
         <div>
           <h1 className="font-playfair font-bold text-3xl text-foreground">
-            Financial Reports
+            {t("admin:financialReports", "Financial Reports")}
           </h1>
           <p className="text-muted-foreground text-sm mt-1">
-            Donation analytics, category breakdown, audit exports
+            {t("admin:donationAnalytics", "Donation analytics, category breakdown, audit exports")}
           </p>
         </div>
         <div className="flex gap-2">
           <Button variant="outline" size="sm" onClick={exportCSV}>
             <Download size={14} className="mr-2" />
-            CSV
+            {t("admin:csv", "CSV")}
           </Button>
           <Button size="sm" onClick={exportPDF}>
             <FileText size={14} className="mr-2" />
-            PDF Report
+            {t("admin:pdfReport", "PDF Report")}
           </Button>
         </div>
       </div>
@@ -187,7 +191,7 @@ export default function ReportsAdmin() {
       <div className="bg-card border border-border rounded-xl p-4 mb-6 flex flex-wrap gap-4 items-end">
         <div>
           <label className="block text-xs font-medium text-muted-foreground mb-1">
-            From Date
+            {t("admin:fromDate", "From Date")}
           </label>
           <Input
             type="date"
@@ -198,7 +202,7 @@ export default function ReportsAdmin() {
         </div>
         <div>
           <label className="block text-xs font-medium text-muted-foreground mb-1">
-            To Date
+            {t("admin:toDate", "To Date")}
           </label>
           <Input
             type="date"
@@ -210,14 +214,16 @@ export default function ReportsAdmin() {
         <div className="flex gap-2">
           {[
             {
-              label: "This Month",
+              label: "thisMonth",
+              fallback: "This Month",
               action: () => {
                 setDateFrom(format(startOfMonth(new Date()), "yyyy-MM-dd"));
                 setDateTo(format(new Date(), "yyyy-MM-dd"));
               },
             },
             {
-              label: "Last Month",
+              label: "lastMonth",
+              fallback: "Last Month",
               action: () => {
                 const lm = subMonths(new Date(), 1);
                 setDateFrom(format(startOfMonth(lm), "yyyy-MM-dd"));
@@ -225,19 +231,20 @@ export default function ReportsAdmin() {
               },
             },
             {
-              label: "This Year",
+              label: "thisYear",
+              fallback: "This Year",
               action: () => {
                 setDateFrom(format(startOfYear(new Date()), "yyyy-MM-dd"));
                 setDateTo(format(new Date(), "yyyy-MM-dd"));
               },
             },
-          ].map(({ label, action }) => (
+          ].map(({ label, fallback, action }) => (
             <button
               key={label}
               onClick={action}
               className="px-3 py-2 bg-secondary rounded-lg text-xs font-medium hover:bg-muted transition-colors"
             >
-              {label}
+              {t(`admin:${label}`, fallback)}
             </button>
           ))}
         </div>
@@ -246,16 +253,16 @@ export default function ReportsAdmin() {
       {/* Summary Stats */}
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
         {[
-          { label: "Total Raised", value: `$${totalAmount.toLocaleString()}` },
-          { label: "Donations", value: filtered.length },
-          { label: "Avg Donation", value: `$${avgDonation.toFixed(0)}` },
-          { label: "Recurring", value: `${recurringCount} donors` },
-        ].map(({ label, value }) => (
+          { label: "totalRaised", fallback: "Total Raised", value: `$${totalAmount.toLocaleString()}` },
+          { label: "donations", fallback: "Donations", value: filtered.length },
+          { label: "avgDonation", fallback: "Avg Donation", value: `$${avgDonation.toFixed(0)}` },
+          { label: "recurring", fallback: "Recurring", value: `${recurringCount} ${t("admin:donors", "donors")}` },
+        ].map(({ label, fallback, value }) => (
           <div
             key={label}
             className="bg-card border border-border rounded-xl p-5"
           >
-            <p className="text-xs text-muted-foreground mb-1">{label}</p>
+            <p className="text-xs text-muted-foreground mb-1">{t(`admin:${label}`, fallback)}</p>
             <p className="font-playfair font-bold text-2xl text-foreground">
               {value}
             </p>
@@ -267,7 +274,7 @@ export default function ReportsAdmin() {
         {/* Monthly Chart */}
         <div className="lg:col-span-3 bg-card border border-border rounded-xl p-6">
           <h2 className="font-playfair font-bold text-lg text-foreground mb-5">
-            Monthly Breakdown
+            {t("admin:monthlyBreakdown", "Monthly Breakdown")}
           </h2>
           {monthlyData.length > 0 ? (
             <ResponsiveContainer width="100%" height={250}>
@@ -279,7 +286,7 @@ export default function ReportsAdmin() {
                 <XAxis dataKey="month" tick={{ fontSize: 11 }} />
                 <YAxis tick={{ fontSize: 11 }} />
                 <Tooltip
-                  formatter={(v) => [`$${v.toLocaleString()}`, "Amount"]}
+                  formatter={(v) => [`$${v.toLocaleString()}`, t("admin:totalAmount", "Amount")]}
                 />
                 <Bar
                   dataKey="amount"
@@ -290,7 +297,7 @@ export default function ReportsAdmin() {
             </ResponsiveContainer>
           ) : (
             <div className="h-[250px] flex items-center justify-center text-muted-foreground text-sm">
-              No data for selected period
+              {t("admin:noDataForSelectedPeriod", "No data for selected period")}
             </div>
           )}
         </div>
@@ -298,7 +305,7 @@ export default function ReportsAdmin() {
         {/* Category Pie */}
         <div className="lg:col-span-2 bg-card border border-border rounded-xl p-6">
           <h2 className="font-playfair font-bold text-lg text-foreground mb-5">
-            By Category
+            {t("admin:byCategory", "By Category")}
           </h2>
           {categoryData.length > 0 ? (
             <ResponsiveContainer width="100%" height={250}>
@@ -311,7 +318,7 @@ export default function ReportsAdmin() {
                   cy="45%"
                   outerRadius={85}
                   label={({ name, percent }) =>
-                    `${name} ${(percent * 100).toFixed(0)}%`
+                    `${t(`admin:${name}`, name)} ${(percent * 100).toFixed(0)}%`
                   }
                   labelLine={false}
                   fontSize={10}
@@ -325,7 +332,7 @@ export default function ReportsAdmin() {
             </ResponsiveContainer>
           ) : (
             <div className="h-[250px] flex items-center justify-center text-muted-foreground text-sm">
-              No data
+              {t("admin:noData", "No data")}
             </div>
           )}
         </div>
@@ -335,23 +342,23 @@ export default function ReportsAdmin() {
       <div className="bg-card border border-border rounded-xl overflow-hidden">
         <div className="p-5 border-b border-border">
           <h2 className="font-playfair font-bold text-lg text-foreground">
-            Category Summary
+            {t("admin:categorySummary", "Category Summary")}
           </h2>
         </div>
         <table className="w-full text-sm">
           <thead className="bg-secondary/50 border-b border-border">
             <tr>
               {[
-                "Category",
-                "Total Amount",
-                "% of Total",
-                "Donations Count",
+                { key: "category", def: "Category" },
+                { key: "totalAmount", def: "Total Amount" },
+                { key: "percentOfTotal", def: "% of Total" },
+                { key: "donationsCount", def: "Donations Count" },
               ].map((h) => (
                 <th
-                  key={h}
+                  key={h.key}
                   className="text-left font-semibold text-muted-foreground p-4 text-xs"
                 >
-                  {h}
+                  {t(`admin:${h.key}`, h.def)}
                 </th>
               ))}
             </tr>
@@ -360,7 +367,7 @@ export default function ReportsAdmin() {
             {categoryData.map((c) => (
               <tr key={c.name} className="hover:bg-secondary/20">
                 <td className="p-4 capitalize font-medium text-foreground">
-                  {c.name}
+                  {t(`admin:${c.name}`, c.name)}
                 </td>
                 <td className="p-4 font-playfair font-bold text-foreground">
                   ${c.value.toLocaleString()}
@@ -378,7 +385,7 @@ export default function ReportsAdmin() {
               </tr>
             ))}
             <tr className="bg-secondary/30 font-bold">
-              <td className="p-4 text-foreground">Total</td>
+              <td className="p-4 text-foreground">{t("admin:total", "Total")}</td>
               <td className="p-4 font-playfair text-foreground">
                 ${totalAmount.toLocaleString()}
               </td>

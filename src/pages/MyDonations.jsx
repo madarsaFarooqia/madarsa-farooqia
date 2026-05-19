@@ -719,7 +719,7 @@ export default function MyDonations() {
                         </div>
                         {d.status === "completed" && (
                           <button
-                            onClick={() => downloadReceipt(d, "IN")}
+                            onClick={() => downloadReceipt(d, "IN", language)}
                             className="opacity-0 group-hover:opacity-100 transition-opacity p-2 hover:bg-secondary rounded-lg shrink-0"
                             title="Download Receipt"
                           >

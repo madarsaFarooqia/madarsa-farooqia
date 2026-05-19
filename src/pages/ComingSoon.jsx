@@ -2,14 +2,19 @@ import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
 import { ArrowLeft, BookOpen, GraduationCap, Star } from 'lucide-react';
 import { FarooqiaLogo, AuthBackground } from "../assets";
-
-const upcomingFeatures = [
-  { icon: BookOpen, title: 'Online Courses', desc: 'Full Quran & Islamic Sciences e-learning platform' },
-  { icon: GraduationCap, title: 'Student Portal', desc: 'Personal dashboard for enrolled students' },
-  { icon: Star, title: 'Alumni Network', desc: 'Connect with thousands of Madrasa Farooqia alumni worldwide' },
-];
+import { useLanguage } from "../lib/LanguageContext";
+import { useTranslation } from "../lib/i18n";
 
 export default function ComingSoon() {
+  const { language } = useLanguage();
+  const { t } = useTranslation(language);
+
+  const upcomingFeatures = [
+    { icon: BookOpen, title: t('coming:online_courses', 'Online Courses'), desc: t('coming:online_courses_desc', 'Full Quran & Islamic Sciences e-learning platform') },
+    { icon: GraduationCap, title: t('coming:student_portal', 'Student Portal'), desc: t('coming:student_portal_desc', 'Personal dashboard for enrolled students') },
+    { icon: Star, title: t('coming:alumni_network', 'Alumni Network'), desc: t('coming:alumni_network_desc', 'Connect with thousands of Madrasa Farooqia alumni worldwide') },
+  ];
+
   return (
     <div className="min-h-screen relative flex flex-col items-center justify-center px-4 py-20 bg-background overflow-hidden">
       {/* Background Image Overlay */}
@@ -39,13 +44,13 @@ export default function ComingSoon() {
         />
 
         <div className="inline-block px-6 py-2 bg-primary/10 text-primary rounded-full text-sm font-bold mb-6 font-amiri tracking-wider italic backdrop-blur-sm">
-          قريبًا • Coming Soon
+          {t('coming:coming_soon_badge', 'قريبًا • Coming Soon')}
         </div>
         <h1 className="font-playfair text-4xl sm:text-6xl font-bold text-foreground mb-4 italic">
-          Exciting Features Ahead
+          {t('coming:title', 'Exciting Features Ahead')}
         </h1>
         <p className="text-muted-foreground text-xl mb-12 max-w-lg mx-auto italic font-medium">
-          We're building something remarkable for the global Madrasa Farooqia community. Stay tuned.
+          {t('coming:subtitle', "We're building something remarkable for the global Madrasa Farooqia community. Stay tuned.")}
         </p>
 
         <div className="grid sm:grid-cols-3 gap-6 mb-12">
@@ -70,7 +75,7 @@ export default function ComingSoon() {
           to="/"
           className="inline-flex items-center gap-2 text-lg font-bold text-primary hover:text-primary/80 transition-all hover:scale-105 active:scale-95 group"
         >
-          <ArrowLeft className="w-5 h-5 group-hover:-translate-x-1 transition-transform" /> Back to Home
+          <ArrowLeft className="w-5 h-5 group-hover:-translate-x-1 transition-transform" /> {t('coming:back_home', 'Back to Home')}
         </Link>
       </motion.div>
     </div>

@@ -187,215 +187,209 @@ import {
 } from "lucide-react";
 import { Link } from "react-router-dom";
 import InstitutionTabs from "../components/institutions/InstitutionTabs";
-
-const schedule = [
-  {
-    time: "Fajr – 5:30 AM",
-    activity: "Morning Hifz Session (Sabaq & Manzil)",
-    icon: "🌅",
-  },
-  {
-    time: "7:30 AM – 8:00 AM",
-    activity: "Breakfast & Personal Time",
-    icon: "🍽️",
-  },
-  {
-    time: "8:00 AM – 12:00 PM",
-    activity: "Academic Classes (Tajweed, Arabic, Islamic Studies)",
-    icon: "📚",
-  },
-  { time: "12:00 PM", activity: "Zuhr Prayer, Lunch & Rest", icon: "🕌" },
-  {
-    time: "1:30 PM – 3:30 PM",
-    activity: "Para Revision & Individual Practice",
-    icon: "📖",
-  },
-  {
-    time: "4:00 PM",
-    activity: "Asr Prayer — Group Hifz Review with Teacher",
-    icon: "🤲",
-  },
-  {
-    time: "6:30 PM",
-    activity: "Maghrib Prayer & Quran Recitation Circle",
-    icon: "🌙",
-  },
-  {
-    time: "8:00 PM",
-    activity: "Isha Prayer — Final Night Revision Session",
-    icon: "⭐",
-  },
-  { time: "9:30 PM", activity: "Lights out — Rest & Recovery", icon: "💤" },
-];
-
-const documents = [
-  {
-    title: "Masjid Registration",
-    number: "WAQF/UP/MAU/2001/0892",
-    authority: "UP Waqf Board",
-    year: 2001,
-    status: "Valid",
-  },
-  {
-    title: "Hifz Program Approval",
-    number: "UBSM/2002/HFZ/312",
-    authority: "UP Madrasa Education Board",
-    year: 2002,
-    status: "Approved",
-  },
-  {
-    title: "Trust Deed",
-    number: "TRUST/MAU/2001/045",
-    authority: "Sub-Registrar Office, Mau",
-    year: 2001,
-    status: "Registered",
-  },
-  {
-    title: "Fire & Safety NOC",
-    number: "FIRE/MAU/2022/1183",
-    authority: "Fire Safety Dept., Mau Municipality",
-    year: 2022,
-    status: "Cleared",
-  },
-  {
-    title: "80G Tax Exemption",
-    number: "80G/UP/MAU/2005/009",
-    authority: "Income Tax Department, India",
-    year: 2005,
-    status: "Valid",
-  },
-  {
-    title: "FCRA Registration",
-    number: "FCRA/2015/0012345",
-    authority: "Ministry of Home Affairs",
-    year: 2015,
-    status: "Valid",
-  },
-];
-
-const milestones = [
-  {
-    year: 1999,
-    event:
-      "Masjid established at Husianabad, Mau — the founding institution of Madrasa Farooqia",
-  },
-  {
-    year: 2001,
-    event:
-      "Hifz program officially started — first batch of 15 students enrolled",
-  },
-  {
-    year: 2002,
-    event:
-      "Affiliation obtained from UP Madrasa Education Board for Hifz studies",
-  },
-  {
-    year: 2005,
-    event:
-      "First graduating class — 6 students completed full 30-Juz Hifz with Ijazah",
-  },
-  {
-    year: 2007,
-    event:
-      "Masjid building extended — new Hifz hall with capacity for 100 students built",
-  },
-  {
-    year: 2010,
-    event:
-      "Residential facilities constructed — enabling students from distant areas",
-  },
-  {
-    year: 2014,
-    event:
-      "Tajweed certification program introduced — linked to Egyptian Ijazah chain",
-  },
-  {
-    year: 2018,
-    event: "Audio-visual Tajweed lab established for precision learning",
-  },
-  {
-    year: 2020,
-    event:
-      "Online Hifz monitoring system launched — parents can track daily progress",
-  },
-  {
-    year: 2022,
-    event:
-      "500th Hafiz graduated from the program — community celebration event",
-  },
-  {
-    year: 2024,
-    event:
-      "New wudu area and expanded Masjid hall completed — capacity 800+ worshippers",
-  },
-];
-
-const teachers = [
-  {
-    name: "Qari Mohammad Hafiz Sahib",
-    qual: "Hafiz with Ijazah from Deoband",
-    subjects: "Hifz, Tajweed",
-    exp: "22 yrs",
-  },
-  {
-    name: "Maulana Abdul Rahman",
-    qual: "Alim, Darul Uloom Deoband",
-    subjects: "Tajweed Rules, Quran Sciences",
-    exp: "18 yrs",
-  },
-  {
-    name: "Qari Yusuf Khan",
-    qual: "Huffaz, Certified Muallim",
-    subjects: "Individual Hifz Sessions",
-    exp: "15 yrs",
-  },
-  {
-    name: "Maulana Ibrahim Sahib",
-    qual: "Arabic & Tajweed Expert",
-    subjects: "Makhaarij, Applied Tajweed",
-    exp: "12 yrs",
-  },
-];
-
-const islamicEquations = [
-  {
-    arabic: "إِنَّ مَعَ الْعُسْرِ يُسْرًا",
-    translation: "Indeed, with hardship comes ease.",
-    source: "Quran 94:6",
-  },
-  {
-    arabic: "وَاعْتَصِمُوا بِحَبْلِ اللَّهِ جَمِيعًا",
-    translation: "Hold firmly to the rope of Allah, all of you together.",
-    source: "Quran 3:103",
-  },
-  {
-    arabic: "خَيْرُكُمْ مَنْ تَعَلَّمَ الْقُرْآنَ وَعَلَّمَهُ",
-    translation: "The best of you are those who learn the Quran and teach it.",
-    source: "Sahih Bukhari",
-  },
-];
-
-const faqs = [
-  {
-    q: "Who established the Masjid and when?",
-    a: "The Masjid was established in 1999 by Hazrat Maulana Mohammad Farooq Sahib as the spiritual and educational heart of what would become Madrasa Farooqia. It serves as the daily prayer centre for all students and teachers.",
-  },
-  {
-    q: "What makes the Hifz program unique?",
-    a: "Our program is based on the traditional Dars method with modern tracking. Each student has a personal Hafiz teacher, daily individualised sessions, and weekly assessments. The curriculum is affiliated with UP Madrasa Board and includes Tajweed with an unbroken Ijazah chain.",
-  },
-  {
-    q: "How long does it take to complete Hifz?",
-    a: "On average, 3–4 years for dedicated students. Some exceptional students complete it in 2.5 years. The program is flexible based on individual capacity, without rushing quality.",
-  },
-  {
-    q: "Is this open to day students or residential only?",
-    a: "Both. Local students may attend as day scholars. Students from other cities/states can avail the residential facilities at minimal cost. Full scholarships are available for deserving students.",
-  },
-];
+import { useLanguage } from "../lib/LanguageContext";
+import { useTranslation } from "../lib/i18n";
 
 export default function MasjidHifz() {
+  const { language } = useLanguage();
+  const { t } = useTranslation(language);
   const [openFaq, setOpenFaq] = useState(null);
+
+  const schedule = [
+    {
+      time: t("masjid:sched1_time", "Fajr – 5:30 AM"),
+      activity: t("masjid:sched1_act", "Morning Hifz Session (Sabaq & Manzil)"),
+      icon: "🌅",
+    },
+    {
+      time: t("masjid:sched2_time", "7:30 AM – 8:00 AM"),
+      activity: t("masjid:sched2_act", "Breakfast & Personal Time"),
+      icon: "🍽️",
+    },
+    {
+      time: t("masjid:sched3_time", "8:00 AM – 12:00 PM"),
+      activity: t("masjid:sched3_act", "Academic Classes (Tajweed, Arabic, Islamic Studies)"),
+      icon: "📚",
+    },
+    { time: t("masjid:sched4_time", "12:00 PM"), activity: t("masjid:sched4_act", "Zuhr Prayer, Lunch & Rest"), icon: "🕌" },
+    {
+      time: t("masjid:sched5_time", "1:30 PM – 3:30 PM"),
+      activity: t("masjid:sched5_act", "Para Revision & Individual Practice"),
+      icon: "📖",
+    },
+    {
+      time: t("masjid:sched6_time", "4:00 PM"),
+      activity: t("masjid:sched6_act", "Asr Prayer — Group Hifz Review with Teacher"),
+      icon: "🤲",
+    },
+    {
+      time: t("masjid:sched7_time", "6:30 PM"),
+      activity: t("masjid:sched7_act", "Maghrib Prayer & Quran Recitation Circle"),
+      icon: "🌙",
+    },
+    {
+      time: t("masjid:sched8_time", "8:00 PM"),
+      activity: t("masjid:sched8_act", "Isha Prayer — Final Night Revision Session"),
+      icon: "⭐",
+    },
+    { time: t("masjid:sched9_time", "9:30 PM"), activity: t("masjid:sched9_act", "Lights out — Rest & Recovery"), icon: "💤" },
+  ];
+
+  const documents = [
+    {
+      title: t("masjid:doc1_title", "Masjid Registration"),
+      number: "WAQF/UP/MAU/2001/0892",
+      authority: t("masjid:doc1_auth", "UP Waqf Board"),
+      year: 2001,
+      status: t("masjid:doc_status_valid", "Valid"),
+    },
+    {
+      title: t("masjid:doc2_title", "Hifz Program Approval"),
+      number: "UBSM/2002/HFZ/312",
+      authority: t("masjid:doc2_auth", "UP Madrasa Education Board"),
+      year: 2002,
+      status: t("masjid:doc_status_approved", "Approved"),
+    },
+    {
+      title: t("masjid:doc3_title", "Trust Deed"),
+      number: "TRUST/MAU/2001/045",
+      authority: t("masjid:doc3_auth", "Sub-Registrar Office, Mau"),
+      year: 2001,
+      status: t("masjid:doc_status_registered", "Registered"),
+    },
+    {
+      title: t("masjid:doc4_title", "Fire & Safety NOC"),
+      number: "FIRE/MAU/2022/1183",
+      authority: t("masjid:doc4_auth", "Fire Safety Dept., Mau Municipality"),
+      year: 2022,
+      status: t("masjid:doc_status_cleared", "Cleared"),
+    },
+    {
+      title: t("masjid:doc5_title", "80G Tax Exemption"),
+      number: "80G/UP/MAU/2005/009",
+      authority: t("masjid:doc5_auth", "Income Tax Department, India"),
+      year: 2005,
+      status: t("masjid:doc_status_valid", "Valid"),
+    },
+    {
+      title: t("masjid:doc6_title", "FCRA Registration"),
+      number: "FCRA/2015/0012345",
+      authority: t("masjid:doc6_auth", "Ministry of Home Affairs"),
+      year: 2015,
+      status: t("masjid:doc_status_valid", "Valid"),
+    },
+  ];
+
+  const milestones = [
+    {
+      year: 1999,
+      event: t("masjid:mile1", "Masjid established at Husianabad, Mau — the founding institution of Madrasa Farooqia"),
+    },
+    {
+      year: 2001,
+      event: t("masjid:mile2", "Hifz program officially started — first batch of 15 students enrolled"),
+    },
+    {
+      year: 2002,
+      event: t("masjid:mile3", "Affiliation obtained from UP Madrasa Education Board for Hifz studies"),
+    },
+    {
+      year: 2005,
+      event: t("masjid:mile4", "First graduating class — 6 students completed full 30-Juz Hifz with Ijazah"),
+    },
+    {
+      year: 2007,
+      event: t("masjid:mile5", "Masjid building extended — new Hifz hall with capacity for 100 students built"),
+    },
+    {
+      year: 2010,
+      event: t("masjid:mile6", "Residential facilities constructed — enabling students from distant areas"),
+    },
+    {
+      year: 2014,
+      event: t("masjid:mile7", "Tajweed certification program introduced — linked to Egyptian Ijazah chain"),
+    },
+    {
+      year: 2018,
+      event: t("masjid:mile8", "Audio-visual Tajweed lab established for precision learning"),
+    },
+    {
+      year: 2020,
+      event: t("masjid:mile9", "Online Hifz monitoring system launched — parents can track daily progress"),
+    },
+    {
+      year: 2022,
+      event: t("masjid:mile10", "500th Hafiz graduated from the program — community celebration event"),
+    },
+    {
+      year: 2024,
+      event: t("masjid:mile11", "New wudu area and expanded Masjid hall completed — capacity 800+ worshippers"),
+    },
+  ];
+
+  const teachers = [
+    {
+      name: t("masjid:t1_name", "Qari Mohammad Hafiz Sahib"),
+      qual: t("masjid:t1_qual", "Hafiz with Ijazah from Deoband"),
+      subjects: t("masjid:t1_sub", "Hifz, Tajweed"),
+      exp: t("masjid:t1_exp", "22 yrs"),
+    },
+    {
+      name: t("masjid:t2_name", "Maulana Abdul Rahman"),
+      qual: t("masjid:t2_qual", "Alim, Darul Uloom Deoband"),
+      subjects: t("masjid:t2_sub", "Tajweed Rules, Quran Sciences"),
+      exp: t("masjid:t2_exp", "18 yrs"),
+    },
+    {
+      name: t("masjid:t3_name", "Qari Yusuf Khan"),
+      qual: t("masjid:t3_qual", "Huffaz, Certified Muallim"),
+      subjects: t("masjid:t3_sub", "Individual Hifz Sessions"),
+      exp: t("masjid:t3_exp", "15 yrs"),
+    },
+    {
+      name: t("masjid:t4_name", "Maulana Ibrahim Sahib"),
+      qual: t("masjid:t4_qual", "Arabic & Tajweed Expert"),
+      subjects: t("masjid:t4_sub", "Makhaarij, Applied Tajweed"),
+      exp: t("masjid:t4_exp", "12 yrs"),
+    },
+  ];
+
+  const islamicEquations = [
+    {
+      arabic: "إِنَّ مَعَ الْعُسْرِ يُسْرًا",
+      translation: t("masjid:eq1_trans", "Indeed, with hardship comes ease."),
+      source: "Quran 94:6",
+    },
+    {
+      arabic: "وَاعْتَصِمُوا بِحَبْلِ اللَّهِ جَمِيعًا",
+      translation: t("masjid:eq2_trans", "Hold firmly to the rope of Allah, all of you together."),
+      source: "Quran 3:103",
+    },
+    {
+      arabic: "خَيْرُكُمْ مَنْ تَعَلَّمَ الْقُرْآنَ وَعَلَّمَهُ",
+      translation: t("masjid:eq3_trans", "The best of you are those who learn the Quran and teach it."),
+      source: "Sahih Bukhari",
+    },
+  ];
+
+  const faqs = [
+    {
+      q: t("masjid:faq1_q", "Who established the Masjid and when?"),
+      a: t("masjid:faq1_a", "The Masjid was established in 1999 by Hazrat Maulana Mohammad Farooq Sahib as the spiritual and educational heart of what would become Madrasa Farooqia. It serves as the daily prayer centre for all students and teachers."),
+    },
+    {
+      q: t("masjid:faq2_q", "What makes the Hifz program unique?"),
+      a: t("masjid:faq2_a", "Our program is based on the traditional Dars method with modern tracking. Each student has a personal Hafiz teacher, daily individualised sessions, and weekly assessments. The curriculum is affiliated with UP Madrasa Board and includes Tajweed with an unbroken Ijazah chain."),
+    },
+    {
+      q: t("masjid:faq3_q", "How long does it take to complete Hifz?"),
+      a: t("masjid:faq3_a", "On average, 3–4 years for dedicated students. Some exceptional students complete it in 2.5 years. The program is flexible based on individual capacity, without rushing quality."),
+    },
+    {
+      q: t("masjid:faq4_q", "Is this open to day students or residential only?"),
+      a: t("masjid:faq4_a", "Both. Local students may attend as day scholars. Students from other cities/states can avail the residential facilities at minimal cost. Full scholarships are available for deserving students."),
+    },
+  ];
 
   return (
     <div className="min-h-screen bg-background">
@@ -414,28 +408,26 @@ export default function MasjidHifz() {
           >
             <div className="inline-flex items-center gap-2 text-accent text-sm font-medium mb-5 px-4 py-2 bg-white/10 backdrop-blur-sm rounded-full border border-white/20">
               <BookOpen className="w-4 h-4" />
-              <span>Quran Memorisation · Est. 1999 · Madrasa Farooqia</span>
+              <span>{t("masjid:badge", "Quran Memorisation · Est. 1999 · Madrasa Farooqia")}</span>
             </div>
             <h1 className="font-playfair text-4xl sm:text-5xl lg:text-6xl font-bold text-white mb-5 leading-tight">
-              Masjid & Hifz Program
+              {t("masjid:title", "Masjid & Hifz Program")}
             </h1>
             <div className="font-amiri text-2xl text-accent mb-2">
-              إِنَّا نَحْنُ نَزَّلْنَا الذِّكْرَ وَإِنَّا لَهُ لَحَافِظُونَ
+              إِنَّا نَحْنُ نَزَّلْنَا الذِّکْرَ وَإِنَّا لَهُ لَحَافِظُونَ
             </div>
             <p className="text-white/40 text-sm italic mb-6">
-              "Indeed, it is We who sent down the Quran and indeed, We will be
-              its guardian." — Quran 15:9
+              {t("masjid:hero_verse_trans", "\"Indeed, it is We who sent down the Quran and indeed, We will be its guardian.\" — Quran 15:9")}
             </p>
             <p className="text-white/70 text-lg max-w-2xl mx-auto leading-relaxed mb-8">
-              A dedicated Quran memorisation program within our Masjid — where
-              students complete full Hifz with certified Tajweed since 1999.
+              {t("masjid:hero_desc", "A dedicated Quran memorisation program within our Masjid — where students complete full Hifz with certified Tajweed since 1999.")}
             </p>
             <div className="flex flex-wrap justify-center gap-3 mb-8">
               {[
-                { val: "500+", lbl: "Graduated Huffaz" },
-                { val: "150+", lbl: "Current Students" },
-                { val: "25 yrs", lbl: "Serving Community" },
-                { val: "Ijazah", lbl: "Certified Chain" },
+                { val: "500+", lbl: t("masjid:grad_huffaz_lbl", "Graduated Huffaz") },
+                { val: "150+", lbl: t("masjid:curr_students_lbl", "Current Students") },
+                { val: "25 yrs", lbl: t("masjid:serving_community_lbl", "Serving Community") },
+                { val: "Ijazah", lbl: t("masjid:certified_chain_lbl", "Certified Chain") },
               ].map(({ val, lbl }) => (
                 <div
                   key={lbl}
@@ -453,13 +445,13 @@ export default function MasjidHifz() {
                 to="/donate?purpose=masjid"
                 className="inline-flex items-center gap-2 px-6 py-3 gold-gradient text-foreground font-semibold rounded-xl hover:opacity-90 shadow-lg"
               >
-                <Heart className="w-4 h-4" /> Support Hifz Program
+                <Heart className="w-4 h-4" /> {t("masjid:support_btn", "Support Hifz Program")}
               </Link>
               <Link
                 to="/contact"
                 className="inline-flex items-center gap-2 px-6 py-3 bg-white/10 text-white font-semibold rounded-xl border border-white/20 hover:bg-white/20 transition-colors"
               >
-                Enrol a Student <ChevronRight className="w-4 h-4" />
+                {t("masjid:enrol_btn", "Enrol a Student")} <ChevronRight className="w-4 h-4" />
               </Link>
             </div>
           </motion.div>
@@ -478,29 +470,19 @@ export default function MasjidHifz() {
               viewport={{ once: true }}
             >
               <div className="inline-flex items-center gap-2 text-accent font-semibold text-sm mb-4">
-                <BookOpen className="w-4 h-4" /> The Founding Story
+                <BookOpen className="w-4 h-4" /> {t("masjid:founding_story", "The Founding Story")}
               </div>
               <h2 className="font-playfair text-3xl font-bold text-foreground mb-6">
-                A Masjid First, Then a Madrasa
+                {t("masjid:founding_title", "A Masjid First, Then a Madrasa")}
               </h2>
               <p className="text-muted-foreground leading-relaxed mb-4">
-                Everything began in{" "}
-                <strong className="text-foreground">1999</strong> when Hazrat
-                Maulana Mohammad Farooq Sahib established a small Masjid in
-                Husianabad, Mau — a neighbourhood where children had nowhere to
-                learn the Quran properly.
+                {t("masjid:founding_p1", "Everything began in 1999 when Hazrat Maulana Mohammad Farooq Sahib established a small Masjid in Husianabad, Mau — a neighbourhood where children had nowhere to learn the Quran properly.")}
               </p>
               <p className="text-muted-foreground leading-relaxed mb-4">
-                Within two years, the Masjid became an informal Hifz circle.
-                Parents from across Mau district brought their sons to memorise
-                the Quran. What started as 15 students grew into a structured,
-                board-affiliated Hifz program.
+                {t("masjid:founding_p2", "Within two years, the Masjid became an informal Hifz circle. Parents from across Mau district brought their sons to memorise the Quran. What started as 15 students grew into a structured, board-affiliated Hifz program.")}
               </p>
               <p className="text-muted-foreground leading-relaxed mb-6">
-                Today, the Masjid is the spiritual heart of Madrasa Farooqia —
-                all students and teachers begin and end their day here. The Hifz
-                program has produced over 500 Huffaz who now lead prayers, teach
-                in madrasas, and serve communities across India and the world.
+                {t("masjid:founding_p3", "Today, the Masjid is the spiritual heart of Madrasa Farooqia — all students and teachers begin and end their day here. The Hifz program has produced over 500 Huffaz who now lead prayers, teach in madrasas, and serve communities across India and the world.")}
               </p>
               <div className="grid grid-cols-2 gap-4">
                 <div className="p-4 bg-secondary/50 rounded-2xl border border-border text-center">
@@ -508,7 +490,7 @@ export default function MasjidHifz() {
                     500+
                   </div>
                   <div className="text-xs text-muted-foreground mt-1">
-                    Huffaz Graduated
+                    {t("masjid:huffaz_graduated", "Huffaz Graduated")}
                   </div>
                 </div>
                 <div className="p-4 bg-secondary/50 rounded-2xl border border-border text-center">
@@ -516,7 +498,7 @@ export default function MasjidHifz() {
                     800+
                   </div>
                   <div className="text-xs text-muted-foreground mt-1">
-                    Masjid Capacity
+                    {t("masjid:masjid_capacity", "Masjid Capacity")}
                   </div>
                 </div>
               </div>
@@ -537,10 +519,10 @@ export default function MasjidHifz() {
                 <MapPin className="w-5 h-5 text-accent shrink-0" />
                 <div>
                   <div className="font-semibold text-foreground text-sm">
-                    Husianabad Main Masjid
+                    {t("masjid:main_masjid", "Husianabad Main Masjid")}
                   </div>
                   <div className="text-xs text-muted-foreground">
-                    Mau, Uttar Pradesh 275101, India
+                    {t('footer:addressLine', 'Husianabad, Mau, Uttar Pradesh, India')}
                   </div>
                 </div>
                 <a
@@ -549,7 +531,7 @@ export default function MasjidHifz() {
                   rel="noreferrer"
                   className="ml-auto text-xs text-accent hover:underline flex items-center gap-1"
                 >
-                  Map <ChevronRight className="w-3 h-3" />
+                  {t("masjid:map", "Map")} <ChevronRight className="w-3 h-3" />
                 </a>
               </div>
             </motion.div>
@@ -588,14 +570,13 @@ export default function MasjidHifz() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-12">
             <div className="inline-flex items-center gap-2 text-accent font-semibold text-sm mb-4">
-              <FileText className="w-4 h-4" /> 100% Transparent
+              <FileText className="w-4 h-4" /> {t("masjid:transparent", "100% Transparent")}
             </div>
             <h2 className="font-playfair text-3xl font-bold text-foreground mb-3">
-              Official Documents & Licenses
+              {t("masjid:docs_title", "Official Documents & Licenses")}
             </h2>
             <p className="text-muted-foreground max-w-xl mx-auto">
-              All registrations, approvals and legal documents are publicly
-              verifiable.
+              {t("masjid:docs_desc", "All registrations, approvals and legal documents are publicly verifiable.")}
             </p>
           </div>
           <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
@@ -627,7 +608,7 @@ export default function MasjidHifz() {
                   {doc.authority}
                 </p>
                 <p className="text-xs text-muted-foreground">
-                  Issued: {doc.year}
+                  {t("masjid:issued", "Issued")}: {doc.year}
                 </p>
               </motion.div>
             ))}
@@ -640,11 +621,10 @@ export default function MasjidHifz() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-12">
             <h2 className="font-playfair text-3xl font-bold text-foreground mb-3">
-              25 Years of Hifz Excellence
+              {t("masjid:milestones_title", "25 Years of Hifz Excellence")}
             </h2>
             <p className="text-muted-foreground">
-              From a small Masjid circle to one of India's respected Hifz
-              institutions
+              {t("masjid:milestones_desc", "From a small Masjid circle to one of India's respected Hifz institutions")}
             </p>
           </div>
           <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
@@ -676,14 +656,14 @@ export default function MasjidHifz() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-12">
             <h2 className="font-playfair text-3xl font-bold text-foreground mb-3">
-              Hifz Faculty
+              {t("masjid:faculty_title", "Hifz Faculty")}
             </h2>
             <p className="text-muted-foreground">
-              Certified Huffaz teachers with unbroken Ijazah chains
+              {t("masjid:faculty_desc", "Certified Huffaz teachers with unbroken Ijazah chains")}
             </p>
           </div>
           <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-5">
-            {teachers.map((t, i) => (
+            {teachers.map((t_item, i) => (
               <motion.div
                 key={i}
                 initial={{ opacity: 0, y: 20 }}
@@ -694,16 +674,16 @@ export default function MasjidHifz() {
               >
                 <div className="w-16 h-16 bg-foreground rounded-full flex items-center justify-center mx-auto mb-3">
                   <span className="font-playfair font-bold text-background text-xl">
-                    {t.name.split(" ")[1]?.[0] || "Q"}
+                    {t_item.name.split(" ")[1]?.[0] || "Q"}
                   </span>
                 </div>
                 <h3 className="font-semibold text-foreground text-sm mb-1">
-                  {t.name}
+                  {t_item.name}
                 </h3>
-                <p className="text-xs text-accent mb-1">{t.subjects}</p>
-                <p className="text-xs text-muted-foreground mb-2">{t.qual}</p>
+                <p className="text-xs text-accent mb-1">{t_item.subjects}</p>
+                <p className="text-xs text-muted-foreground mb-2">{t_item.qual}</p>
                 <span className="text-xs px-2 py-0.5 bg-secondary rounded-full text-muted-foreground">
-                  {t.exp} experience
+                  {t_item.exp} {t("teachers:experience", "experience")}
                 </span>
               </motion.div>
             ))}
@@ -716,11 +696,10 @@ export default function MasjidHifz() {
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-12">
             <h2 className="font-playfair text-3xl font-bold text-foreground mb-3">
-              Daily Schedule
+              {t("masjid:schedule_title", "Daily Schedule")}
             </h2>
             <p className="text-muted-foreground">
-              A disciplined routine designed for maximum retention and spiritual
-              growth
+              {t("masjid:schedule_desc", "A disciplined routine designed for maximum retention and spiritual growth")}
             </p>
           </div>
           <div className="space-y-2">
@@ -751,7 +730,7 @@ export default function MasjidHifz() {
         <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-12">
             <h2 className="font-playfair text-3xl font-bold text-foreground mb-3">
-              Frequently Asked Questions
+              {t("masjid:faq_title", "Frequently Asked Questions")}
             </h2>
           </div>
           <div className="space-y-3">
@@ -794,17 +773,16 @@ export default function MasjidHifz() {
             viewport={{ once: true }}
           >
             <h2 className="font-playfair text-3xl font-bold text-white mb-4">
-              Sponsor a Hafiz's Journey
+              {t("masjid:sponsor_title", "Sponsor a Hafiz's Journey")}
             </h2>
             <p className="text-white/70 mb-8">
-              An ongoing Sadqa Jariyah for you and your family — every Juz a
-              student memorises, the reward flows to you.
+              {t("masjid:sponsor_desc", "An ongoing Sadqa Jariyah for you and your family — every Juz a student memorises, the reward flows to you.")}
             </p>
             <Link
               to="/donate?purpose=masjid"
               className="inline-flex items-center gap-2 px-8 py-4 gold-gradient text-foreground font-semibold rounded-xl hover:opacity-90 shadow-xl text-lg"
             >
-              <Heart className="w-5 h-5" /> Sponsor a Hafiz Student
+              <Heart className="w-5 h-5" /> {t("masjid:sponsor_btn", "Sponsor a Hafiz Student")}
             </Link>
           </motion.div>
         </div>

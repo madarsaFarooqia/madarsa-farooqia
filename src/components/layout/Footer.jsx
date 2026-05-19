@@ -34,10 +34,10 @@ export default function Footer() {
               </div>
             </div>
             <p className="text-background/60 text-sm leading-relaxed mb-2">
-              Husianabad, Mau, Uttar Pradesh, India
+              {t('footer:addressLine', 'Husianabad, Mau, Uttar Pradesh, India')}
             </p>
             <p className="text-background/60 text-sm leading-relaxed">
-              Spreading authentic Islamic knowledge since 1999.
+              {t('footer:spreadingKnowledge', 'Spreading authentic Islamic knowledge since 1999.')}
             </p>
             <div className="flex gap-3 mt-5">
               {[FaFacebook, FaTwitter, FaInstagram, FaYoutube].map(
@@ -57,7 +57,7 @@ export default function Footer() {
           {/* Quick Links */}
           <div>
             <h4 className="font-semibold text-accent mb-4 text-sm uppercase tracking-wider">
-              Quick Links
+              {t('footer:quickLinks', 'Quick Links')}
             </h4>
             <ul className="space-y-2.5">
               {[
@@ -66,7 +66,7 @@ export default function Footer() {
                 { to: "/donate", label: t('nav:donate') },
                 { to: "/fundraising", label: t('nav:fundraising') },
                 { to: "/contact", label: t('nav:contact') },
-                { to: "/coming-soon", label: "Coming Soon" },
+                { to: "/coming-soon", label: t('nav:comingSoon', 'Coming Soon') },
               ].map((link) => (
                 <li key={link.to}>
                   <Link
@@ -115,11 +115,10 @@ export default function Footer() {
           {/* Donate CTA */}
           <div>
             <h4 className="font-semibold text-accent mb-4 text-sm uppercase tracking-wider">
-              Support Us
+              {t('footer:supportUs', 'Support Us')}
             </h4>
             <p className="text-background/60 text-sm mb-4 leading-relaxed">
-              Your generous donation sustains our mission of authentic Islamic
-              education.
+              {t('footer:donationSustains', 'Your generous donation sustains our mission of authentic Islamic education.')}
             </p>
             <Link
               to="/donate"
@@ -132,7 +131,7 @@ export default function Footer() {
         </div>
 
         <div className="py-5 border-t border-background/10 flex flex-col sm:flex-row items-center justify-between gap-2 text-xs text-background/40">
-          <span>© 2025 Madrasa Farooqia. All rights reserved.</span>
+          <span>© 2025 Madrasa Farooqia. {t('footer:allRightsReserved', 'All rights reserved.')}</span>
           <span className="font-amiri text-base text-background/50">
             بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ
           </span>
