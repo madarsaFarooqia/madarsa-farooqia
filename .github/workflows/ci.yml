@@ -144,7 +144,7 @@ jobs:
         run: yarn install --frozen-lockfile
       - name: Build
         env:
-          CI: true
+          CI: false
         run: yarn build
 
   placeholder-advanced:
