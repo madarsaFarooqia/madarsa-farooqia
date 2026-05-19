@@ -2,9 +2,9 @@ name: CI
 
 on:
   push:
-    branches: [ main, development, developement ]
+    branches: [ main, developement ]
   pull_request:
-    branches: [ main, development, developement ]
+    branches: [ main, developement ]
 
 jobs:
   validate-lock:
