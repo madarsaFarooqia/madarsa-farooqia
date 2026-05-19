@@ -27,7 +27,7 @@ export default function EntityManager({ entityName, title, fields, displayField 
 
   const entity = getEntityService(entityName);
 
-  // Dynamic titles and labels
+  // Dynamic titles and label
   const translatedTitle = t(`admin:${title}`, title);
   const translatedTitlePlural = t(`admin:${title}s`, `${title}s`);
 
