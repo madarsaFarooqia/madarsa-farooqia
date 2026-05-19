@@ -54,6 +54,13 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+      - name: Use Node.js 20
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: 'yarn'
+      - name: Install
+        run: yarn install --frozen-lockfile
       - name: Prettier check
         run: |
           if yarn dlx prettier --version >/dev/null 2>&1; then
@@ -69,6 +76,13 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+      - name: Use Node.js 20
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: 'yarn'
+      - name: Install
+        run: yarn install --frozen-lockfile
       - name: Run ESLint
         run: |
           if yarn exec eslint --version >/dev/null 2>&1; then
@@ -84,6 +98,13 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+      - name: Use Node.js 20
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: 'yarn'
+      - name: Install
+        run: yarn install --frozen-lockfile
       - name: Run tsc
         run: |
           if [ -f tsconfig.json ]; then yarn tsc --noEmit; else echo "No tsconfig.json; skipping"; fi
@@ -95,6 +116,13 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+      - name: Use Node.js 20
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: 'yarn'
+      - name: Install
+        run: yarn install --frozen-lockfile
       - name: Run tests
         env:
           CI: true
