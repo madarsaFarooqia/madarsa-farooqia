@@ -13,11 +13,10 @@ import {
 } from "lucide-react";
 import { useLanguage } from "../lib/LanguageContext";
 import { useTranslation } from "../lib/i18n";
-import {
-  authService,
-  donationService,
-  fundraisingCampaignService,
-} from "../services";
+import { authService } from "../services";
+import { useDonationMutations } from "../hooks/api";
+import { useAuth } from "../lib/AuthContext";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import { Button } from "../components/ui/button";
 import { Input } from "../components/ui/input";
 import { Label } from "../components/ui/label";
@@ -31,7 +30,6 @@ import {
   SelectValue,
 } from "../components/ui/select";
 import { toast } from "sonner";
-import { useSearchParams } from "react-router-dom";
 import DonationSuccessModal from "../components/shared/DonationSuccessModal";
 import { FarooqiaLogo, AuthBackground } from "../assets";
 
@@ -62,10 +60,12 @@ const currencies = [
 export default function Donate() {
   const { language } = useLanguage();
   const { t } = useTranslation(language);
+  const navigate = useNavigate();
   const [searchParams] = useSearchParams();
   const campaignId = searchParams.get("campaign");
 
-  const [user, setUser] = useState(null);
+  const { initiateGuest } = useDonationMutations();
+  const { user } = useAuth();
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState(false);
   const [lastDonation, setLastDonation] = useState(null);
@@ -84,18 +84,13 @@ export default function Donate() {
   });
 
   useEffect(() => {
-    authService
-      .me()
-      .then((u) => {
-        setUser(u);
-        setForm((f) => ({
-          ...f,
-          donorName: u.full_name || "",
-          donorEmail: u.email || "",
-        }));
-      })
-      .catch(() => {});
-  }, []);
+    if (!user) return;
+    setForm((f) => ({
+      ...f,
+      donorName: user.full_name || "",
+      donorEmail: user.email || "",
+    }));
+  }, [user]);
 
   const finalAmount = form.customAmount
     ? parseFloat(form.customAmount)
@@ -108,39 +103,35 @@ export default function Donate() {
       return;
     }
     setLoading(true);
+    try {
+      const donationPayload = {
+        donor_name: form.isAnonymous ? "Anonymous" : form.donorName,
+        donor_email: form.donorEmail,
+        donor_phone: form.donorPhone,
+        amount: finalAmount,
+        currency: form.currency,
+        purpose: form.purpose,
+        is_anonymous: form.isAnonymous,
+        campaign_id: campaignId || null,
+      };
 
-    const donation = {
-      donor_name: form.isAnonymous ? "Anonymous" : form.donorName,
-      donor_email: form.donorEmail,
-      donor_phone: form.donorPhone,
-      amount: finalAmount,
-      currency: form.currency,
-      purpose: form.purpose,
-      is_recurring: form.isRecurring,
-      recurring_frequency: form.isRecurring ? form.recurringFrequency : null,
-      recurring_amount: form.isRecurring ? finalAmount : null,
-      is_anonymous: form.isAnonymous,
-      campaign_id: campaignId || null,
-      status: "completed",
-      payment_method: "card",
-    };
+      const created = await initiateGuest.mutateAsync(donationPayload);
 
-    const created = await donationService.create(donation);
-
-    if (campaignId) {
-      const list = await fundraisingCampaignService.list("-created_date", 500);
-      const campaign = list.find((x) => String(x.id) === String(campaignId));
-      if (campaign) {
-        await fundraisingCampaignService.update(campaignId, {
-          collected_amount: (campaign.collected_amount || 0) + finalAmount,
-          donors_count: (campaign.donors_count || 0) + 1,
-        });
+      if (created?.checkout_url) {
+        const checkout = created.checkout_url.startsWith("http")
+          ? created.checkout_url
+          : `${created.checkout_url}${created.checkout_url.includes("?") ? "&" : "?"}amount=${finalAmount}&currency=${form.currency}`;
+        navigate(checkout);
+        return;
       }
-    }
 
-    setLastDonation({ ...donation, id: created?.id });
-    setLoading(false);
-    setSuccess(true);
+      setLastDonation({ ...donationPayload, id: created?.id, status: created?.status });
+      setSuccess(true);
+    } catch (err) {
+      toast.error(err.message || "Donation could not be started");
+    } finally {
+      setLoading(false);
+    }
   };
 
   if (success && lastDonation) {

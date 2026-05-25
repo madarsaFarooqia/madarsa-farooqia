@@ -1,5 +1,5 @@
-import { useState, useEffect } from 'react';
-import { registrationService } from '../../services';
+import { useState } from 'react';
+import { useRegistrationsQuery, useRegistrationMutations } from '../../hooks/api';
 import { Loader2, Search, Check, X, Eye } from 'lucide-react';
 import { Input } from '../../components/ui/input';
 import { Button } from '../../components/ui/button';
@@ -13,19 +13,10 @@ export default function RegistrationsAdmin() {
   const { toast } = useToast();
   const { language } = useLanguage();
   const { t } = useTranslation(language);
-  const [regs, setRegs] = useState([]);
-  const [loading, setLoading] = useState(true);
+  const { data: regs = [], isLoading: loading, refetch } = useRegistrationsQuery('-created_date', 500);
+  const { update } = useRegistrationMutations();
   const [search, setSearch] = useState('');
   const [selected, setSelected] = useState(null);
-
-  const loadData = () => {
-    setLoading(true);
-    registrationService.list('-created_date', 500)
-      .then(setRegs)
-      .finally(() => setLoading(false));
-  };
-
-  useEffect(() => { loadData(); }, []);
 
   const filtered = regs.filter(r =>
     (r.student_name || '').toLowerCase().includes(search.toLowerCase()) ||
@@ -33,9 +24,9 @@ export default function RegistrationsAdmin() {
   );
 
   const updateStatus = async (reg, status) => {
-    await registrationService.update(reg.id, { status });
+    await update.mutateAsync({ id: reg.id, payload: { status } });
     toast({ title: t('admin:registrationStatusUpdated', 'Registration status updated successfully') });
-    loadData();
+    refetch();
     setSelected(null);
   };
 

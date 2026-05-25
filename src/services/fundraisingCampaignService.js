@@ -1,27 +1,4 @@
-import { http, normalizeListResponse } from './http';
+import { campaignService } from './campaignService';
 
-const path = '/api/fundraising-campaigns';
-
-export const fundraisingCampaignService = {
-  async list(sort, limit) {
-    const data = await http.get(path, { query: { sort, limit } });
-    return normalizeListResponse(data);
-  },
-
-  async filter(filters, sort, limit) {
-    const data = await http.get(path, { query: { ...filters, sort, limit } });
-    return normalizeListResponse(data);
-  },
-
-  async create(payload) {
-    return http.post(path, payload);
-  },
-
-  async update(id, payload) {
-    return http.patch(`${path}/${id}`, payload);
-  },
-
-  async delete(id) {
-    return http.delete(`${path}/${id}`);
-  },
-};
+/** Fundraising UI uses the same campaigns API as the core backend. */
+export const fundraisingCampaignService = campaignService;

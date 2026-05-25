@@ -3,7 +3,7 @@ import { motion } from 'framer-motion';
 import { MapPin, Phone, Mail, Clock, Send, MessageSquare, Check, Navigation } from 'lucide-react';
 import { useLanguage } from '../lib/LanguageContext';
 import { useTranslation } from '../lib/i18n';
-import { contactMessageService } from '../services';
+import { useContactMessageMutations } from '../hooks/api';
 import { Button } from '../components/ui/button';
 import { Input } from '../components/ui/input';
 import { Label } from '../components/ui/label';
@@ -37,15 +37,13 @@ const contactInfo = [
 export default function Contact() {
   const { language, currentLang } = useLanguage();
   const { t } = useTranslation(language);
-  const [loading, setLoading] = useState(false);
+  const { create } = useContactMessageMutations();
   const [sent, setSent] = useState(false);
   const [form, setForm] = useState({ name: '', email: '', phone: '', subject: '', message: '' });
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setLoading(true);
-    await contactMessageService.create(form);
-    setLoading(false);
+    await create.mutateAsync(form);
     setSent(true);
     toast.success(t('contact:messageSent'));
     setForm({ name: '', email: '', phone: '', subject: '', message: '' });
@@ -198,10 +196,10 @@ export default function Contact() {
                   </div>
                   <Button
                     type="submit"
-                    disabled={loading}
+                    disabled={create.isPending}
                     className="w-full h-12 bg-foreground text-background font-bold rounded-xl hover:opacity-90 transition-all hover:scale-[1.01] active:scale-[0.99] shadow-lg"
                   >
-                    {loading ? (
+                    {create.isPending ? (
                       <span className="flex items-center gap-2">
                         <span className="w-4 h-4 border-2 border-background border-t-transparent rounded-full animate-spin" />
                         Sending...

@@ -64,7 +64,12 @@ export function normalizeListResponse(data) {
   if (data && Array.isArray(data.items)) return data.items;
   if (data && Array.isArray(data.data)) return data.data;
   if (data && Array.isArray(data.results)) return data.results;
+  if (data && Array.isArray(data.content)) return data.content;
   return [];
+}
+
+export function getPaymentsApiBase() {
+  return (process.env.REACT_APP_PAYMENTS_API_URL || 'http://localhost:8082').replace(/\/$/, '');
 }
 
 function resolveCredentials() {
@@ -119,6 +124,13 @@ export async function apiRequest(method, path, { query, body, headers, signal } 
       res.statusText ||
       'Request failed';
     throw new ApiError(String(message), { status: res.status, data });
+  }
+
+  if (data && typeof data === 'object' && Object.prototype.hasOwnProperty.call(data, 'success')) {
+    if (data.success === false) {
+      throw new ApiError(data.message || 'Request failed', { status: res.status, data });
+    }
+    return data.data !== undefined ? data.data : data;
   }
 
   return data;

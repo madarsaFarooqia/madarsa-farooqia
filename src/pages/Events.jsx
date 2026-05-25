@@ -1,5 +1,5 @@
-import { useState, useEffect } from 'react';
-import { eventService } from '../services';
+import { useState } from 'react';
+import { useEventsQuery } from '../hooks/api';
 import EventCard from '../components/events/EventCard';
 import SectionHeader from '../components/shared/SectionHeader';
 import { Loader2 } from 'lucide-react';
@@ -9,8 +9,7 @@ import { useTranslation } from "../lib/i18n";
 export default function Events() {
   const { language } = useLanguage();
   const { t } = useTranslation(language);
-  const [events, setEvents] = useState([]);
-  const [loading, setLoading] = useState(true);
+  const { data: events = [], isLoading: loading } = useEventsQuery('-created_date', 100);
   const [activeTab, setActiveTab] = useState('All');
 
   const TABS = [
@@ -21,12 +20,6 @@ export default function Events() {
     { key: 'Community', label: t('events:tab_community', 'Community') },
     { key: 'Graduation', label: t('events:tab_graduation', 'Graduation') }
   ];
-
-  useEffect(() => {
-    eventService.list('-date', 100)
-      .then(setEvents)
-      .finally(() => setLoading(false));
-  }, []);
 
   const filtered = events.filter(e => {
     if (activeTab === 'All') return true;

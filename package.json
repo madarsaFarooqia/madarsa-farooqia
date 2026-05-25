@@ -59,6 +59,8 @@
     "zod": "^3.23.8"
   },
   "scripts": {
+    "test:api": "node scripts/api-integration-test.mjs",
+    "start:stack": "cd .. && yarn start:all",
     "start": "craco start",
     "build": "craco build",
     "test": "craco test",

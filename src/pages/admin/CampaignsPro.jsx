@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { motion } from "framer-motion";
 import {
   Plus,
@@ -19,46 +19,32 @@ import { format } from "date-fns";
 import CampaignFormModal from "../../components/admin/CampaignFormModal";
 import { useLanguage } from "../../lib/LanguageContext";
 import { useTranslation } from "../../lib/i18n";
+import { useCampaignsQuery, useCampaignMutations } from "../../hooks/api";
 
 export default function CampaignsPro() {
   const { language } = useLanguage();
   const { t } = useTranslation(language);
-  const [campaigns, setCampaigns] = useState([]);
-  const [loading, setLoading] = useState(true);
+  const { data: campaigns = [], isLoading: loading, refetch } = useCampaignsQuery('-created_date', 100);
+  const { close } = useCampaignMutations();
   const [search, setSearch] = useState("");
   const [statusFilter, setStatusFilter] = useState("all");
   const [showModal, setShowModal] = useState(false);
   const [editing, setEditing] = useState(null);
-
-  const load = () => {
-    setLoading(true);
-
-    const data = generateCampaigns(16);
-
-    setTimeout(() => {
-      setCampaigns(data);
-      setLoading(false);
-    }, 300);
-  };
-
-  useEffect(() => {
-    load();
-  }, []);
 
   const filtered = campaigns.filter((c) => {
     const matchSearch =
       !search ||
       c.title?.toLowerCase().includes(search.toLowerCase()) ||
       c.category?.toLowerCase().includes(search.toLowerCase());
-    const matchStatus = statusFilter === "all" || c.status === statusFilter;
+    const matchStatus = statusFilter === "all" || String(c.status).toLowerCase() === statusFilter;
     return matchSearch && matchStatus;
   });
 
   const handleDelete = async (id) => {
     const ok = window.confirm(t("admin:deleteCampaignConfirm", "Delete this campaign?"));
     if (!ok) return;
-    setCampaigns((prev) => prev.filter((c) => c.id !== id));
-    load();
+    await close.mutateAsync(id);
+    refetch();
   };
 
   const exportCSV = () => {
@@ -312,7 +298,7 @@ export default function CampaignsPro() {
           onSaved={() => {
             setShowModal(false);
             setEditing(null);
-            load();
+            refetch();
           }}
         />
       )}

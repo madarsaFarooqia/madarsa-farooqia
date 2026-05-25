@@ -262,7 +262,7 @@
 //   );
 // }
 
-import React, { useEffect, useState } from "react";
+import React from "react";
 import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
 import {
@@ -281,7 +281,7 @@ import { useLanguage } from "../lib/LanguageContext";
 import { useTranslation } from "../lib/i18n";
 import TeacherCard from "../components/teachers/TeacherCard";
 import CampaignCard from "../components/fundraising/CampaignCard";
-import { fundraisingCampaignService, teacherService } from "../services";
+import { useTeachersQuery, useCampaignsQuery } from "../hooks/api";
 import { AuthBackground } from "../assets";
 import { FcDonate } from "react-icons/fc";
 
@@ -297,8 +297,11 @@ const stats = [
 export default function Home() {
   const { language } = useLanguage();
   const { t } = useTranslation(language);
-  const [teachers, setTeachers] = useState([]);
-  const [campaigns, setCampaigns] = useState([]);
+  const { data: teachers = [] } = useTeachersQuery("-created_date", 3);
+  const { data: allCampaigns = [] } = useCampaignsQuery("-created_date", 50);
+  const campaigns = allCampaigns
+    .filter((c) => String(c.status || "").toLowerCase() === "active")
+    .slice(0, 3);
 
   const islamicVerses = [
     {
@@ -341,22 +344,6 @@ export default function Home() {
       emoji: "🕌",
     },
   ];
-
-  // useEffect(() => {
-  //   base44.entities.Teacher.list('-created_date', 3).then(setTeachers).catch(() => {});
-  //   base44.entities.FundraisingCampaign.filter({ status: 'active' }, '-created_date', 3).then(setCampaigns).catch(() => {});
-  // }, []);
-
-  useEffect(() => {
-    teacherService
-      .list("-created_date", 3)
-      .then(setTeachers)
-      .catch(() => {});
-    fundraisingCampaignService
-      .filter({ status: "active" }, "-created_date", 3)
-      .then(setCampaigns)
-      .catch(() => {});
-  }, []);
 
   return (
     <div className="min-h-screen">

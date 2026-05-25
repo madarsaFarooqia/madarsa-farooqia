@@ -1,10 +1,10 @@
 import { format } from 'date-fns';
 
 const CATEGORY_CODES = {
-  general: 'GN', education: 'ED', sadqa: 'SD', zakat: 'ZK',
-  lillah: 'LL', waqf: 'WF', building: 'IN', infrastructure: 'IN',
-  scholarship: 'SW', food_program: 'FP', orphan_care: 'OC',
-  masjid: 'MH', niswaan: 'NW', campaign: 'CP', salaries: 'SL', fitra: 'FT',
+  general: 'GEN', education: 'EDU', sadqa: 'SDQ', zakat: 'ZKT',
+  lillah: 'LLH', waqf: 'WQF', building: 'BLD', infrastructure: 'INF',
+  scholarship: 'SCH', food_program: 'FDP', orphan_care: 'ORP',
+  masjid: 'MSJ', niswaan: 'NSW', campaign: 'GEN', salaries: 'SL', fitra: 'FTR',
 };
 
 export const TAX_RULES = {
@@ -16,16 +16,19 @@ export const TAX_RULES = {
   default: { name: 'International', taxId: 'Reg. No.', regLabel: 'Reg. No.', reg: 'U85300UP2000NPL012345', disclaimer: 'This is an official tax receipt from Madrasa Farooqia, a registered educational institution and charitable organization.' },
 };
 
+/** Prefer server-issued receipt: DUF-{TYPE}-{Institute}-{YYYYMMDD}-{SEQ} */
 export function generateReceiptId(donation) {
-  if (donation.receipt_id) return donation.receipt_id;
-  if (!donation.created_date && !donation.id) return `MF-${Date.now().toString().slice(-12)}`;
-  const d = new Date(donation.created_date || new Date());
+  if (donation.receipt_number) return donation.receipt_number;
+  if (donation.receipt_id && String(donation.receipt_id).startsWith('DUF-')) {
+    return donation.receipt_id;
+  }
+  if (!donation.created_date && !donation.id) return `DUF-GEN-M1-${format(new Date(), 'yyyyMMdd')}-000000`;
+  const d = new Date(donation.completed_at || donation.created_date || new Date());
   const date = format(d, 'yyyyMMdd');
-  const time = format(d, 'HHmm');
-  const cat = CATEGORY_CODES[donation.purpose] || 'GN';
-  const seed = (donation.id || donation.amount || '').toString().slice(-4);
-  const rand = (seed.padStart(4, '0') + Math.random().toString(36).slice(2, 4)).toUpperCase().slice(0, 4);
-  return `MF-${date}-${time}-${cat}-${rand}`;
+  const type = CATEGORY_CODES[donation.purpose] || 'GEN';
+  const institute = donation.institute_code || 'M1';
+  const seed = (donation.id || '').toString().replace(/\D/g, '').slice(-6).padStart(6, '0');
+  return `DUF-${type}-${institute}-${date}-${seed || '000001'}`;
 }
 
 function buildQRDataURL(text) {

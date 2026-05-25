@@ -1,7 +1,8 @@
-import React, { createContext, useContext, useEffect } from "react";
+import React, { createContext, useContext } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { authService } from "../services/authService";
 import { getStoredToken } from "../services/http";
+import { queryKeys } from "../hooks/api/queryKeys";
 
 const AuthContext = createContext();
 
@@ -15,7 +16,7 @@ export const AuthProvider = ({ children }) => {
     isError,
     refetch,
   } = useQuery({
-    queryKey: ["auth-user"],
+    queryKey: queryKeys.auth.me,
     queryFn: authService.me,
     enabled: !!getStoredToken(), // Only run if we have a token
     retry: false,
@@ -25,24 +26,22 @@ export const AuthProvider = ({ children }) => {
   // 2. Mutation for Login
   const loginMutation = useMutation({
     mutationFn: (credentials) => authService.login(credentials),
-    onSuccess: (data) => {
-      // Invalidate and refetch user query
-      queryClient.setQueryData(["auth-user"], data.user || data);
-      // Optional: redirect or show success
+    onSuccess: async () => {
+      await queryClient.invalidateQueries({ queryKey: queryKeys.auth.me });
     },
   });
 
   // 3. Mutation for Register
   const registerMutation = useMutation({
     mutationFn: (userData) => authService.register(userData),
-    onSuccess: (data) => {
-      queryClient.setQueryData(["auth-user"], data.user || data);
+    onSuccess: async () => {
+      await queryClient.invalidateQueries({ queryKey: queryKeys.auth.me });
     },
   });
 
   const logout = (redirectTo = "/") => {
     authService.logout(redirectTo);
-    queryClient.setQueryData(["auth-user"], null);
+    queryClient.setQueryData(queryKeys.auth.me, null);
     queryClient.clear();
   };
 

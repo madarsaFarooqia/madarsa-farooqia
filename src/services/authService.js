@@ -1,45 +1,61 @@
 import { http, getStoredToken, setStoredToken } from './http';
+import { mapUserFromAuth } from '../lib/apiMappers';
+
+function mapAuthResponse(response) {
+  const token = response?.token;
+  if (token) setStoredToken(token);
+  const user = mapUserFromAuth({
+    email: response?.email,
+    role: response?.role,
+    preferredLanguage: response?.preferredLanguage,
+    firstName: response?.firstName,
+    lastName: response?.lastName,
+    id: response?.id,
+    fullName: response?.fullName,
+  });
+  return { token, user, ...response };
+}
 
 export const authService = {
   async me() {
     if (!getStoredToken()) {
       throw new Error('Not authenticated');
     }
-    // Adjust endpoint as per your actual backend /auth/me or similar
-    // If your backend doesn't have /me, we might need to handle it differently
-    return await http.get('/auth/me');
+    const data = await http.get('/auth/me');
+    return mapUserFromAuth(data);
   },
 
   async login(credentials) {
-    // credentials: { email, password }
     const response = await http.post('/auth/login', credentials);
-    // response is expected to be { token, user } or similar
-    if (response.token) {
-      setStoredToken(response.token);
-    }
-    return response;
+    return mapAuthResponse(response);
   },
 
   async register(userData) {
-    // userData matches RegisterRequest in Spring Boot
-    const response = await http.post('/auth/register', userData);
-    if (response.token) {
-      setStoredToken(response.token);
-    }
-    return response;
+    const payload = {
+      firstName: userData.firstName,
+      lastName: userData.lastName,
+      email: userData.email,
+      password: userData.password,
+      phoneNumber: userData.phoneNumber,
+      preferredLanguage: userData.preferredLanguage || 'en',
+    };
+    const response = await http.post('/auth/register', payload);
+    return mapAuthResponse(response);
   },
 
   async forgotPassword(email) {
-    return await http.post('/auth/forgot-password', { email });
+    return http.post('/auth/forgot-password', { email });
   },
 
   async resetPassword(data) {
-    // data: { token, newPassword }
-    return await http.post('/auth/reset-password', data);
+    return http.post('/auth/reset-password', {
+      token: data.token,
+      newPassword: data.newPassword,
+    });
   },
 
   async updateLanguagePreference(language) {
-    return await http.put('/auth/language', { language });
+    return http.put('/auth/language', { language });
   },
 
   logout(redirectTo) {

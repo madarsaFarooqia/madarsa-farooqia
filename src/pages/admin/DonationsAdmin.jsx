@@ -1,19 +1,12 @@
-import { useState, useEffect } from 'react';
-import { base44 } from '../../api/base44Client';
+import { useState } from 'react';
+import { useAdminDonationsQuery } from '../../hooks/api';
 import { Loader2, Search, Download, DollarSign } from 'lucide-react';
 import { Input } from '../../components/ui/input';
 import { format } from 'date-fns';
 
 export default function DonationsAdmin() {
-  const [donations, setDonations] = useState([]);
-  const [loading, setLoading] = useState(true);
+  const { data: donations = [], isLoading: loading } = useAdminDonationsQuery('-created_date', 500);
   const [search, setSearch] = useState('');
-
-  useEffect(() => {
-    base44.entities.Donation.list('-created_date', 500)
-      .then(setDonations)
-      .finally(() => setLoading(false));
-  }, []);
 
   const filtered = donations.filter(d =>
     (d.donor_name || '').toLowerCase().includes(search.toLowerCase()) ||

@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useMemo } from "react";
 import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
 import {
@@ -20,6 +20,15 @@ import {
 } from "lucide-react";
 import { useLanguage } from "../../lib/LanguageContext";
 import { useTranslation } from "../../lib/i18n";
+import {
+  useTeachersQuery,
+  useStudentsQuery,
+  useCampaignsQuery,
+  useAdminDonationsQuery,
+  useRegistrationsQuery,
+  useContactMessagesQuery,
+  useAdminStatsQuery,
+} from "../../hooks/api";
 import { format, subDays, startOfMonth } from "date-fns";
 import {
   BarChart,
@@ -76,120 +85,64 @@ const generateCampaigns = () =>
 export default function AdminDashboard() {
   const { language } = useLanguage();
   const { t } = useTranslation(language);
-  const [stats, setStats] = useState({
-    teachers: 0,
-    students: 0,
-    campaigns: 0,
-    donations: 0,
-    raised: 0,
-    registrations: 0,
-    messages: 0,
-    blogs: 0,
-  });
-  const [recentDonations, setRecentDonations] = useState([]);
-  const [recentRegs, setRecentRegs] = useState([]);
-  const [campaigns, setCampaigns] = useState([]);
-  const [donationsByCategory, setDonationsByCategory] = useState([]);
-  const [monthlyTrend, setMonthlyTrend] = useState([]);
-  const [loading, setLoading] = useState(true);
+  const { data: teachers = [], isLoading: tLoading } = useTeachersQuery('-created_date', 500);
+  const { data: students = [], isLoading: sLoading } = useStudentsQuery('-created_date', 500);
+  const { data: campaignList = [], isLoading: cLoading } = useCampaignsQuery('-created_date', 50);
+  const { data: donations = [], isLoading: dLoading } = useAdminDonationsQuery('-created_date', 500);
+  const { data: registrations = [], isLoading: rLoading } = useRegistrationsQuery('-created_date', 10);
+  const { data: messages = [], isLoading: mLoading } = useContactMessagesQuery('-created_date', 100);
+  useAdminStatsQuery();
 
-  // useEffect(() => {
-  //   Promise.all([
-  //     base44.entities.Teacher.list('-created_date', 500),
-  //     base44.entities.Student.list('-created_date', 500),
-  //     base44.entities.FundraisingCampaign.list('-created_date', 50),
-  //     base44.entities.Donation.list('-created_date', 500),
-  //     base44.entities.Registration.list('-created_date', 10),
-  //     base44.entities.ContactMessage.filter({ status: 'new' }, '-created_date', 100),
-  //   ]).then(([t, s, c, d, r, msgs]) => {
-  //     const completed = d.filter(x => x.status === 'completed');
-  //     const totalRaised = completed.reduce((sum, x) => sum + (x.amount || 0), 0);
+  const loading = tLoading || sLoading || cLoading || dLoading || rLoading || mLoading;
 
-  //     setStats({
-  //       teachers: t.length, students: s.length, campaigns: c.length,
-  //       donations: d.length, raised: totalRaised,
-  //       registrations: r.length, messages: msgs.length,
-  //     });
-  //     setRecentDonations(d.slice(0, 6));
-  //     setRecentRegs(r.slice(0, 5));
-  //     setCampaigns(c.slice(0, 4));
-
-  //     // Category breakdown
-  //     const catMap = {};
-  //     completed.forEach(don => {
-  //       const cat = don.purpose || 'general';
-  //       catMap[cat] = (catMap[cat] || 0) + (don.amount || 0);
-  //     });
-  //     setDonationsByCategory(Object.entries(catMap).map(([name, value]) => ({ name, value })));
-
-  //     // Monthly trend (last 6 months)
-  //     const now = new Date();
-  //     const trend = Array.from({ length: 6 }, (_, i) => {
-  //       const month = subDays(now, (5 - i) * 30);
-  //       const label = format(month, 'MMM');
-  //       const total = completed
-  //         .filter(don => {
-  //           if (!don.created_date) return false;
-  //           const d = new Date(don.created_date);
-  //           return d.getMonth() === month.getMonth() && d.getFullYear() === month.getFullYear();
-  //         })
-  //         .reduce((sum, don) => sum + (don.amount || 0), 0);
-  //       return { month: label, amount: total };
-  //     });
-  //     setMonthlyTrend(trend);
-  //   }).finally(() => setLoading(false));
-  // }, []);
-
-  useEffect(() => {
-    const donations = generateDonations(120);
-    const regs = generateRegs(8);
-    const camps = generateCampaigns();
-
-    const completed = donations.filter((x) => x.status === "completed");
-    const totalRaised = completed.reduce((sum, x) => sum + x.amount, 0);
-
-    setStats({
-      teachers: 12,
-      students: 340,
-      campaigns: camps.length,
-      donations: donations.length,
-      raised: totalRaised,
-      registrations: regs.length,
-      messages: 5,
-    });
-
-    setRecentDonations(donations.slice(0, 6));
-    setRecentRegs(regs.slice(0, 5));
-    setCampaigns(camps.slice(0, 4));
+  const {
+    stats,
+    recentDonations,
+    recentRegs,
+    campaigns,
+    donationsByCategory,
+    monthlyTrend,
+  } = useMemo(() => {
+    const completed = donations.filter((x) => String(x.status).toLowerCase() === 'completed');
+    const totalRaised = completed.reduce((sum, x) => sum + (x.amount || 0), 0);
 
     const catMap = {};
     completed.forEach((don) => {
-      const cat = don.purpose || "general";
-      catMap[cat] = (catMap[cat] || 0) + don.amount;
+      const cat = don.purpose || 'general';
+      catMap[cat] = (catMap[cat] || 0) + (don.amount || 0);
     });
-
-    setDonationsByCategory(
-      Object.entries(catMap).map(([name, value]) => ({ name, value })),
-    );
 
     const now = new Date();
     const trend = Array.from({ length: 6 }, (_, i) => {
       const month = new Date(now.getFullYear(), now.getMonth() - (5 - i), 1);
-      const label = month.toLocaleString("default", { month: "short" });
-
+      const label = month.toLocaleString('default', { month: 'short' });
       const total = completed
         .filter((don) => {
-          const d = new Date(don.created_date);
-          return d.getMonth() === month.getMonth();
+          const d = new Date(don.completed_at || don.created_date || 0);
+          return d.getMonth() === month.getMonth() && d.getFullYear() === month.getFullYear();
         })
-        .reduce((sum, don) => sum + don.amount, 0);
-
+        .reduce((sum, don) => sum + (don.amount || 0), 0);
       return { month: label, amount: total };
     });
 
-    setMonthlyTrend(trend);
-    setLoading(false);
-  }, []);
+    return {
+      stats: {
+        teachers: teachers.length,
+        students: students.length,
+        campaigns: campaignList.length,
+        donations: donations.length,
+        raised: totalRaised,
+        registrations: registrations.length,
+        messages: messages.length,
+        blogs: 0,
+      },
+      recentDonations: donations.slice(0, 6),
+      recentRegs: registrations.slice(0, 5),
+      campaigns: campaignList.slice(0, 4),
+      donationsByCategory: Object.entries(catMap).map(([name, value]) => ({ name, value })),
+      monthlyTrend: trend,
+    };
+  }, [teachers, students, campaignList, donations, registrations, messages]);
 
   const getPurposeLabel = (p) => {
     switch (p?.toLowerCase()) {

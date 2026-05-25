@@ -1,5 +1,5 @@
-import { useState, useEffect } from 'react';
-import { studentService } from '../services';
+import { useState } from 'react';
+import { useStudentsQuery } from '../hooks/api';
 import StudentCard from '../components/students/StudentCard';
 import SectionHeader from '../components/shared/SectionHeader';
 import { Loader2 } from 'lucide-react';
@@ -9,8 +9,7 @@ import { useTranslation } from "../lib/i18n";
 export default function Students() {
   const { language } = useLanguage();
   const { t } = useTranslation(language);
-  const [students, setStudents] = useState([]);
-  const [loading, setLoading] = useState(true);
+  const { data: students = [], isLoading: loading } = useStudentsQuery('-created_date', 100);
   const [activeCourse, setActiveCourse] = useState('All');
 
   const COURSES = [
@@ -21,12 +20,6 @@ export default function Students() {
     { key: 'Tajweed', label: t('students:course_tajweed', 'Tajweed') },
     { key: 'Arabic', label: t('students:course_arabic', 'Arabic') }
   ];
-
-  useEffect(() => {
-    studentService.list('-created_date', 100)
-      .then(setStudents)
-      .finally(() => setLoading(false));
-  }, []);
 
   const featured = students.filter(s => s.is_featured);
   const filtered = activeCourse === 'All' ? students : students.filter(s => s.course === activeCourse);

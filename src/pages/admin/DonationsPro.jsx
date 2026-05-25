@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import {
   Search,
   Download,
@@ -13,26 +13,17 @@ import { format } from "date-fns";
 import { generateReceiptId, downloadReceipt } from "../../lib/receiptGenerator";
 import { useLanguage } from "../../lib/LanguageContext";
 import { useTranslation } from "../../lib/i18n";
+import { useAdminDonationsQuery } from "../../hooks/api";
 
 export default function DonationsPro() {
   const { language } = useLanguage();
   const { t } = useTranslation(language);
-  const [donations, setDonations] = useState([]);
-  const [loading, setLoading] = useState(true);
+  const { data: donations = [], isLoading: loading } = useAdminDonationsQuery('-created_date', 1000);
   const [search, setSearch] = useState("");
   const [purposeFilter, setPurposeFilter] = useState("all");
   const [statusFilter, setStatusFilter] = useState("all");
   const [dateFrom, setDateFrom] = useState("");
   const [dateTo, setDateTo] = useState("");
-
-  useEffect(() => {
-    setLoading(true);
-
-    setTimeout(() => {
-      setDonations(fakeDonations);
-      setLoading(false);
-    }, 500);
-  }, []);
 
   const filtered = donations.filter((d) => {
     const matchSearch =

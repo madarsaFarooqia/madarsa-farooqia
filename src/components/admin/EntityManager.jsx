@@ -1,5 +1,5 @@
-import { useState, useEffect } from 'react';
-import { getEntityService } from '../../services';
+import { useState } from 'react';
+import { useEntityQuery, useEntityMutations } from '../../hooks/api';
 import { Loader2, Plus, Pencil, Trash2, X, Check, Search } from 'lucide-react';
 import { Input } from '../ui/input';
 import { Button } from '../ui/button';
@@ -17,26 +17,15 @@ export default function EntityManager({ entityName, title, fields, displayField 
   const { toast } = useToast();
   const { language } = useLanguage();
   const { t } = useTranslation(language);
-  const [items, setItems] = useState([]);
-  const [loading, setLoading] = useState(true);
+  const { data: items = [], isLoading: loading, refetch } = useEntityQuery(entityName, sortField);
+  const { create, update, remove } = useEntityMutations(entityName);
   const [search, setSearch] = useState('');
   const [dialogOpen, setDialogOpen] = useState(false);
   const [editing, setEditing] = useState(null);
   const [form, setForm] = useState({});
-  const [saving, setSaving] = useState(false);
 
-  const entity = getEntityService(entityName);
-
-  // Dynamic titles and label
   const translatedTitle = t(`admin:${title}`, title);
   const translatedTitlePlural = t(`admin:${title}s`, `${title}s`);
-
-  const loadItems = () => {
-    setLoading(true);
-    entity.list(sortField, 500).then(setItems).finally(() => setLoading(false));
-  };
-
-  useEffect(() => { loadItems(); }, [entityName]);
 
   const openCreate = () => {
     setEditing(null);
@@ -53,24 +42,22 @@ export default function EntityManager({ entityName, title, fields, displayField 
   };
 
   const handleSave = async () => {
-    setSaving(true);
     if (editing) {
-      await entity.update(editing.id, form);
+      await update.mutateAsync({ id: editing.id, payload: form });
       toast({ title: t('admin:recordUpdated', 'Record updated successfully') });
     } else {
-      await entity.create(form);
+      await create.mutateAsync(form);
       toast({ title: t('admin:recordCreated', 'Record created successfully') });
     }
-    setSaving(false);
     setDialogOpen(false);
-    loadItems();
+    refetch();
   };
 
   const handleDelete = async (item) => {
     if (!window.confirm(t('admin:deleteConfirm', 'Are you sure you want to delete this record?'))) return;
-    await entity.delete(item.id);
+    await remove.mutateAsync(item.id);
     toast({ title: t('admin:recordDeleted', 'Record deleted successfully') });
-    loadItems();
+    refetch();
   };
 
   const filtered = items.filter(item => {
@@ -187,8 +174,8 @@ export default function EntityManager({ entityName, title, fields, displayField 
           </div>
           <div className="flex justify-end gap-3 mt-6 pt-4 border-t border-border">
             <Button variant="outline" onClick={() => setDialogOpen(false)}>{t('admin:cancel', 'Cancel')}</Button>
-            <Button onClick={handleSave} disabled={saving}>
-              {saving ? <Loader2 size={16} className="animate-spin mr-2" /> : <Check size={16} className="mr-2" />}
+            <Button onClick={handleSave} disabled={create.isPending || update.isPending}>
+              {(create.isPending || update.isPending) ? <Loader2 size={16} className="animate-spin mr-2" /> : <Check size={16} className="mr-2" />}
               {editing ? t('admin:update', 'Update') : t('admin:create', 'Create')}
             </Button>
           </div>

@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import {
   MessageSquare,
   CheckCircle2,
@@ -12,36 +12,23 @@ import { Button } from "../../components/ui/button";
 import { format } from "date-fns";
 import { useLanguage } from "../../lib/LanguageContext";
 import { useTranslation } from "../../lib/i18n";
+import { useContactMessagesQuery, useContactMessageMutations } from "../../hooks/api";
 
 export default function QAAdmin() {
   const { language } = useLanguage();
   const { t } = useTranslation(language);
-  const [messages, setMessages] = useState([]);
-  const [loading, setLoading] = useState(true);
+  const { data: apiMessages = [], isLoading: loading, refetch } = useContactMessagesQuery('-created_date', 200);
+  const { remove } = useContactMessageMutations();
+  const [localStatus, setLocalStatus] = useState({});
+  const messages = apiMessages.map((m) => ({
+    ...m,
+    status: localStatus[m.id] || m.status || 'new',
+  }));
   const [search, setSearch] = useState("");
   const [statusFilter, setStatusFilter] = useState("all");
   const [replyingTo, setReplyingTo] = useState(null);
   const [replyText, setReplyText] = useState("");
   const [saving, setSaving] = useState(false);
-
-  // const load = () => {
-  //   setLoading(true);
-  //   base44.entities.ContactMessage.list('-created_date', 200)
-  //     .then(setMessages).catch(() => setMessages([])).finally(() => setLoading(false));
-  // };
-
-  const load = () => {
-    setLoading(true);
-
-    setTimeout(() => {
-      setMessages(fakeMessages);
-      setLoading(false);
-    }, 400);
-  };
-
-  useEffect(() => {
-    load();
-  }, []);
 
   const filtered = messages.filter((m) => {
     const matchSearch =
@@ -54,11 +41,8 @@ export default function QAAdmin() {
   });
 
   const markStatus = async (id, status) => {
-    // await base44.entities.ContactMessage.update(id, { status });
-    setMessages((prev) =>
-      prev.map((m) => (m.id === id ? { ...m, status } : m)),
-    );
-    load();
+    setLocalStatus((prev) => ({ ...prev, [id]: status }));
+    refetch();
   };
 
   // const handleReply = async (msg) => {
@@ -76,27 +60,11 @@ export default function QAAdmin() {
   // };
   const handleReply = (msg) => {
     if (!replyText.trim()) return;
-
     setSaving(true);
-
-    setTimeout(() => {
-      setMessages((prev) =>
-        prev.map((m) =>
-          m.id === msg.id
-            ? {
-                ...m,
-                status: "replied",
-                admin_reply: replyText,
-                replied_at: new Date().toISOString(),
-              }
-            : m,
-        ),
-      );
-
-      setSaving(false);
-      setReplyingTo(null);
-      setReplyText("");
-    }, 400);
+    setLocalStatus((prev) => ({ ...prev, [msg.id]: 'replied' }));
+    setSaving(false);
+    setReplyingTo(null);
+    setReplyText("");
   };
 
   // const handleDelete = async (id) => {
@@ -104,10 +72,10 @@ export default function QAAdmin() {
   //   await base44.entities.ContactMessage.delete(id);
   //   load();
   // };
-  const handleDelete = (id) => {
+  const handleDelete = async (id) => {
     if (!window.confirm(t("admin:deleteMessageConfirm", "Delete this message?"))) return;
-
-    setMessages((prev) => prev.filter((m) => m.id !== id));
+    await remove.mutateAsync(id);
+    refetch();
   };
 
   const statusColors = {

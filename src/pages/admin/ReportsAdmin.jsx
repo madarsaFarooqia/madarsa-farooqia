@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import {
   Download,
   FileText,
@@ -30,6 +30,7 @@ import {
 } from "recharts";
 import { useLanguage } from "../../lib/LanguageContext";
 import { useTranslation } from "../../lib/i18n";
+import { useAdminDonationsQuery } from "../../hooks/api";
 
 const PIE_COLORS = [
   "#1a1a1a",
@@ -44,27 +45,13 @@ const PIE_COLORS = [
 export default function ReportsAdmin() {
   const { language } = useLanguage();
   const { t } = useTranslation(language);
-  const [donations, setDonations] = useState([]);
-  const [loading, setLoading] = useState(true);
+  const { data: allDonations = [], isLoading: loading } = useAdminDonationsQuery('-created_date', 1000);
+  const donations = allDonations.filter((x) => String(x.status).toLowerCase() === 'completed');
   const [dateFrom, setDateFrom] = useState(
     format(startOfYear(new Date()), "yyyy-MM-dd"),
   );
   const [dateTo, setDateTo] = useState(format(new Date(), "yyyy-MM-dd"));
   const [reportType, setReportType] = useState("monthly");
-
-  // useEffect(() => {
-  //   base44.entities.Donation.list('-created_date', 1000)
-  //     .then(d => setDonations(d.filter(x => x.status === 'completed')))
-  //     .finally(() => setLoading(false));
-  // }, []);
-
-  useEffect(() => {
-    setTimeout(() => {
-      const fake = fakeDonations.filter((x) => x.status === "completed");
-      setDonations(fake);
-      setLoading(false);
-    }, 500);
-  }, []);
 
   const filtered = donations.filter((d) => {
     if (!d.created_date) return false;

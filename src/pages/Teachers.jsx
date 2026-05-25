@@ -1,9 +1,9 @@
-import React, { useEffect, useState, useMemo } from 'react';
+import React, { useState, useMemo } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Search, Filter, BookOpen, Users, Award, GraduationCap, Star, Clock, ChevronRight, Mail, Phone } from 'lucide-react';
 import { useLanguage } from '../lib/LanguageContext';
 import { useTranslation } from '../lib/i18n';
-import { teacherService } from '../services';
+import { useTeachersFilterQuery } from '../hooks/api';
 import { Input } from '../components/ui/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '../components/ui/select';
 import { Badge } from '../components/ui/badge';
@@ -14,18 +14,13 @@ import FacultyStats from '../components/teachers/FacultyStats';
 export default function Teachers() {
   const { language } = useLanguage();
   const { t } = useTranslation(language);
-  const [teachers, setTeachers] = useState([]);
-  const [loading, setLoading] = useState(true);
+  const { data: teachers = [], isLoading: loading } = useTeachersFilterQuery(
+    { is_active: true },
+    '-created_date',
+  );
   const [search, setSearch] = useState('');
   const [specialization, setSpecialization] = useState('all');
   const [activeInstitution, setActiveInstitution] = useState('main');
-
-  useEffect(() => {
-    teacherService.filter({ is_active: true }, '-created_date')
-      .then(setTeachers)
-      .catch(() => setTeachers([]))
-      .finally(() => setLoading(false));
-  }, []);
 
   const specializations = useMemo(
     () => [...new Set(teachers.map(t => t.specialization).filter(Boolean))],

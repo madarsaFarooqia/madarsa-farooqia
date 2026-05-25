@@ -1,5 +1,5 @@
-import { useState, useEffect } from 'react';
-import { campaignService, donationService } from '../services';
+import { useState } from 'react';
+import { useCampaignsQuery } from '../hooks/api';
 import CampaignCard from '../components/campaigns/CampaignCard';
 import SectionHeader from '../components/shared/SectionHeader';
 import GeometricProgress from '../components/campaigns/GeometricProgress';
@@ -11,9 +11,7 @@ import { useTranslation } from "../lib/i18n";
 export default function Campaigns() {
   const { language } = useLanguage();
   const { t } = useTranslation(language);
-  const [campaigns, setCampaigns] = useState([]);
-  const [donations, setDonations] = useState([]);
-  const [loading, setLoading] = useState(true);
+  const { data: campaigns = [], isLoading: loading } = useCampaignsQuery('-created_date', 100);
   const [activeCategory, setActiveCategory] = useState('All');
 
   const CATEGORIES = [
@@ -26,18 +24,8 @@ export default function Campaigns() {
     { key: 'General', label: t('campaigns:cat_general', 'General') }
   ];
 
-  useEffect(() => {
-    Promise.all([
-      campaignService.list('-created_date', 100),
-      donationService.filter({ status: 'completed' }, '-created_date', 100),
-    ]).then(([c, d]) => {
-      setCampaigns(c);
-      setDonations(d);
-    }).finally(() => setLoading(false));
-  }, []);
-
-  const totalRaised = donations.reduce((s, d) => s + (d.amount || 0), 0);
-  const totalDonors = new Set(donations.map(d => d.donor_email || d.donor_name)).size;
+  const totalRaised = campaigns.reduce((s, c) => s + (c.collected_amount || 0), 0);
+  const totalDonors = campaigns.reduce((s, c) => s + (c.donors_count || 0), 0);
 
   const filtered = activeCategory === 'All' ? campaigns : campaigns.filter(c => c.category === activeCategory);
 

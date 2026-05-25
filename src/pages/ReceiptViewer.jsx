@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { motion } from "framer-motion";
 import {
   Download,
@@ -18,6 +18,9 @@ import {
 import { format } from "date-fns";
 import { useLanguage } from "../lib/LanguageContext";
 import { useTranslation } from "../lib/i18n";
+import { useAuth } from "../lib/AuthContext";
+import { useMyDonationsQuery } from "../hooks/api";
+import { getStoredToken } from "../services/http";
 
 const purposeIcons = {
   sadqa: "💝",
@@ -163,9 +166,11 @@ function ReceiptCard({ donation, country, onDownload, t }) {
 export default function ReceiptViewer() {
   const { language } = useLanguage();
   const { t } = useTranslation(language);
-  const [donations, setDonations] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [user, setUser] = useState(null);
+  const { user, isLoadingAuth } = useAuth();
+  const { data: donations = [], isLoading: donationsLoading } = useMyDonationsQuery({
+    enabled: !!getStoredToken(),
+  });
+  const loading = isLoadingAuth || donationsLoading;
   const [country, setCountry] = useState("IN");
   const navigate = useNavigate();
 
@@ -177,44 +182,6 @@ export default function ReceiptViewer() {
     { code: "SA", flag: "🇸🇦", name: t("receipt:country_sa", "Saudi Arabia") },
     { code: "default", flag: "🌍", name: t("receipt:country_int", "International") },
   ];
-
-  useEffect(() => {
-    const fakeUser = {
-      id: 1,
-      full_name: "Demo User",
-      email: "demo@madarsa.com",
-      role: "admin",
-    };
-
-    const fakeDonations = [
-      {
-        id: 1,
-        purpose: "zakat",
-        amount: 500,
-        currency: "$",
-        status: "completed",
-        created_date: new Date().toISOString(),
-        donor_name: "Demo User",
-        payment_method: "card",
-        is_anonymous: false,
-      },
-      {
-        id: 2,
-        purpose: "sadqa",
-        amount: 250,
-        currency: "$",
-        status: "completed",
-        created_date: new Date().toISOString(),
-        donor_name: "Demo User",
-        payment_method: "upi",
-        is_anonymous: false,
-      },
-    ];
-
-    setUser(fakeUser);
-    setDonations(fakeDonations);
-    setLoading(false);
-  }, []);
 
   const handleDownload = (donation) => downloadReceipt(donation, country);
 
