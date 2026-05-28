@@ -432,9 +432,11 @@ import {
   DropdownMenuSeparator,
 } from "../ui/dropdown-menu";
 import { motion, AnimatePresence } from "framer-motion";
+import { FaRedRiver } from "react-icons/fa";
+import FarooqiaLogoWithBg from "../../assets/logos/farooqia_logo _withBg.png";
 
-const LOGO_URL =
-  "https://media.base44.com/images/public/69e13339ea1b0b97c63a7ecc/b4db5ec8f_farooqia_logo_withBg.png";
+// const LOGO_URL =
+//   "https://media.base44.com/images/public/69e13339ea1b0b97c63a7ecc/b4db5ec8f_farooqia_logo_withBg.png";
 
 export default function Navbar() {
   const { language, setLanguage, currentLang, languages } = useLanguage();
@@ -502,8 +504,8 @@ export default function Navbar() {
     },
   ];
 
-  const isAdmin = user?.role === "admin";
-  const isTeacher = user?.role === "teacher";
+  const isAdmin = user?.role?.toLowerCase() === "admin";
+  const isTeacher = user?.role?.toLowerCase() === "teacher";
   const canAccessAdmin = isAdmin || isTeacher;
   const isRTL = currentLang.dir === "rtl";
 
@@ -520,7 +522,7 @@ export default function Navbar() {
           {/* Logo */}
           <Link to="/" className="flex items-center gap-3 group shrink-0">
             <img
-              src={LOGO_URL}
+              src={FarooqiaLogoWithBg}
               alt="Madrasa Farooqia"
               className="w-10 h-10 sm:w-12 sm:h-12 rounded-full object-cover border-2 border-accent/40 shadow-md"
             />

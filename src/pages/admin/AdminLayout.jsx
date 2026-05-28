@@ -1,4 +1,4 @@
-import { Outlet, Link, useLocation, useNavigate } from "react-router-dom";
+import { Outlet, Link, useLocation, useNavigate, Navigate } from "react-router-dom";
 import { useState } from "react";
 import { useAuth } from "../../lib/AuthContext";
 import {
@@ -31,6 +31,22 @@ export default function AdminLayout() {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const { language, currentLang } = useLanguage();
   const { t } = useTranslation(language);
+
+  // Auth & Role protection
+  if (!user) {
+    return <Navigate to="/login" state={{ from: location }} replace />;
+  }
+
+  const roleLower = user.role?.toLowerCase();
+  if (roleLower !== "admin" && roleLower !== "teacher") {
+    return <Navigate to="/" replace />;
+  }
+
+  if (roleLower === "teacher" && location.pathname !== "/admin/students") {
+    return <Navigate to="/admin/students" replace />;
+  }
+
+  const isTeacher = roleLower === "teacher";
 
   const navGroups = [
     {
@@ -68,6 +84,16 @@ export default function AdminLayout() {
     },
   ];
 
+  const filteredNavGroups = navGroups.map(group => {
+    const items = group.items.filter(item => {
+      if (isTeacher) {
+        return item.href === "/admin/students";
+      }
+      return true;
+    });
+    return { ...group, items };
+  }).filter(group => group.items.length > 0);
+
   const handleLogout = () => {
     logout("/login");
   };
@@ -90,13 +116,13 @@ export default function AdminLayout() {
               Madrasa Farooqia
             </p>
             <p className="text-xs text-sidebar-foreground/50 flex items-center gap-1">
-              {t("admin:panelTitle", "Admin Panel")} <ExternalLink size={10} />
+              {isTeacher ? t("nav:studentPanel", "Student Panel") : t("admin:panelTitle", "Admin Panel")} <ExternalLink size={10} />
             </p>
           </div>
         </Link>
       </div>
       <nav className="flex-1 p-3 space-y-4 overflow-y-auto">
-        {navGroups.map((group, gi) => (
+        {filteredNavGroups.map((group, gi) => (
           <div key={gi}>
             {group.label && (
               <p className="text-xs font-semibold text-sidebar-foreground/40 uppercase tracking-widest px-3 mb-2">
@@ -166,7 +192,7 @@ export default function AdminLayout() {
           <Menu size={20} />
         </button>
         <span className="font-playfair font-bold text-foreground">
-          {t("admin:mobileTitle", "Madrasa Admin")}
+          {isTeacher ? t("nav:studentPanel", "Student Panel") : t("admin:mobileTitle", "Madrasa Admin")}
         </span>
       </div>
 

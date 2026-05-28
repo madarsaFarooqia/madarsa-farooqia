@@ -4,9 +4,10 @@ import { FaFacebook, FaTwitter, FaInstagram, FaYoutube } from "react-icons/fa";
 import { useLanguage } from "../../lib/LanguageContext";
 import { useTranslation } from "../../lib/i18n";
 import { Heart, Mail, Phone, MapPin } from "lucide-react";
+import { FarooqiaLogoWithBg } from "../../assets";
 
-const LOGO_URL =
-  "https://media.base44.com/images/public/69e13339ea1b0b97c63a7ecc/b4db5ec8f_farooqia_logo_withBg.png";
+// const LOGO_URL =
+//   "https://media.base44.com/images/public/69e13339ea1b0b97c63a7ecc/b4db5ec8f_farooqia_logo_withBg.png";
 
 export default function Footer() {
   const { language, currentLang } = useLanguage();
@@ -20,7 +21,7 @@ export default function Footer() {
           <div>
             <div className="flex items-center gap-3 mb-4">
               <img
-                src={LOGO_URL}
+                src={FarooqiaLogoWithBg}
                 alt="Logo"
                 className="w-12 h-12 rounded-full border-2 border-accent/40 object-cover"
               />

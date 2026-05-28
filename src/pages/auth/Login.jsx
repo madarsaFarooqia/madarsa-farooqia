@@ -1,5 +1,5 @@
 import React from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useLocation } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
@@ -27,6 +27,7 @@ import { useTranslation } from "../../lib/i18n";
 const Login = () => {
   const { login, isLoggingIn } = useAuth();
   const navigate = useNavigate();
+  const location = useLocation();
   const { language } = useLanguage();
   const { t } = useTranslation(language);
 
@@ -47,9 +48,19 @@ const Login = () => {
 
   const onSubmit = async (data) => {
     try {
-      await login(data);
+      const response = await login(data);
       toast.success(t("login:success_toast", "Welcome back! You are now logged in to Darul Uloom Farooqia"));
-      navigate("/");
+      
+      const from = location.state?.from?.pathname;
+      if (from) {
+        navigate(from, { replace: true });
+      } else if (response?.user?.role === "admin") {
+        navigate("/admin", { replace: true });
+      } else if (response?.user?.role === "teacher") {
+        navigate("/admin/students", { replace: true });
+      } else {
+        navigate("/", { replace: true });
+      }
     } catch (error) {
       toast.error(error.message || t("login:failed_toast", "Login failed"));
     }
