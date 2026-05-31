@@ -14,6 +14,7 @@ import { generateReceiptId, downloadReceipt } from "../../lib/receiptGenerator";
 import { useLanguage } from "../../lib/LanguageContext";
 import { useTranslation } from "../../lib/i18n";
 import { useAdminDonationsQuery } from "../../hooks/api";
+import { getStatusLabel, getStatusClass } from "../../lib/statusUtils";
 
 export default function DonationsPro() {
   const { language } = useLanguage();
@@ -66,20 +67,20 @@ export default function DonationsPro() {
     }
   };
 
-  const getStatusLabel = (s) => {
-    switch (s) {
-      case "completed":
-        return t("admin:completed", "Completed");
-      case "pending":
-        return t("admin:pending", "Pending");
-      case "failed":
-        return t("admin:failed", "Failed");
-      case "refunded":
-        return t("admin:refunded", "Refunded");
-      default:
-        return s;
-    }
-  };
+  // const getStatusLabel = (s) => {
+  //   switch (s) {
+  //     case "completed":
+  //       return t("admin:completed", "Completed");
+  //     case "pending":
+  //       return t("admin:pending", "Pending");
+  //     case "failed":
+  //       return t("admin:failed", "Failed");
+  //     case "refunded":
+  //       return t("admin:refunded", "Refunded");
+  //     default:
+  //       return s;
+  //   }
+  // };
 
   const exportCSV = () => {
     const rows = [
@@ -371,7 +372,7 @@ export default function DonationsPro() {
                       )}
                     </td>
                     <td className="p-4">
-                      <span
+                      {/* <span
                         className={`text-xs px-2 py-1 rounded-full font-medium ${
                           d.status === "completed"
                             ? "bg-foreground text-background"
@@ -383,6 +384,11 @@ export default function DonationsPro() {
                         }`}
                       >
                         {getStatusLabel(d.status)}
+                      </span> */}
+                      <span
+                        className={`text-xs px-2 py-1 rounded font-medium ${getStatusClass(d.status)}`}
+                      >
+                        {getStatusLabel(d.status, t)}
                       </span>
                     </td>
                     <td className="p-4 text-muted-foreground text-xs whitespace-nowrap">
