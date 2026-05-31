@@ -18,7 +18,10 @@ import { useAdminDonationsQuery } from "../../hooks/api";
 export default function DonationsPro() {
   const { language } = useLanguage();
   const { t } = useTranslation(language);
-  const { data: donations = [], isLoading: loading } = useAdminDonationsQuery('-created_date', 1000);
+  const { data: donations = [], isLoading: loading } = useAdminDonationsQuery(
+    "-created_date",
+    1000,
+  );
   const [search, setSearch] = useState("");
   const [purposeFilter, setPurposeFilter] = useState("all");
   const [statusFilter, setStatusFilter] = useState("all");
@@ -49,22 +52,32 @@ export default function DonationsPro() {
 
   const getPurposeLabel = (p) => {
     switch (p?.toLowerCase()) {
-      case "education": return t("admin:education", "Islamic Education");
+      case "education":
+        return t("admin:education", "Islamic Education");
       case "mosque":
-      case "masjid": return t("admin:masjid", "Masjid Project");
-      case "zakat": return t("admin:zakat", "Zakat");
-      case "general": return t("admin:general", "General");
-      default: return p;
+      case "masjid":
+        return t("admin:masjid", "Masjid Project");
+      case "zakat":
+        return t("admin:zakat", "Zakat");
+      case "general":
+        return t("admin:general", "General");
+      default:
+        return p;
     }
   };
 
   const getStatusLabel = (s) => {
     switch (s) {
-      case "completed": return t("admin:completed", "Completed");
-      case "pending": return t("admin:pending", "Pending");
-      case "failed": return t("admin:failed", "Failed");
-      case "refunded": return t("admin:refunded", "Refunded");
-      default: return s;
+      case "completed":
+        return t("admin:completed", "Completed");
+      case "pending":
+        return t("admin:pending", "Pending");
+      case "failed":
+        return t("admin:failed", "Failed");
+      case "refunded":
+        return t("admin:refunded", "Refunded");
+      default:
+        return s;
     }
   };
 
@@ -80,6 +93,7 @@ export default function DonationsPro() {
         t("admin:status", "Status"),
         t("admin:recurring", "Recurring"),
         t("admin:date", "Date"),
+        t("admin:receipt", "receipt"),
       ],
       ...filtered.map((d) => [
         generateReceiptId(d),
@@ -141,7 +155,10 @@ export default function DonationsPro() {
             {t("admin:donationsTitle", "Donations")}
           </h1>
           <p className="text-muted-foreground text-sm mt-1">
-            {t("admin:fullDonationManagement", "Full donation management & reporting")}
+            {t(
+              "admin:fullDonationManagement",
+              "Full donation management & reporting",
+            )}
           </p>
         </div>
         <div className="flex gap-2">
@@ -159,8 +176,14 @@ export default function DonationsPro() {
       {/* Summary */}
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
         {[
-          { label: t("admin:totalRaised", "Total Raised"), value: `$${totalRaised.toLocaleString()}` },
-          { label: t("admin:totalRecords", "Total Records"), value: filtered.length },
+          {
+            label: t("admin:totalRaised", "Total Raised"),
+            value: `$${totalRaised.toLocaleString()}`,
+          },
+          {
+            label: t("admin:totalRecords", "Total Records"),
+            value: filtered.length,
+          },
           {
             label: t("admin:recurring", "Recurring"),
             value: filtered.filter((d) => d.is_recurring).length,
@@ -194,7 +217,10 @@ export default function DonationsPro() {
               className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground"
             />
             <Input
-              placeholder={t("admin:searchDonationsPlaceholder", "Search donor, email, receipt ID...")}
+              placeholder={t(
+                "admin:searchDonationsPlaceholder",
+                "Search donor, email, receipt ID...",
+              )}
               value={search}
               onChange={(e) => setSearch(e.target.value)}
               className="pl-8 text-sm"
@@ -205,7 +231,9 @@ export default function DonationsPro() {
             onChange={(e) => setPurposeFilter(e.target.value)}
             className="border border-input bg-background rounded-md px-3 py-2 text-sm min-w-[140px]"
           >
-            <option value="all">{t("admin:allPurposes", "All Purposes")}</option>
+            <option value="all">
+              {t("admin:allPurposes", "All Purposes")}
+            </option>
             {purposes.map((p) => (
               <option key={p} value={p}>
                 {getPurposeLabel(p)}
@@ -218,7 +246,9 @@ export default function DonationsPro() {
             className="border border-input bg-background rounded-md px-3 py-2 text-sm"
           >
             <option value="all">{t("admin:allStatus", "All Status")}</option>
-            <option value="completed">{t("admin:completed", "Completed")}</option>
+            <option value="completed">
+              {t("admin:completed", "Completed")}
+            </option>
             <option value="pending">{t("admin:pending", "Pending")}</option>
             <option value="failed">{t("admin:failed", "Failed")}</option>
             <option value="refunded">{t("admin:refunded", "Refunded")}</option>
@@ -269,7 +299,9 @@ export default function DonationsPro() {
         ) : filtered.length === 0 ? (
           <div className="text-center py-16 text-muted-foreground">
             <DollarSign size={40} className="mx-auto mb-3 opacity-20" />
-            <p>{t("admin:noDonationsMatch", "No donations match your filters.")}</p>
+            <p>
+              {t("admin:noDonationsMatch", "No donations match your filters.")}
+            </p>
           </div>
         ) : (
           <div className="overflow-x-auto">
@@ -307,7 +339,9 @@ export default function DonationsPro() {
                     </td>
                     <td className="p-4">
                       <p className="font-medium text-foreground">
-                        {d.is_anonymous ? t("admin:anonymous", "Anonymous") : d.donor_name || "—"}
+                        {d.is_anonymous
+                          ? t("admin:anonymous", "Anonymous")
+                          : d.donor_name || "—"}
                       </p>
                       <p className="text-xs text-muted-foreground">
                         {d.donor_email || ""}
@@ -357,10 +391,13 @@ export default function DonationsPro() {
                         : "—"}
                     </td>
                     <td className="p-4">
-                      {d.status === "completed" && (
+                      {d?.status?.toLowerCase() === "completed" && (
                         <button
                           onClick={() => downloadReceipt(d, "IN", language)}
-                          title={t("admin:downloadTaxReceipt", "Download Tax Receipt")}
+                          title={t(
+                            "admin:downloadTaxReceipt",
+                            "Download Tax Receipt",
+                          )}
                           className="flex items-center gap-1 text-xs text-muted-foreground hover:text-foreground hover:bg-secondary px-2 py-1.5 rounded-lg transition-colors"
                         >
                           <QrCode size={13} /> {t("admin:receipt", "Receipt")}
@@ -377,19 +414,3 @@ export default function DonationsPro() {
     </div>
   );
 }
-
-const fakeDonations = Array.from({ length: 80 }).map((_, i) => ({
-  id: i + 1,
-  donor_name: ["Ali Khan", "Ahmed Raza", "Fatima Noor", "John Doe"][i % 4],
-  donor_email: `user${i}@mail.com`,
-  amount: Math.floor(Math.random() * 500) + 20,
-  currency: "USD",
-  purpose: ["zakat", "education", "mosque", "general"][i % 4],
-  status: ["completed", "pending", "failed", "refunded"][i % 4],
-  is_recurring: i % 5 === 0,
-  recurring_frequency: "monthly",
-  payment_method: ["card", "paypal", "bank"][i % 3],
-  is_anonymous: i % 7 === 0,
-  receipt_id: `REC-${1000 + i}`,
-  created_date: new Date(Date.now() - i * 86400000).toISOString(),
-}));
