@@ -94,7 +94,7 @@ export default function BlogPostModal({ post, onClose, onSaved }) {
         </div>
         <div className="flex gap-3 p-6 border-t border-border">
           <Button variant="outline" onClick={onClose} className="flex-1">Cancel</Button>
-          <Button onClick={handleSave} disabled={saving} className="flex-1">
+          <Button onClick={handleSave} isLoading={saving} disabled={saving} className="flex-1">
             {saving ? 'Saving...' : post ? 'Update Post' : 'Publish Post'}
           </Button>
         </div>

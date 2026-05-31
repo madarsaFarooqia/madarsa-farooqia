@@ -75,7 +75,7 @@ export default function Fundraising() {
                 <span className="text-primary">{overallPercent.toFixed(1)}% Complete</span>
                 <span className="text-muted-foreground">${(totalGoal - totalCollected).toLocaleString()} remaining</span>
               </div>
-              <Progress value={overallPercent} className="h-4 rounded-full" />
+              <Progress value={overallPercent} shape="wavy" className="h-4 rounded-full" />
             </div>
           </div>
         </section>

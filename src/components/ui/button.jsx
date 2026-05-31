@@ -1,6 +1,7 @@
 import * as React from "react"
 import { Slot } from "@radix-ui/react-slot"
 import { cva } from "class-variance-authority";
+import { CircularProgress } from "@mui/material";
 
 import { cn } from "../../lib/utils"
 
@@ -34,14 +35,31 @@ const buttonVariants = cva(
   }
 )
 
-const Button = React.forwardRef(({ className, variant, size, asChild = false, ...props }, ref) => {
+const Button = React.forwardRef(({ className, variant, size, asChild = false, isLoading = false, loadingShape = "flat", ...props }, ref) => {
   const Comp = asChild ? Slot : "button"
+  // Determine loading indicator based on shape
+  const loadingIndicator = (
+    <CircularProgress
+      size={16}
+      thickness={5}
+      className={loadingShape === 'wavy' ? 'crescent-spin' : ''}
+      sx={{
+        mr: 1,
+        color: 'currentColor',
+      }}
+    />
+  );
   return (
-    (<Comp
+    <Comp
       className={cn(buttonVariants({ variant, size, className }))}
       ref={ref}
-      {...props} />)
-  );
+      disabled={isLoading || props.disabled}
+      {...props}
+    >
+      {isLoading && loadingIndicator}
+      {props.children}
+    </Comp>
+  )
 })
 Button.displayName = "Button"
 
