@@ -125,12 +125,10 @@ function App() {
     <AuthProvider>
       <QueryClientProvider client={queryClientInstance}>
         <LanguageProvider>
-          {/* <Router>
-            <AuthenticatedApp />
-          </Router> */}
-          <Router basename="/madrasa-farooqia">
+          <Router>
             <AuthenticatedApp />
           </Router>
+
 
           <Toaster />
           <SonnerToaster position="top-center" richColors />
