@@ -2,7 +2,13 @@ import { Toaster } from "@/components/ui/toaster";
 import { Toaster as SonnerToaster } from "sonner";
 import { QueryClientProvider } from "@tanstack/react-query";
 import { queryClientInstance } from "@/lib/query-client";
-import { BrowserRouter as Router, Route, Routes, Navigate } from "react-router-dom";
+// import { BrowserRouter as Router, Route, Routes, Navigate } from "react-router-dom";
+import {
+  HashRouter as Router,
+  Route,
+  Routes,
+  Navigate,
+} from "react-router-dom";
 
 import { AuthProvider, useAuth } from "@/lib/AuthContext";
 import { LanguageProvider } from "@/lib/LanguageContext";
@@ -49,12 +55,7 @@ import InfrastructureAdmin from "@/pages/admin/InfrastructureAdmin";
 /* ---------------- AUTH LOADING WRAPPER ---------------- */
 
 const AuthenticatedApp = () => {
-  const {
-    isLoadingAuth,
-    isLoadingPublicSettings,
-    authError,
-    user,
-  } = useAuth();
+  const { isLoadingAuth, isLoadingPublicSettings, authError, user } = useAuth();
 
   if (isLoadingPublicSettings || isLoadingAuth) {
     return (
@@ -75,7 +76,6 @@ const AuthenticatedApp = () => {
 
   return (
     <Routes>
-
       {/* ================= AUTH ROUTES (NO LAYOUT) ================= */}
       <Route path="/login" element={<Login />} />
       <Route path="/signup" element={<Signup />} />
@@ -125,7 +125,10 @@ function App() {
     <AuthProvider>
       <QueryClientProvider client={queryClientInstance}>
         <LanguageProvider>
-          <Router>
+          {/* <Router>
+            <AuthenticatedApp />
+          </Router> */}
+          <Router basename="/madrasa-farooqia">
             <AuthenticatedApp />
           </Router>
 

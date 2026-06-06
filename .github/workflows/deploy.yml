@@ -27,15 +27,23 @@ jobs:
 
       - name: Build
         run: yarn build
+        env:
+          CI: false
+
+      - name: Create 404.html for SPA routing
+        run: cp build/index.html build/404.html
 
       - name: Upload build
         uses: actions/upload-pages-artifact@v3
         with:
-          path: build   # CRA ALWAYS uses build/
+          path: build
 
   deploy:
     needs: build
     runs-on: ubuntu-latest
+    permissions:
+      pages: write
+      id-token: write
 
     steps:
       - name: Deploy
