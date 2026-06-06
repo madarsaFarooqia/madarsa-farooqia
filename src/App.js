@@ -2,7 +2,8 @@ import { Toaster } from "./components/ui/toaster";
 import { Toaster as SonnerToaster } from "sonner";
 import { QueryClientProvider } from "@tanstack/react-query";
 import { queryClientInstance } from "./lib/query-client";
-import { BrowserRouter as Router, Route, Routes, Navigate } from "react-router-dom";
+// import { BrowserRouter as Router, Route, Routes, Navigate } from "react-router-dom";
+import { HashRouter as Router, Route, Routes } from "react-router-dom";
 
 import { AuthProvider, useAuth } from "./lib/AuthContext";
 import { LanguageProvider } from "./lib/LanguageContext";
@@ -71,6 +72,14 @@ const AuthenticatedApp = () => {
     return <UserNotRegisteredError />;
   }
 
+  const getBasename = () => {
+  const pathname = window.location.pathname;
+  if (pathname.includes('/development/')) {
+    return '/madarsa-farooqia/development';
+  }
+  return '/madarsa-farooqia';  // Production path
+};
+
   /* ---------------- ROUTES ---------------- */
 
   return (
@@ -125,7 +134,7 @@ function App() {
     <QueryClientProvider client={queryClientInstance}>
       <AuthProvider>
         <LanguageProvider>
-          <Router>
+          <Router basename={getBasename()}>
             <AuthenticatedApp />
           </Router>
 

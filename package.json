@@ -2,6 +2,7 @@
   "name": "madrasa-farooqia",
   "version": "0.1.0",
   "private": true,
+  "homepage": "https://madarsafarooqia.github.io/madarsa-farooqia",
   "dependencies": {
     "@emotion/react": "^11.14.0",
     "@emotion/styled": "^11.14.1",
@@ -69,6 +70,7 @@
     "start:stack": "cd .. && yarn start:all",
     "start": "craco start",
     "build": "craco build",
+    "build:dev": "PUBLIC_URL=/madarsa-farooqia/development craco build",
     "test": "craco test",
     "eject": "react-scripts eject"
   },
