@@ -70,7 +70,6 @@
     "start:stack": "cd .. && yarn start:all",
     "start": "craco start",
     "build": "craco build",
-    "build:dev": "PUBLIC_URL=/madarsa-farooqia/development craco build",
     "test": "craco test",
     "eject": "react-scripts eject"
   },

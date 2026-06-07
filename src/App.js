@@ -49,14 +49,6 @@ import InfrastructureAdmin from "./pages/admin/InfrastructureAdmin";
 
 /* ---------------- AUTH LOADING WRAPPER ---------------- */
 
-  const getBasename = () => {
-    const pathname = window.location.pathname;
-    if (pathname.includes("/development/")) {
-      return "/madarsa-farooqia/development";
-    }
-    return "/madarsa-farooqia"; // Production path
-  };
-  
 const AuthenticatedApp = () => {
   const { isLoadingAuth, isLoadingPublicSettings, authError, user } = useAuth();
 
@@ -128,7 +120,7 @@ function App() {
     <QueryClientProvider client={queryClientInstance}>
       <AuthProvider>
         <LanguageProvider>
-          <Router basename={getBasename()}>
+          <Router>
             <AuthenticatedApp />
           </Router>
 
