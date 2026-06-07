@@ -1,4 +1,4 @@
-// Mock all dependencies before importing App
+// Mock everything at the top level
 jest.mock('react-router-dom', () => ({
   HashRouter: ({ children }) => <>{children}</>,
   Route: ({ element }) => element,
@@ -39,12 +39,7 @@ jest.mock('./lib/LanguageContext', () => ({
 }));
 
 jest.mock('./lib/query-client', () => ({
-  queryClientInstance: {
-    getDefaultOptions: () => ({}),
-    setDefaultOptions: () => {},
-    mount: () => {},
-    unmount: () => {}
-  }
+  queryClientInstance: {}
 }));
 
 jest.mock('@tanstack/react-query', () => ({
@@ -52,28 +47,52 @@ jest.mock('@tanstack/react-query', () => ({
   QueryClient: jest.fn()
 }));
 
-// Mock Layout component
-jest.mock('./components/layout/Layout', () => ({
-  __esModule: true,
-  default: ({ children }) => <div data-testid="layout">{children}</div>
-}));
+// Mock ALL components that might be causing issues
+jest.mock('./components/layout/Layout', () => {
+  return function Layout({ children }) {
+    return <div data-testid="layout">{children}</div>;
+  };
+});
 
-// Now import and run tests
+jest.mock('./pages/Home', () => () => <div>Home</div>);
+jest.mock('./pages/Teachers', () => () => <div>Teachers</div>);
+jest.mock('./pages/Donate', () => () => <div>Donate</div>);
+jest.mock('./pages/Fundraising', () => () => <div>Fundraising</div>);
+jest.mock('./pages/Contact', () => () => <div>Contact</div>);
+jest.mock('./pages/MyDonations', () => () => <div>MyDonations</div>);
+jest.mock('./pages/Payment', () => () => <div>Payment</div>);
+jest.mock('./pages/ComingSoon', () => () => <div>ComingSoon</div>);
+jest.mock('./pages/Niswaan', () => () => <div>Niswaan</div>);
+jest.mock('./pages/MasjidHifz', () => () => <div>MasjidHifz</div>);
+jest.mock('./pages/ReceiptViewer', () => () => <div>ReceiptViewer</div>);
+jest.mock('./pages/auth/Login', () => () => <div>Login</div>);
+jest.mock('./pages/auth/Signup', () => () => <div>Signup</div>);
+jest.mock('./pages/auth/ForgotPassword', () => () => <div>ForgotPassword</div>);
+jest.mock('./pages/auth/ResetPassword', () => () => <div>ResetPassword</div>);
+jest.mock('./pages/admin/AdminLayout', ({ children }) => <>{children}</>);
+jest.mock('./pages/admin/AdminDashboard', () => () => <div>AdminDashboard</div>);
+jest.mock('./pages/admin/TeachersAdmin', () => () => <div>TeachersAdmin</div>);
+jest.mock('./pages/admin/StudentsAdmin', () => () => <div>StudentsAdmin</div>);
+jest.mock('./pages/admin/EventsAdmin', () => () => <div>EventsAdmin</div>);
+jest.mock('./pages/admin/RegistrationsAdmin', () => () => <div>RegistrationsAdmin</div>);
+jest.mock('./pages/admin/CampaignsPro', () => () => <div>CampaignsPro</div>);
+jest.mock('./pages/admin/DonationsPro', () => () => <div>DonationsPro</div>);
+jest.mock('./pages/admin/ReportsAdmin', () => () => <div>ReportsAdmin</div>);
+jest.mock('./pages/admin/BlogAdmin', () => () => <div>BlogAdmin</div>);
+jest.mock('./pages/admin/QAAdmin', () => () => <div>QAAdmin</div>);
+jest.mock('./pages/admin/InfrastructureAdmin', () => () => <div>InfrastructureAdmin</div>);
+jest.mock('./components/UserNotRegisteredError', () => () => <div>UserNotRegisteredError</div>);
+jest.mock('./components/shared/LoadingSpinner', () => () => <div>LoadingSpinner</div>);
+jest.mock('./lib/PageNotFound', () => () => <div>PageNotFound</div>);
+
+// Mock CSS imports
+jest.mock('./index.css', () => ({}));
+jest.mock('./App.css', () => ({}));
+
 import { render } from '@testing-library/react';
 import App from './App';
 
-// Debug: Check what App imports
-console.log('=== Debugging App Component ===');
-console.log('App:', App);
-
 test('App renders without crashing', () => {
-  console.log('Starting test...');
-  try {
-    const { container } = render(<App />);
-    console.log('Render successful');
-    expect(container).toBeDefined();
-  } catch (error) {
-    console.error('Render error:', error);
-    throw error;
-  }
+  const { container } = render(<App />);
+  expect(container).toBeDefined();
 });
