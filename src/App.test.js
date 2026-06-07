@@ -69,7 +69,7 @@ jest.mock('./pages/auth/Login', () => () => <div>Login</div>);
 jest.mock('./pages/auth/Signup', () => () => <div>Signup</div>);
 jest.mock('./pages/auth/ForgotPassword', () => () => <div>ForgotPassword</div>);
 jest.mock('./pages/auth/ResetPassword', () => () => <div>ResetPassword</div>);
-jest.mock('./pages/admin/AdminLayout', ({ children }) => <>{children}</>);
+jest.mock('./pages/admin/AdminLayout', () => ({ children }) => <>{children}</>);
 jest.mock('./pages/admin/AdminDashboard', () => () => <div>AdminDashboard</div>);
 jest.mock('./pages/admin/TeachersAdmin', () => () => <div>TeachersAdmin</div>);
 jest.mock('./pages/admin/StudentsAdmin', () => () => <div>StudentsAdmin</div>);
