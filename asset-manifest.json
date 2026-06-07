@@ -1,0 +1,23 @@
+{
+  "files": {
+    "main.css": "/madarsa-farooqia/static/css/main.91cf9235.css",
+    "main.js": "/madarsa-farooqia/static/js/main.ddcc5727.js",
+    "static/js/453.cea006e2.chunk.js": "/madarsa-farooqia/static/js/453.cea006e2.chunk.js",
+    "static/media/farooqia_logo _withBg.png": "/madarsa-farooqia/static/media/farooqia_logo _withBg.97ab9cf3d9c81c7ea783.png",
+    "static/media/farooqia_logo _noBg.png": "/madarsa-farooqia/static/media/farooqia_logo _noBg.eec8af9ce4d84c01d5cb.png",
+    "static/media/women_avatar.jpg": "/madarsa-farooqia/static/media/women_avatar.ed31b45aadcb5f74555a.jpg",
+    "static/media/blacked_bg.png": "/madarsa-farooqia/static/media/blacked_bg.5bbda197a4851b77c60d.png",
+    "static/media/background_2.png": "/madarsa-farooqia/static/media/background_2.0770b331545ddce9eb32.png",
+    "static/media/auth_bg.png": "/madarsa-farooqia/static/media/auth_bg.5756e255ac3bc2f0d61b.png",
+    "static/media/female_student_avatar.jpg": "/madarsa-farooqia/static/media/female_student_avatar.38f0768fb20b5823caad.jpg",
+    "static/media/male_student_avatar.jpg": "/madarsa-farooqia/static/media/male_student_avatar.290db9477bfc04ead0b8.jpg",
+    "index.html": "/madarsa-farooqia/index.html",
+    "main.91cf9235.css.map": "/madarsa-farooqia/static/css/main.91cf9235.css.map",
+    "main.ddcc5727.js.map": "/madarsa-farooqia/static/js/main.ddcc5727.js.map",
+    "453.cea006e2.chunk.js.map": "/madarsa-farooqia/static/js/453.cea006e2.chunk.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.91cf9235.css",
+    "static/js/main.ddcc5727.js"
+  ]
+}
