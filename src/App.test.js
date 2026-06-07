@@ -58,13 +58,13 @@ jest.mock('./components/layout/Layout', () => ({
   default: ({ children }) => <div data-testid="layout">{children}</div>
 }));
 
-// Mock i18n
-jest.mock('react-i18next', () => ({
-  useTranslation: () => ({
-    t: (key) => key,
-    i18n: { language: 'en' }
-  })
-}));
+// // Mock i18n
+// jest.mock('react-i18next', () => ({
+//   useTranslation: () => ({
+//     t: (key) => key,
+//     i18n: { language: 'en' }
+//   })
+// }));
 
 // Now import and run tests
 import { render } from '@testing-library/react';
