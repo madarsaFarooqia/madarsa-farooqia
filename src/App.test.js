@@ -58,19 +58,22 @@ jest.mock('./components/layout/Layout', () => ({
   default: ({ children }) => <div data-testid="layout">{children}</div>
 }));
 
-// // Mock i18n
-// jest.mock('react-i18next', () => ({
-//   useTranslation: () => ({
-//     t: (key) => key,
-//     i18n: { language: 'en' }
-//   })
-// }));
-
 // Now import and run tests
 import { render } from '@testing-library/react';
 import App from './App';
 
+// Debug: Check what App imports
+console.log('=== Debugging App Component ===');
+console.log('App:', App);
+
 test('App renders without crashing', () => {
-  const { container } = render(<App />);
-  expect(container).toBeDefined();
+  console.log('Starting test...');
+  try {
+    const { container } = render(<App />);
+    console.log('Render successful');
+    expect(container).toBeDefined();
+  } catch (error) {
+    console.error('Render error:', error);
+    throw error;
+  }
 });
