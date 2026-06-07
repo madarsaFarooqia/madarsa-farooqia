@@ -49,13 +49,16 @@ import InfrastructureAdmin from "./pages/admin/InfrastructureAdmin";
 
 /* ---------------- AUTH LOADING WRAPPER ---------------- */
 
+  const getBasename = () => {
+    const pathname = window.location.pathname;
+    if (pathname.includes("/development/")) {
+      return "/madarsa-farooqia/development";
+    }
+    return "/madarsa-farooqia"; // Production path
+  };
+  
 const AuthenticatedApp = () => {
-  const {
-    isLoadingAuth,
-    isLoadingPublicSettings,
-    authError,
-    user,
-  } = useAuth();
+  const { isLoadingAuth, isLoadingPublicSettings, authError, user } = useAuth();
 
   if (isLoadingPublicSettings || isLoadingAuth) {
     return (
@@ -72,19 +75,10 @@ const AuthenticatedApp = () => {
     return <UserNotRegisteredError />;
   }
 
-  const getBasename = () => {
-  const pathname = window.location.pathname;
-  if (pathname.includes('/development/')) {
-    return '/madarsa-farooqia/development';
-  }
-  return '/madarsa-farooqia';  // Production path
-};
-
   /* ---------------- ROUTES ---------------- */
 
   return (
     <Routes>
-
       {/* ================= AUTH ROUTES (NO LAYOUT) ================= */}
       <Route path="/login" element={<Login />} />
       <Route path="/signup" element={<Signup />} />
