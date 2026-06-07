@@ -254,7 +254,7 @@ function App() {
     <QueryClientProvider client={queryClientInstance}>
       <AuthProvider>
         <LanguageProvider>
-          <Router>
+          <Router basename="/madarsa-farooqia">
             <AuthenticatedApp />
           </Router>
 
