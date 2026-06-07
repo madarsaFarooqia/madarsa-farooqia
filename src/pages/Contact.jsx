@@ -168,7 +168,7 @@ export default function Contact() {
                   <Button onClick={() => setSent(false)} variant="outline" className="rounded-xl font-bold">Send Another Message</Button>
                 </div>
               ) : (
-                <form onSubmit={handleSubmit} className="space-y-5">
+                <form onSubmit={handleSubmit} className="space-y-5 bg-black/30">
                   <h2 className="font-playfair text-2xl font-semibold text-foreground mb-6">{t('contact:sendMessage')}</h2>
                   <div className="grid sm:grid-cols-2 gap-4">
                     <div>
