@@ -1,8 +1,8 @@
 // import React from 'react';
 // import { X, Mail, Phone, BookOpen, Clock, Award, Star, GraduationCap } from 'lucide-react';
 // import { motion, AnimatePresence } from 'framer-motion';
-// import { Badge } from '@/components/ui/badge';
-// import { normalizeSubjectList, teacherExperienceYears } from '@/lib/utils';
+// import { Badge } from '../ui/badge';
+// import { normalizeSubjectList, teacherExperienceYears } from '../../lib/utils';
 
 // export default function TeacherModal({ teacher, language, tr, onClose }) {
 //   const subjects = normalizeSubjectList(teacher.subjects);
@@ -158,7 +158,7 @@
 import React from 'react';
 import { X, Mail, Phone, BookOpen, Clock, Award, Star, GraduationCap } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Badge } from '@/components/ui/badge';
+import { Badge } from '../ui/badge';
 
 export default function TeacherModal({ teacher, language, t, onClose }) {
   const displayName = (language !== 'en' && teacher[`name_${language}`])
@@ -250,7 +250,7 @@ export default function TeacherModal({ teacher, language, t, onClose }) {
             {displayBio && (
               <div className="mb-6">
                 <h3 className="font-semibold text-foreground mb-3 flex items-center gap-2">
-                  <Star className="w-4 h-4 text-accent" /> About
+                  <Star className="w-4 h-4 text-accent" /> {t('teachers:about_label', 'About')}
                 </h3>
                 <p className="text-muted-foreground leading-relaxed text-sm">{displayBio}</p>
               </div>
@@ -285,7 +285,7 @@ export default function TeacherModal({ teacher, language, t, onClose }) {
             {/* Contact */}
             {(teacher.email || teacher.phone) && (
               <div className="pt-4 border-t border-border">
-                <h3 className="font-semibold text-foreground mb-3">Contact</h3>
+                <h3 className="font-semibold text-foreground mb-3">{t('teachers:contact_label', 'Contact')}</h3>
                 <div className="flex flex-col gap-2">
                   {teacher.email && (
                     <a href={`mailto:${teacher.email}`} className="flex items-center gap-2 text-sm text-foreground hover:underline">

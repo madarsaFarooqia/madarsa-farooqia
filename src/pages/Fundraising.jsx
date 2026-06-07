@@ -1,11 +1,11 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import { Target, TrendingUp, Users, PieChart, BarChart2, AlertCircle } from 'lucide-react';
-import { useLanguage } from '@/lib/LanguageContext';
-import { useTranslation } from '@/lib/i18n';
-import { fundraisingCampaignService } from '@/services';
-import CampaignCard from '@/components/fundraising/CampaignCard';
-import { Progress } from '@/components/ui/progress';
+import { useLanguage } from '../lib/LanguageContext';
+import { useTranslation } from '../lib/i18n';
+import { useCampaignsQuery } from '../hooks/api';
+import CampaignCard from '../components/fundraising/CampaignCard';
+import { Progress } from '../components/ui/progress';
 import { RadialBarChart, RadialBar, BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, Cell, PieChart as RePieChart, Pie } from 'recharts';
 
 const COLORS = ['#0a0a0a', '#b8891a', '#374151', '#6b7280', '#111827', '#d4a53a', '#1f2937', '#4b5563'];
@@ -13,15 +13,7 @@ const COLORS = ['#0a0a0a', '#b8891a', '#374151', '#6b7280', '#111827', '#d4a53a'
 export default function Fundraising() {
   const { language } = useLanguage();
   const { t } = useTranslation(language);
-  const [campaigns, setCampaigns] = useState([]);
-  const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    fundraisingCampaignService.list('-created_date')
-      .then(setCampaigns)
-      .catch(() => setCampaigns([]))
-      .finally(() => setLoading(false));
-  }, []);
+  const { data: campaigns = [], isLoading: loading } = useCampaignsQuery('-created_date', 100);
 
   const totalGoal = campaigns.reduce((s, c) => s + (c.goal_amount || 0), 0);
   const totalCollected = campaigns.reduce((s, c) => s + (c.collected_amount || 0), 0);
@@ -83,7 +75,7 @@ export default function Fundraising() {
                 <span className="text-primary">{overallPercent.toFixed(1)}% Complete</span>
                 <span className="text-muted-foreground">${(totalGoal - totalCollected).toLocaleString()} remaining</span>
               </div>
-              <Progress value={overallPercent} className="h-4 rounded-full" />
+              <Progress value={overallPercent} shape="wavy" className="h-4 rounded-full" />
             </div>
           </div>
         </section>

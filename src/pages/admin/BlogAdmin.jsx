@@ -1,283 +1,17 @@
-// import { useState, useEffect } from "react";
-// import {
-//   Plus,
-//   Edit2,
-//   Trash2,
-//   Search,
-//   Eye,
-//   FileText,
-//   Clock,
-// } from "lucide-react";
-// import { Input } from "@/components/ui/input";
-// import { Button } from "@/components/ui/button";
-// import { format } from "date-fns";
-// import BlogPostModal from "@/components/admin/BlogPostModal";
-
-// export default function BlogAdmin() {
-//   const [posts, setPosts] = useState([]);
-//   const [loading, setLoading] = useState(true);
-//   const [search, setSearch] = useState("");
-//   const [statusFilter, setStatusFilter] = useState("all");
-//   const [showModal, setShowModal] = useState(false);
-//   const [editing, setEditing] = useState(null);
-
-//   // const load = () => {
-//   //   setLoading(true);
-//   //   base44.entities.BlogPost.list('-created_date', 200)
-//   //     .then(setPosts).catch(() => setPosts([])).finally(() => setLoading(false));
-//   // };
-// const load = () => {
-//   setLoading(true);
-
-//   const data = generatePosts(30);
-
-//   setTimeout(() => {
-//     setPosts(data);
-//     setLoading(false);
-//   }, 300);
-// };
-
-//   useEffect(() => {
-//     load();
-//   }, []);
-
-//   const filtered = posts.filter((p) => {
-//     const matchSearch =
-//       !search || p.title?.toLowerCase().includes(search.toLowerCase());
-//     const matchStatus = statusFilter === "all" || p.status === statusFilter;
-//     return matchSearch && matchStatus;
-//   });
-
-// const handleDelete = async (id) => {
-//   // if (!confirm("Delete this post?")) return;
-//   const ok = window.confirm("Delete this post?");
-//   if (!ok) return;
-//   // await base44.entities.BlogPost.delete(id);
-//   setPosts((prev) => prev.filter((p) => p.id !== id));
-//   load();
-// };
-
-//   const statusBadge = (s) =>
-//     ({
-//       published: "bg-foreground text-background",
-//       draft: "bg-secondary text-muted-foreground",
-//       scheduled: "bg-accent/20 text-accent",
-//     })[s] || "bg-secondary text-muted-foreground";
-
-//   return (
-//     <div>
-//       <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mb-6">
-//         <div>
-//           <h1 className="font-playfair font-bold text-3xl text-foreground">
-//             Blog & News
-//           </h1>
-//           <p className="text-muted-foreground text-sm mt-1">
-//             Manage madrasa news, updates, and posts
-//           </p>
-//         </div>
-//         <Button
-//           size="sm"
-//           onClick={() => {
-//             setEditing(null);
-//             setShowModal(true);
-//           }}
-//         >
-//           <Plus size={14} className="mr-2" /> New Post
-//         </Button>
-//       </div>
-
-//       {/* Stats */}
-//       <div className="grid grid-cols-3 gap-4 mb-6">
-//         {[
-//           { label: "Total Posts", value: posts.length },
-//           {
-//             label: "Published",
-//             value: posts.filter((p) => p.status === "published").length,
-//           },
-//           {
-//             label: "Drafts",
-//             value: posts.filter((p) => p.status === "draft").length,
-//           },
-//         ].map(({ label, value }) => (
-//           <div
-//             key={label}
-//             className="bg-card border border-border rounded-xl p-4"
-//           >
-//             <p className="text-xs text-muted-foreground mb-1">{label}</p>
-//             <p className="font-playfair font-bold text-xl text-foreground">
-//               {value}
-//             </p>
-//           </div>
-//         ))}
-//       </div>
-
-//       {/* Filters */}
-//       <div className="flex gap-3 mb-6">
-//         <div className="relative flex-1">
-//           <Search
-//             size={14}
-//             className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground"
-//           />
-//           <Input
-//             placeholder="Search posts..."
-//             value={search}
-//             onChange={(e) => setSearch(e.target.value)}
-//             className="pl-8"
-//           />
-//         </div>
-//         {["all", "published", "draft", "scheduled"].map((s) => (
-//           <button
-//             key={s}
-//             onClick={() => setStatusFilter(s)}
-//             className={`px-3 py-2 rounded-lg text-xs font-medium transition-colors ${statusFilter === s ? "bg-foreground text-background" : "bg-secondary text-muted-foreground hover:bg-muted"}`}
-//           >
-//             {s.charAt(0).toUpperCase() + s.slice(1)}
-//           </button>
-//         ))}
-//       </div>
-
-//       {/* Posts List */}
-//       <div className="bg-card border border-border rounded-xl overflow-hidden">
-//         {loading ? (
-//           <div className="p-6 space-y-3">
-//             {[1, 2, 3].map((i) => (
-//               <div key={i} className="h-16 skeleton rounded-lg" />
-//             ))}
-//           </div>
-//         ) : filtered.length === 0 ? (
-//           <div className="text-center py-16 text-muted-foreground">
-//             <FileText size={40} className="mx-auto mb-3 opacity-20" />
-//             <p>No posts found. Create your first post!</p>
-//           </div>
-//         ) : (
-//           <table className="w-full text-sm">
-//             <thead className="bg-secondary/50 border-b border-border">
-//               <tr>
-//                 {[
-//                   "Title",
-//                   "Category",
-//                   "Author",
-//                   "Status",
-//                   "Date",
-//                   "Actions",
-//                 ].map((h) => (
-//                   <th
-//                     key={h}
-//                     className="text-left font-semibold text-muted-foreground p-4 text-xs"
-//                   >
-//                     {h}
-//                   </th>
-//                 ))}
-//               </tr>
-//             </thead>
-//             <tbody className="divide-y divide-border">
-//               {filtered.map((p) => (
-//                 <tr
-//                   key={p.id}
-//                   className="hover:bg-secondary/20 transition-colors"
-//                 >
-//                   <td className="p-4">
-//                     <p className="font-medium text-foreground truncate max-w-[200px]">
-//                       {p.title}
-//                     </p>
-//                     {p.excerpt && (
-//                       <p className="text-xs text-muted-foreground truncate max-w-[200px]">
-//                         {p.excerpt}
-//                       </p>
-//                     )}
-//                   </td>
-//                   <td className="p-4">
-//                     <span className="text-xs px-2 py-0.5 bg-secondary rounded-full capitalize">
-//                       {p.category || "general"}
-//                     </span>
-//                   </td>
-//                   <td className="p-4 text-muted-foreground text-xs">
-//                     {p.author || "—"}
-//                   </td>
-//                   <td className="p-4">
-//                     <span
-//                       className={`text-xs px-2 py-1 rounded-full font-medium ${statusBadge(p.status)}`}
-//                     >
-//                       {p.status}
-//                     </span>
-//                   </td>
-//                   <td className="p-4 text-muted-foreground text-xs">
-//                     {p.published_at
-//                       ? format(new Date(p.published_at), "MMM d, yyyy")
-//                       : p.created_date
-//                         ? format(new Date(p.created_date), "MMM d")
-//                         : "—"}
-//                   </td>
-//                   <td className="p-4">
-//                     <div className="flex gap-1">
-//                       <button
-//                         onClick={() => {
-//                           setEditing(p);
-//                           setShowModal(true);
-//                         }}
-//                         className="p-1.5 hover:bg-secondary rounded text-muted-foreground hover:text-foreground"
-//                       >
-//                         <Edit2 size={13} />
-//                       </button>
-//                       <button
-//                         onClick={() => handleDelete(p.id)}
-//                         className="p-1.5 hover:bg-destructive/10 rounded text-muted-foreground hover:text-destructive"
-//                       >
-//                         <Trash2 size={13} />
-//                       </button>
-//                     </div>
-//                   </td>
-//                 </tr>
-//               ))}
-//             </tbody>
-//           </table>
-//         )}
-//       </div>
-
-//       {showModal && (
-//         <BlogPostModal
-//           post={editing}
-//           onClose={() => {
-//             setShowModal(false);
-//             setEditing(null);
-//           }}
-//           onSaved={() => {
-//             setShowModal(false);
-//             setEditing(null);
-//             load();
-//           }}
-//         />
-//       )}
-//     </div>
-//   );
-// }
-
-// const randomFrom = (arr) => arr[Math.floor(Math.random() * arr.length)];
-
-// const generatePosts = (count = 25) =>
-//   Array.from({ length: count }).map((_, i) => ({
-//     id: i + 1,
-//     title: `Blog Post ${i + 1}`,
-//     excerpt: "This is a sample excerpt for blog post content preview.",
-//     category: randomFrom(["news", "update", "event", "announcement"]),
-//     author: randomFrom(["Admin", "Editor", "Teacher"]),
-//     status: randomFrom(["published", "draft", "scheduled"]),
-//     created_date: new Date(
-//       Date.now() - Math.random() * 1000 * 60 * 60 * 24 * 90,
-//     ),
-//     published_at: Math.random() > 0.3 ? new Date() : null,
-//   }));
-
 import { useState, useEffect } from "react";
 import { Plus, Edit2, Trash2, Search, FileText, Download } from "lucide-react";
-import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
+import { Input } from "../../components/ui/input";
+import { Button } from "../../components/ui/button";
 import { format } from "date-fns";
 import { toast } from "sonner";
-import BlogPostModal from "@/components/admin/BlogPostModal";
-import DeleteConfirmModal from "@/components/shared/DeleteConfirmModal";
+import BlogPostModal from "../../components/admin/BlogPostModal";
+import DeleteConfirmModal from "../../components/shared/DeleteConfirmModal";
+import { useLanguage } from "../../lib/LanguageContext";
+import { useTranslation } from "../../lib/i18n";
 
 export default function BlogAdmin() {
+  const { language } = useLanguage();
+  const { t } = useTranslation(language);
   const [posts, setPosts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState("");
@@ -309,34 +43,51 @@ export default function BlogAdmin() {
     return matchSearch && matchStatus;
   });
 
-  // const handleDelete = async () => {
-  //   setDeleting(true);
-  //   await base44.entities.BlogPost.delete(deleteId);
-  // setDeleting(false);
-  // setDeleteId(null);
-  // toast.success("Post deleted successfully");
-  //   load();
-  // };
+  const handleDelete = async () => {
+    if (!deleteId) return;
+    setDeleting(true);
+    setTimeout(() => {
+      setPosts((prev) => prev.filter((p) => p.id !== deleteId));
+      setDeleting(false);
+      setDeleteId(null);
+      toast.success(t("admin:postDeletedSuccess", "Post deleted successfully"));
+      load();
+    }, 300);
+  };
 
-  const handleDelete = async (id) => {
-    // if (!confirm("Delete this post?")) return;
-    const ok = window.confirm("Delete this post?");
-    if (!ok) return;
-    // await base44.entities.BlogPost.delete(id);
-    setPosts((prev) => prev.filter((p) => p.id !== id));
-    setDeleting(false);
-    setDeleteId(null);
-    toast.success("Post deleted successfully");
-    load();
+  const getCategoryLabel = (c) => {
+    switch (c?.toLowerCase()) {
+      case "news": return t("admin:news", "News");
+      case "update": return t("admin:update", "Update");
+      case "event": return t("admin:event", "Event");
+      case "announcement": return t("admin:announcement", "Announcement");
+      default: return t("admin:general", "General");
+    }
+  };
+
+  const getStatusLabel = (s) => {
+    switch (s) {
+      case "published": return t("admin:published", "Published");
+      case "draft": return t("admin:statusDraft", "Draft");
+      case "scheduled": return t("admin:statusScheduled", "Scheduled");
+      default: return s;
+    }
   };
 
   const exportCSV = () => {
-    const headers = ["Title", "Category", "Author", "Status", "Date", "Views"];
+    const headers = [
+      t("admin:title", "Title"),
+      t("admin:category", "Category"),
+      t("admin:author", "Author"),
+      t("admin:status", "Status"),
+      t("admin:date", "Date"),
+      t("admin:views", "Views")
+    ];
     const rows = filtered.map((p) => [
       `"${(p.title || "").replace(/"/g, '""')}"`,
-      p.category || "general",
+      getCategoryLabel(p.category),
       p.author || "",
-      p.status || "",
+      getStatusLabel(p.status),
       p.published_at
         ? format(new Date(p.published_at), "yyyy-MM-dd")
         : p.created_date
@@ -352,7 +103,7 @@ export default function BlogAdmin() {
     a.download = `blog-posts-${format(new Date(), "yyyy-MM-dd")}.csv`;
     a.click();
     URL.revokeObjectURL(url);
-    toast.success(`Exported ${filtered.length} posts to CSV`);
+    toast.success(t("admin:exportedCsv", "Exported posts to CSV"));
   };
 
   const exportPDF = () => {
@@ -365,15 +116,22 @@ export default function BlogAdmin() {
       .badge{display:inline-block;padding:2px 8px;border-radius:999px;font-size:10px;font-weight:600}
       .published{background:#111;color:#fff}.draft{background:#eee;color:#444}
     </style></head><body>
-      <h1>Blog & News Posts</h1>
-      <p>Exported ${filtered.length} posts · ${format(new Date(), "PPP")}</p>
-      <table><thead><tr>${["Title", "Category", "Author", "Status", "Date", "Views"].map((h) => `<th>${h}</th>`).join("")}</tr></thead>
+      <h1>${t("admin:blogNewsTitle", "Blog & News Posts")}</h1>
+      <p>${t("admin:exportedLabel", "Exported")} ${filtered.length} ${t("admin:postsLabel", "posts")} · ${format(new Date(), "PPP")}</p>
+      <table><thead><tr>${[
+        t("admin:title", "Title"),
+        t("admin:category", "Category"),
+        t("admin:author", "Author"),
+        t("admin:status", "Status"),
+        t("admin:date", "Date"),
+        t("admin:views", "Views")
+      ].map((h) => `<th>${h}</th>`).join("")}</tr></thead>
       <tbody>${filtered
         .map(
           (p) => `<tr>
         <td><strong>${p.title || ""}</strong>${p.excerpt ? `<br/><small style="color:#999">${p.excerpt.slice(0, 80)}...</small>` : ""}</td>
-        <td>${p.category || "general"}</td><td>${p.author || "—"}</td>
-        <td><span class="badge ${p.status}">${p.status || ""}</span></td>
+        <td>${getCategoryLabel(p.category)}</td><td>${p.author || "—"}</td>
+        <td><span class="badge ${p.status}">${getStatusLabel(p.status)}</span></td>
         <td>${p.published_at ? format(new Date(p.published_at), "MMM d, yyyy") : p.created_date ? format(new Date(p.created_date), "MMM d, yyyy") : "—"}</td>
         <td>${p.views || 0}</td>
       </tr>`,
@@ -386,7 +144,7 @@ export default function BlogAdmin() {
     setTimeout(() => {
       w.print();
     }, 500);
-    toast.success("PDF print dialog opened");
+    toast.success(t("admin:pdfOpened", "PDF print dialog opened"));
   };
 
   const statusBadge = (s) =>
@@ -401,18 +159,18 @@ export default function BlogAdmin() {
       <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mb-6">
         <div>
           <h1 className="font-playfair font-bold text-3xl text-foreground">
-            Blog & News
+            {t("admin:blogNewsTitle", "Blog & News")}
           </h1>
           <p className="text-muted-foreground text-sm mt-1">
-            Manage madrasa news, updates, and posts
+            {t("admin:blogNewsSubtitle", "Manage madrasa news, updates, and posts")}
           </p>
         </div>
         <div className="flex gap-2">
           <Button size="sm" variant="outline" onClick={exportCSV}>
-            <Download size={14} className="mr-1" /> CSV
+            <Download size={14} className="mr-1" /> {t("admin:csv", "CSV")}
           </Button>
           <Button size="sm" variant="outline" onClick={exportPDF}>
-            <FileText size={14} className="mr-1" /> PDF
+            <FileText size={14} className="mr-1" /> {t("admin:pdfReport", "PDF")}
           </Button>
           <Button
             size="sm"
@@ -421,7 +179,7 @@ export default function BlogAdmin() {
               setShowModal(true);
             }}
           >
-            <Plus size={14} className="mr-2" /> New Post
+            <Plus size={14} className="mr-2" /> {t("admin:newPost", "New Post")}
           </Button>
         </div>
       </div>
@@ -429,13 +187,13 @@ export default function BlogAdmin() {
       {/* Stats */}
       <div className="grid grid-cols-3 gap-4 mb-6">
         {[
-          { label: "Total Posts", value: posts.length },
+          { label: t("admin:totalPosts", "Total Posts"), value: posts.length },
           {
-            label: "Published",
+            label: t("admin:published", "Published"),
             value: posts.filter((p) => p.status === "published").length,
           },
           {
-            label: "Drafts",
+            label: t("admin:drafts", "Drafts"),
             value: posts.filter((p) => p.status === "draft").length,
           },
         ].map(({ label, value }) => (
@@ -459,7 +217,7 @@ export default function BlogAdmin() {
             className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground"
           />
           <Input
-            placeholder="Search posts..."
+            placeholder={t("admin:searchPosts", "Search posts...")}
             value={search}
             onChange={(e) => setSearch(e.target.value)}
             className="pl-8"
@@ -471,7 +229,7 @@ export default function BlogAdmin() {
             onClick={() => setStatusFilter(s)}
             className={`px-3 py-2 rounded-lg text-xs font-medium transition-colors ${statusFilter === s ? "bg-foreground text-background" : "bg-secondary text-muted-foreground hover:bg-muted"}`}
           >
-            {s.charAt(0).toUpperCase() + s.slice(1)}
+            {s === "all" ? t("admin:all", "All") : getStatusLabel(s)}
           </button>
         ))}
       </div>
@@ -487,19 +245,19 @@ export default function BlogAdmin() {
         ) : filtered.length === 0 ? (
           <div className="text-center py-16 text-muted-foreground">
             <FileText size={40} className="mx-auto mb-3 opacity-20" />
-            <p>No posts found. Create your first post!</p>
+            <p>{t("admin:noPostsFound", "No posts found. Create your first post!")}</p>
           </div>
         ) : (
           <table className="w-full text-sm">
             <thead className="bg-secondary/50 border-b border-border">
               <tr>
                 {[
-                  "Title",
-                  "Category",
-                  "Author",
-                  "Status",
-                  "Date",
-                  "Actions",
+                  t("admin:title", "Title"),
+                  t("admin:category", "Category"),
+                  t("admin:author", "Author"),
+                  t("admin:status", "Status"),
+                  t("admin:date", "Date"),
+                  t("admin:actions", "Actions"),
                 ].map((h) => (
                   <th
                     key={h}
@@ -528,7 +286,7 @@ export default function BlogAdmin() {
                   </td>
                   <td className="p-4">
                     <span className="text-xs px-2 py-0.5 bg-secondary rounded-full capitalize">
-                      {p.category || "general"}
+                      {getCategoryLabel(p.category)}
                     </span>
                   </td>
                   <td className="p-4 text-muted-foreground text-xs">
@@ -538,7 +296,7 @@ export default function BlogAdmin() {
                     <span
                       className={`text-xs px-2 py-1 rounded-full font-medium ${statusBadge(p.status)}`}
                     >
-                      {p.status}
+                      {getStatusLabel(p.status)}
                     </span>
                   </td>
                   <td className="p-4 text-muted-foreground text-xs">
@@ -584,7 +342,7 @@ export default function BlogAdmin() {
           onSaved={() => {
             setShowModal(false);
             setEditing(null);
-            toast.success(editing ? "Post updated!" : "Post created!");
+            toast.success(editing ? t("admin:postUpdated", "Post updated!") : t("admin:postCreated", "Post created!"));
             load();
           }}
         />
@@ -594,8 +352,8 @@ export default function BlogAdmin() {
         onClose={() => setDeleteId(null)}
         onConfirm={handleDelete}
         loading={deleting}
-        title="Delete Post"
-        message="Are you sure you want to delete this blog post?"
+        title={t("admin:deletePost", "Delete Post")}
+        message={t("admin:deletePostConfirm", "Are you sure you want to delete this blog post?")}
       />
     </div>
   );
@@ -615,4 +373,5 @@ const generatePosts = (count = 25) =>
       Date.now() - Math.random() * 1000 * 60 * 60 * 24 * 90,
     ),
     published_at: Math.random() > 0.3 ? new Date() : null,
+    views: Math.floor(Math.random() * 300) + 10,
   }));

@@ -24,6 +24,16 @@
       work correctly both with client-side routing and a non-root public URL.
       Learn how to configure a non-root public URL by running `npm run build`.
     -->
+      <script>
+      // Handle base path for assets
+      (function() {
+        var path = window.location.pathname;
+        var basePath = path.includes('/development/') ? '/madarsa-farooqia/development' : '/madarsa-farooqia';
+        var baseElement = document.createElement('base');
+        baseElement.href = basePath + '/';
+        document.head.appendChild(baseElement);
+      })();
+    </script>
     <title>Darul Uloom Farooqia</title>
   </head>
   <body>

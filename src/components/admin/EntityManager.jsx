@@ -1,34 +1,31 @@
-import { useState, useEffect } from 'react';
-import { getEntityService } from '@/services';
+import { useState } from 'react';
+import { useEntityQuery, useEntityMutations } from '../../hooks/api';
 import { Loader2, Plus, Pencil, Trash2, X, Check, Search } from 'lucide-react';
-import { Input } from '@/components/ui/input';
-import { Button } from '@/components/ui/button';
-import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
-import { Label } from '@/components/ui/label';
-import { Textarea } from '@/components/ui/textarea';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Switch } from '@/components/ui/switch';
-import { useToast } from '@/components/ui/use-toast';
+import { Input } from '../ui/input';
+import { Button } from '../ui/button';
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from '../ui/dialog';
+import { Label } from '../ui/label';
+import { Textarea } from '../ui/textarea';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '../ui/select';
+import { Switch } from '../ui/switch';
+import { useToast } from '../ui/use-toast';
 import { format } from 'date-fns';
+import { useLanguage } from '../../lib/LanguageContext';
+import { useTranslation } from '../../lib/i18n';
 
 export default function EntityManager({ entityName, title, fields, displayField = 'name', sortField = '-created_date' }) {
   const { toast } = useToast();
-  const [items, setItems] = useState([]);
-  const [loading, setLoading] = useState(true);
+  const { language } = useLanguage();
+  const { t } = useTranslation(language);
+  const { data: items = [], isLoading: loading, refetch } = useEntityQuery(entityName, sortField);
+  const { create, update, remove } = useEntityMutations(entityName);
   const [search, setSearch] = useState('');
   const [dialogOpen, setDialogOpen] = useState(false);
   const [editing, setEditing] = useState(null);
   const [form, setForm] = useState({});
-  const [saving, setSaving] = useState(false);
 
-  const entity = getEntityService(entityName);
-
-  const loadItems = () => {
-    setLoading(true);
-    entity.list(sortField, 500).then(setItems).finally(() => setLoading(false));
-  };
-
-  useEffect(() => { loadItems(); }, [entityName]);
+  const translatedTitle = t(`admin:${title}`, title);
+  const translatedTitlePlural = t(`admin:${title}s`, `${title}s`);
 
   const openCreate = () => {
     setEditing(null);
@@ -45,24 +42,22 @@ export default function EntityManager({ entityName, title, fields, displayField 
   };
 
   const handleSave = async () => {
-    setSaving(true);
     if (editing) {
-      await entity.update(editing.id, form);
-      toast({ title: `${title} updated` });
+      await update.mutateAsync({ id: editing.id, payload: form });
+      toast({ title: t('admin:recordUpdated', 'Record updated successfully') });
     } else {
-      await entity.create(form);
-      toast({ title: `${title} created` });
+      await create.mutateAsync(form);
+      toast({ title: t('admin:recordCreated', 'Record created successfully') });
     }
-    setSaving(false);
     setDialogOpen(false);
-    loadItems();
+    refetch();
   };
 
   const handleDelete = async (item) => {
-    if (!window.confirm(`Delete this ${title.toLowerCase()}?`)) return;
-    await entity.delete(item.id);
-    toast({ title: `${title} deleted` });
-    loadItems();
+    if (!window.confirm(t('admin:deleteConfirm', 'Are you sure you want to delete this record?'))) return;
+    await remove.mutateAsync(item.id);
+    toast({ title: t('admin:recordDeleted', 'Record deleted successfully') });
+    refetch();
   };
 
   const filtered = items.filter(item => {
@@ -73,22 +68,27 @@ export default function EntityManager({ entityName, title, fields, displayField 
   const renderField = (field) => {
     const value = form[field.name] ?? '';
     const onChange = (v) => setForm({ ...form, [field.name]: v });
+    const fieldPlaceholder = field.placeholder ? t(`admin:placeholder_${field.name}`, field.placeholder) : '';
 
     if (field.type === 'select') {
       return (
         <Select value={value} onValueChange={onChange}>
-          <SelectTrigger className="font-jakarta"><SelectValue placeholder="Select..." /></SelectTrigger>
+          <SelectTrigger className="font-jakarta"><SelectValue placeholder={t('admin:select', 'Select...')} /></SelectTrigger>
           <SelectContent>
-            {field.options.map(opt => <SelectItem key={opt} value={opt}>{opt}</SelectItem>)}
+            {field.options.map(opt => (
+              <SelectItem key={opt} value={opt}>
+                {t(`admin:option_${opt.toLowerCase()}`, opt)}
+              </SelectItem>
+            ))}
           </SelectContent>
         </Select>
       );
     }
     if (field.type === 'textarea') {
-      return <Textarea value={value} onChange={e => onChange(e.target.value)} placeholder={field.placeholder} className="font-jakarta h-24" />;
+      return <Textarea value={value} onChange={e => onChange(e.target.value)} placeholder={fieldPlaceholder} className="font-jakarta h-24" />;
     }
     if (field.type === 'number') {
-      return <Input type="number" value={value} onChange={e => onChange(parseFloat(e.target.value) || 0)} placeholder={field.placeholder} className="font-jakarta" />;
+      return <Input type="number" value={value} onChange={e => onChange(parseFloat(e.target.value) || 0)} placeholder={fieldPlaceholder} className="font-jakarta" />;
     }
     if (field.type === 'boolean') {
       return <Switch checked={!!value} onCheckedChange={onChange} />;
@@ -96,18 +96,18 @@ export default function EntityManager({ entityName, title, fields, displayField 
     if (field.type === 'date') {
       return <Input type="date" value={value} onChange={e => onChange(e.target.value)} className="font-jakarta" />;
     }
-    return <Input value={value} onChange={e => onChange(e.target.value)} placeholder={field.placeholder} className="font-jakarta" />;
+    return <Input value={value} onChange={e => onChange(e.target.value)} placeholder={fieldPlaceholder} className="font-jakarta" />;
   };
 
   return (
     <div>
       <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mb-6">
         <div>
-          <h1 className="font-baskerville font-bold text-3xl text-primary">{title}s</h1>
-          <p className="font-jakarta text-muted-foreground text-sm mt-1">Manage all {title.toLowerCase()} records</p>
+          <h1 className="font-baskerville font-bold text-3xl text-primary">{translatedTitlePlural}</h1>
+          <p className="font-jakarta text-muted-foreground text-sm mt-1">{t('admin:manageRecords', 'Manage all records')}</p>
         </div>
         <Button onClick={openCreate} className="flex items-center gap-2">
-          <Plus size={16} /> Add {title}
+          <Plus size={16} /> {t('admin:addRecord', 'Add New Record')}
         </Button>
       </div>
 
@@ -118,7 +118,7 @@ export default function EntityManager({ entityName, title, fields, displayField 
             <Input
               value={search}
               onChange={e => setSearch(e.target.value)}
-              placeholder={`Search ${title.toLowerCase()}s...`}
+              placeholder={t('admin:searchRecords', 'Search records...')}
               className="pl-9 font-jakarta"
             />
           </div>
@@ -130,7 +130,7 @@ export default function EntityManager({ entityName, title, fields, displayField 
           </div>
         ) : filtered.length === 0 ? (
           <div className="text-center py-16">
-            <p className="font-jakarta text-muted-foreground">No {title.toLowerCase()}s found.</p>
+            <p className="font-jakarta text-muted-foreground">{t('admin:noRecordsFound', 'No records found.')}</p>
           </div>
         ) : (
           <div className="divide-y divide-border">
@@ -139,7 +139,7 @@ export default function EntityManager({ entityName, title, fields, displayField 
                 <div className="flex-1 min-w-0">
                   <p className="font-jakarta font-medium text-foreground truncate">{item[displayField]}</p>
                   <p className="text-xs font-jakarta text-muted-foreground">
-                    Created {item.created_date ? format(new Date(item.created_date), 'PPP') : '—'}
+                    {t('admin:created', 'Created')} {item.created_date ? format(new Date(item.created_date), 'PPP') : '—'}
                   </p>
                 </div>
                 <div className="flex items-center gap-2">
@@ -160,21 +160,23 @@ export default function EntityManager({ entityName, title, fields, displayField 
       <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
         <DialogContent className="max-w-lg max-h-[85vh] overflow-y-auto">
           <DialogHeader>
-            <DialogTitle className="font-baskerville">{editing ? `Edit ${title}` : `New ${title}`}</DialogTitle>
+            <DialogTitle className="font-baskerville">{editing ? t('admin:editRecord', 'Edit Record') : t('admin:newRecord', 'New Record')}</DialogTitle>
           </DialogHeader>
           <div className="space-y-4 mt-4">
             {fields.map(field => (
               <div key={field.name}>
-                <Label className="text-sm font-jakarta font-semibold mb-2 block">{field.label}</Label>
+                <Label className="text-sm font-jakarta font-semibold mb-2 block">
+                  {t(`admin:field_${field.name}`, field.label)}
+                </Label>
                 {renderField(field)}
               </div>
             ))}
           </div>
           <div className="flex justify-end gap-3 mt-6 pt-4 border-t border-border">
-            <Button variant="outline" onClick={() => setDialogOpen(false)}>Cancel</Button>
-            <Button onClick={handleSave} disabled={saving}>
-              {saving ? <Loader2 size={16} className="animate-spin mr-2" /> : <Check size={16} className="mr-2" />}
-              {editing ? 'Update' : 'Create'}
+            <Button variant="outline" onClick={() => setDialogOpen(false)}>{t('admin:cancel', 'Cancel')}</Button>
+            <Button onClick={handleSave} disabled={create.isPending || update.isPending}>
+              {(create.isPending || update.isPending) ? <Loader2 size={16} className="animate-spin mr-2" /> : <Check size={16} className="mr-2" />}
+              {editing ? t('admin:update', 'Update') : t('admin:create', 'Create')}
             </Button>
           </div>
         </DialogContent>
@@ -188,7 +190,7 @@ export default function EntityManager({ entityName, title, fields, displayField 
 // import { motion } from "framer-motion";
 // import SectionHeader from "../shared/SectionHeader";
 // import CampaignCard from "../campaigns/CampaignCard";
-// import { donateService } from "@/mocks/donateService";
+// import { donateService } from "../../mocks/donateService";
 
 // const CATEGORIES = [
 //   "All",

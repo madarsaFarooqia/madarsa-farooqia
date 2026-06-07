@@ -113,7 +113,7 @@ jobs:
     name: Unit Tests
     runs-on: ubuntu-latest
     needs: install-deps
-    continue-on-error: true 
+    continue-on-error: false
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -160,3 +160,4 @@ jobs:
       - name: Docker build
         run: |
           if [ -f Dockerfile ]; then docker build -t madrasa-farooqia-ci .; else echo "No Dockerfile; skipping"; fi
+

@@ -1,12 +1,5 @@
-/**
- * Mock API: on in development by default so the UI works with no backend.
- * Turn off when your API is running: `REACT_APP_USE_MOCK_API=false` in `.env.development.local`.
- * Production: mocks run only if you explicitly set `REACT_APP_USE_MOCK_API=true` (not recommended).
- */
 export function isMockApiEnabled() {
-  if (process.env.REACT_APP_USE_MOCK_API === 'false') return false;
-  if (process.env.REACT_APP_USE_MOCK_API === 'true') return true;
-  return process.env.NODE_ENV === 'development';
+  return false;
 }
 
 export function mockUserRole() {

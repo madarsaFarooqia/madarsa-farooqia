@@ -1,7 +1,8 @@
+//1
 // import { motion, AnimatePresence } from 'framer-motion';
 // import { Check, Download, Heart, X } from 'lucide-react';
 // import { Link } from 'react-router-dom';
-// import { Button } from '@/components/ui/button';
+// import { Button } from '../ui/button';
 // import { format } from 'date-fns';
 
 // const islamicQuotes = [
@@ -138,6 +139,249 @@
 //   );
 // }
 
+
+//2
+
+// import { motion, AnimatePresence } from "framer-motion";
+// import {
+//   Check,
+//   Download,
+//   Heart,
+//   X,
+//   FileText,
+//   QrCode,
+//   Star,
+// } from "lucide-react";
+// import { Link } from "react-router-dom";
+// import { Button } from "../ui/button";
+// import { format } from "date-fns";
+// import { useLanguage } from "../../lib/LanguageContext";
+// import { useTranslation } from "../../lib/i18n";
+// import { generateReceiptId, downloadReceipt } from "../../lib/receiptGenerator";
+
+// const islamicQuotes = [
+//   { text: "Charity does not decrease wealth.", source: "Sahih Muslim" },
+//   {
+//     text: "Give charity without delay, for it stands in the way of calamity.",
+//     source: "Al-Tirmidhi",
+//   },
+//   {
+//     text: "The believer's shade on the Day of Resurrection will be his charity.",
+//     source: "Al-Tirmidhi",
+//   },
+//   {
+//     text: "Save yourself from Hell-fire even by giving half a date-fruit in charity.",
+//     source: "Sahih Bukhari",
+//   },
+// ];
+
+// const purposeEmoji = {
+//   sadqa: "💝",
+//   zakat: "🌙",
+//   fitra: "🌾",
+//   lillah: "✨",
+//   waqf: "🏛️",
+//   general: "🤲",
+//   building: "🏗️",
+//   education: "📚",
+//   orphan_care: "👶",
+//   food_program: "🍲",
+//   masjid: "🕌",
+//   niswaan: "👩‍🎓",
+//   scholarship: "🎓",
+// };
+
+// export default function DonationSuccessModal({
+//   donation,
+//   onClose,
+//   onDonateAgain,
+// }) {
+//   const { language } = useLanguage();
+//   const { t } = useTranslation(language);
+//   const quote = islamicQuotes[Math.floor(Math.random() * islamicQuotes.length)];
+//   const receiptId = generateReceiptId(donation);
+//   const now = format(new Date(), "PPP");
+
+//   const handleDownload = () => downloadReceipt(donation, "IN", language);
+
+//   return (
+//     <AnimatePresence>
+//       <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/70 backdrop-blur-md">
+//         <motion.div
+//           initial={{ opacity: 0, scale: 0.85, y: 30 }}
+//           animate={{ opacity: 1, scale: 1, y: 0 }}
+//           exit={{ opacity: 0, scale: 0.85 }}
+//           transition={{ type: "spring", damping: 20 }}
+//           className="bg-card border border-border rounded-3xl w-full max-w-md shadow-2xl relative overflow-hidden"
+//         >
+//           {/* Top gradient accent */}
+//           <div className="h-1.5 bg-gradient-to-r from-foreground via-accent to-foreground" />
+
+//           {/* Background watermark */}
+//           <div className="absolute inset-0 flex items-center justify-center pointer-events-none overflow-hidden">
+//             <span className="font-amiri text-[180px] text-foreground/[0.025] select-none leading-none">
+//               م
+//             </span>
+//           </div>
+
+//           <div className="relative p-6 sm:p-8">
+//             <button
+//               onClick={onClose}
+//               className="absolute top-4 right-4 p-2 rounded-full hover:bg-secondary transition-colors z-10"
+//             >
+//               <X className="w-4 h-4 text-muted-foreground" />
+//             </button>
+
+//             {/* Success animation */}
+//             <div className="flex flex-col items-center text-center mb-6">
+//               <motion.div
+//                 initial={{ scale: 0, rotate: -180 }}
+//                 animate={{ scale: 1, rotate: 0 }}
+//                 transition={{ type: "spring", delay: 0.15, damping: 12 }}
+//                 className="relative mb-4"
+//               >
+//                 <div
+//                   className="w-22 h-22 rounded-full bg-foreground flex items-center justify-center shadow-2xl"
+//                   style={{ width: 88, height: 88 }}
+//                 >
+//                   <Check className="w-11 h-11 text-background" />
+//                 </div>
+//                 <motion.div
+//                   initial={{ scale: 0 }}
+//                   animate={{ scale: 1 }}
+//                   transition={{ delay: 0.4 }}
+//                   className="absolute -top-1 -right-1 w-7 h-7 bg-accent rounded-full flex items-center justify-center shadow-lg"
+//                 >
+//                   <Star className="w-3.5 h-3.5 text-accent-foreground" />
+//                 </motion.div>
+//               </motion.div>
+
+//               <motion.div
+//                 initial={{ opacity: 0, y: 10 }}
+//                 animate={{ opacity: 1, y: 0 }}
+//                 transition={{ delay: 0.3 }}
+//               >
+//                 <h2 className="font-amiri text-3xl text-accent mb-1">
+//                   جزاك الله خيرًا
+//                 </h2>
+//                 <p className="font-playfair text-xl font-bold text-foreground">
+//                   {t("donate:jazakAllah", "JazakAllah Khair")}
+//                 </p>
+//                 <p className="text-muted-foreground text-sm mt-1">
+//                   {t("donate:donationReceived", "Your donation has been received")}
+//                 </p>
+//               </motion.div>
+//             </div>
+
+//             {/* Receipt card */}
+//             <motion.div
+//               initial={{ opacity: 0, y: 15 }}
+//               animate={{ opacity: 1, y: 0 }}
+//               transition={{ delay: 0.4 }}
+//               className="bg-secondary/50 rounded-2xl p-5 mb-5 border border-border relative overflow-hidden"
+//             >
+//               {/* Mini decorative border */}
+//               <div className="absolute inset-0 rounded-2xl border border-accent/10 pointer-events-none" />
+
+//               <div className="flex items-center justify-between mb-3">
+//                 <div className="text-2xl">
+//                   {purposeEmoji[donation.purpose] || "🤲"}
+//                 </div>
+//                 <span className="font-mono text-xs text-muted-foreground bg-background px-2 py-1 rounded-lg border border-border">
+//                   {receiptId}
+//                 </span>
+//               </div>
+
+//               <div className="space-y-2 text-sm">
+//                 <div className="flex justify-between items-center">
+//                   <span className="text-muted-foreground">{t("donate:amountDonated", "Amount Donated")}</span>
+//                   <span className="font-playfair font-bold text-xl text-foreground">
+//                     {donation.currency}{" "}
+//                     {Number(donation.amount).toLocaleString()}
+//                   </span>
+//                 </div>
+//                 <div className="flex justify-between">
+//                   <span className="text-muted-foreground">{t("myDonations:donationPurpose", "Purpose")}</span>
+//                   <span className="font-medium capitalize text-foreground">
+//                     {t(`donate:${donation.purpose}`, donation.purpose?.replace(/_/g, " "))}
+//                   </span>
+//                 </div>
+//                 <div className="flex justify-between">
+//                   <span className="text-muted-foreground">{t("myDonations:donationDate", "Date")}</span>
+//                   <span className="text-foreground">{now}</span>
+//                 </div>
+//                 <div className="flex justify-between">
+//                   <span className="text-muted-foreground">{t("myDonations:donationStatus", "Status")}</span>
+//                   <span className="inline-flex items-center gap-1 bg-foreground text-background px-2.5 py-0.5 rounded-full text-xs font-medium">
+//                     <span className="w-1.5 h-1.5 rounded-full bg-green-400" />{" "}
+//                     {t("fundraising:completed", "Completed")}
+//                   </span>
+//                 </div>
+//               </div>
+
+//               {/* QR verification note */}
+//               <div className="flex items-center gap-2 mt-4 pt-3 border-t border-border">
+//                 <QrCode className="w-4 h-4 text-accent shrink-0" />
+//                 <p className="text-xs text-muted-foreground">
+//                   {t("donate:successReceiptNote", "PDF receipt includes QR verification code for tax compliance")}
+//                 </p>
+//               </div>
+//             </motion.div>
+
+//             {/* Quote */}
+//             <div className="border-l-4 border-accent pl-4 mb-6 py-1">
+//               <p className="text-sm italic text-foreground">"{quote.text}"</p>
+//               <p className="text-xs text-muted-foreground mt-1">
+//                 — {quote.source}
+//               </p>
+//             </div>
+
+//             {/* Actions */}
+//             <div className="space-y-2">
+//               <div className="grid grid-cols-2 gap-2">
+//                 <Button
+//                   onClick={handleDownload}
+//                   variant="outline"
+//                   className="flex items-center gap-2 rounded-xl h-11"
+//                 >
+//                   <Download className="w-4 h-4" /> {t("nav:taxReceipts", "Tax Receipt")}
+//                 </Button>
+//                 <Button
+//                   asChild
+//                   className="rounded-xl h-11 bg-foreground text-background hover:bg-foreground/90"
+//                 >
+//                   <Link to="/receipts">
+//                     <FileText className="w-4 h-4 mr-1" /> {t("donate:allReceipts", "All Receipts")}
+//                   </Link>
+//                 </Button>
+//               </div>
+//               <Button
+//                 asChild
+//                 variant="secondary"
+//                 className="w-full rounded-xl h-11"
+//               >
+//                 <Link to="/my-donations">
+//                   <Heart className="w-4 h-4 mr-1" /> {t("nav:myDonations", "My Donations Dashboard")}
+//                 </Link>
+//               </Button>
+//               <Button
+//                 onClick={onDonateAgain}
+//                 variant="ghost"
+//                 className="w-full text-sm text-muted-foreground hover:text-foreground"
+//               >
+//                 {t("donate:donateAgain", "Donate Again")}
+//               </Button>
+//             </div>
+//           </div>
+//         </motion.div>
+//       </div>
+//     </AnimatePresence>
+//   );
+// }
+
+
+
+//3
 import { motion, AnimatePresence } from "framer-motion";
 import {
   Check,
@@ -149,12 +393,22 @@ import {
   Star,
 } from "lucide-react";
 import { Link } from "react-router-dom";
-import { Button } from "@/components/ui/button";
+import { Button } from "../ui/button";
 import { format } from "date-fns";
-import { generateReceiptId, downloadReceipt } from "@/lib/receiptGenerator";
+
+import { useLanguage } from "../../lib/LanguageContext";
+import { useTranslation } from "../../lib/i18n";
+
+import {
+  generateReceiptId,
+  downloadReceipt,
+} from "../../lib/receiptGenerator";
 
 const islamicQuotes = [
-  { text: "Charity does not decrease wealth.", source: "Sahih Muslim" },
+  {
+    text: "Charity does not decrease wealth.",
+    source: "Sahih Muslim",
+  },
   {
     text: "Give charity without delay, for it stands in the way of calamity.",
     source: "Al-Tirmidhi",
@@ -190,11 +444,37 @@ export default function DonationSuccessModal({
   onClose,
   onDonateAgain,
 }) {
-  const quote = islamicQuotes[Math.floor(Math.random() * islamicQuotes.length)];
-  const receiptId = generateReceiptId(donation);
-  const now = format(new Date(), "PPP");
+  const { language } = useLanguage();
+  const { t } = useTranslation(language);
 
-  const handleDownload = () => downloadReceipt(donation, "IN");
+  const quote =
+    islamicQuotes[
+      Math.floor(Math.random() * islamicQuotes.length)
+    ];
+
+  // API integrated receipt handling
+  const receiptId =
+    donation?.receipt_number ||
+    donation?.receipt_id ||
+    generateReceiptId(donation);
+
+  const now = format(
+    donation?.created_at
+      ? new Date(donation.created_at)
+      : new Date(),
+    "PPP"
+  );
+
+  // API integrated download
+  const handleDownload = () =>
+    downloadReceipt(donation, "IN", language);
+
+  // API integrated status
+  const donationStatus =
+    donation?.status
+      ? donation.status.charAt(0).toUpperCase() +
+        donation.status.slice(1)
+      : t("fundraising:completed", "Completed");
 
   return (
     <AnimatePresence>
@@ -203,7 +483,10 @@ export default function DonationSuccessModal({
           initial={{ opacity: 0, scale: 0.85, y: 30 }}
           animate={{ opacity: 1, scale: 1, y: 0 }}
           exit={{ opacity: 0, scale: 0.85 }}
-          transition={{ type: "spring", damping: 20 }}
+          transition={{
+            type: "spring",
+            damping: 20,
+          }}
           className="bg-card border border-border rounded-3xl w-full max-w-md shadow-2xl relative overflow-hidden"
         >
           {/* Top gradient accent */}
@@ -217,6 +500,7 @@ export default function DonationSuccessModal({
           </div>
 
           <div className="relative p-6 sm:p-8">
+            {/* CLOSE */}
             <button
               onClick={onClose}
               className="absolute top-4 right-4 p-2 rounded-full hover:bg-secondary transition-colors z-10"
@@ -224,20 +508,34 @@ export default function DonationSuccessModal({
               <X className="w-4 h-4 text-muted-foreground" />
             </button>
 
-            {/* Success animation */}
+            {/* SUCCESS ANIMATION */}
             <div className="flex flex-col items-center text-center mb-6">
               <motion.div
-                initial={{ scale: 0, rotate: -180 }}
-                animate={{ scale: 1, rotate: 0 }}
-                transition={{ type: "spring", delay: 0.15, damping: 12 }}
+                initial={{
+                  scale: 0,
+                  rotate: -180,
+                }}
+                animate={{
+                  scale: 1,
+                  rotate: 0,
+                }}
+                transition={{
+                  type: "spring",
+                  delay: 0.15,
+                  damping: 12,
+                }}
                 className="relative mb-4"
               >
                 <div
-                  className="w-22 h-22 rounded-full bg-foreground flex items-center justify-center shadow-2xl"
-                  style={{ width: 88, height: 88 }}
+                  className="rounded-full bg-foreground flex items-center justify-center shadow-2xl"
+                  style={{
+                    width: 88,
+                    height: 88,
+                  }}
                 >
                   <Check className="w-11 h-11 text-background" />
                 </div>
+
                 <motion.div
                   initial={{ scale: 0 }}
                   animate={{ scale: 1 }}
@@ -249,86 +547,159 @@ export default function DonationSuccessModal({
               </motion.div>
 
               <motion.div
-                initial={{ opacity: 0, y: 10 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.3 }}
+                initial={{
+                  opacity: 0,
+                  y: 10,
+                }}
+                animate={{
+                  opacity: 1,
+                  y: 0,
+                }}
+                transition={{
+                  delay: 0.3,
+                }}
               >
                 <h2 className="font-amiri text-3xl text-accent mb-1">
                   جزاك الله خيرًا
                 </h2>
+
                 <p className="font-playfair text-xl font-bold text-foreground">
-                  JazakAllah Khair
+                  {t(
+                    "donate:jazakAllah",
+                    "JazakAllah Khair"
+                  )}
                 </p>
+
                 <p className="text-muted-foreground text-sm mt-1">
-                  Your donation has been received
+                  {t(
+                    "donate:donationReceived",
+                    "Your donation has been received"
+                  )}
                 </p>
               </motion.div>
             </div>
 
-            {/* Receipt card */}
+            {/* RECEIPT CARD */}
             <motion.div
-              initial={{ opacity: 0, y: 15 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.4 }}
+              initial={{
+                opacity: 0,
+                y: 15,
+              }}
+              animate={{
+                opacity: 1,
+                y: 0,
+              }}
+              transition={{
+                delay: 0.4,
+              }}
               className="bg-secondary/50 rounded-2xl p-5 mb-5 border border-border relative overflow-hidden"
             >
-              {/* Mini decorative border */}
+              {/* Decorative Border */}
               <div className="absolute inset-0 rounded-2xl border border-accent/10 pointer-events-none" />
 
+              {/* TOP */}
               <div className="flex items-center justify-between mb-3">
                 <div className="text-2xl">
-                  {purposeEmoji[donation.purpose] || "🤲"}
+                  {purposeEmoji[donation?.purpose] ||
+                    "🤲"}
                 </div>
+
                 <span className="font-mono text-xs text-muted-foreground bg-background px-2 py-1 rounded-lg border border-border">
                   {receiptId}
                 </span>
               </div>
 
+              {/* DETAILS */}
               <div className="space-y-2 text-sm">
                 <div className="flex justify-between items-center">
-                  <span className="text-muted-foreground">Amount Donated</span>
+                  <span className="text-muted-foreground">
+                    {t(
+                      "donate:amountDonated",
+                      "Amount Donated"
+                    )}
+                  </span>
+
                   <span className="font-playfair font-bold text-xl text-foreground">
-                    {donation.currency}{" "}
-                    {Number(donation.amount).toLocaleString()}
+                    {donation?.currency || "USD"}{" "}
+                    {Number(
+                      donation?.amount || 0
+                    ).toLocaleString()}
                   </span>
                 </div>
+
                 <div className="flex justify-between">
-                  <span className="text-muted-foreground">Purpose</span>
+                  <span className="text-muted-foreground">
+                    {t(
+                      "myDonations:donationPurpose",
+                      "Purpose"
+                    )}
+                  </span>
+
                   <span className="font-medium capitalize text-foreground">
-                    {donation.purpose?.replace(/_/g, " ")}
+                    {t(
+                      `donate:${donation?.purpose}`,
+                      donation?.purpose?.replace(
+                        /_/g,
+                        " "
+                      )
+                    )}
                   </span>
                 </div>
+
                 <div className="flex justify-between">
-                  <span className="text-muted-foreground">Date</span>
-                  <span className="text-foreground">{now}</span>
+                  <span className="text-muted-foreground">
+                    {t(
+                      "myDonations:donationDate",
+                      "Date"
+                    )}
+                  </span>
+
+                  <span className="text-foreground">
+                    {now}
+                  </span>
                 </div>
+
                 <div className="flex justify-between">
-                  <span className="text-muted-foreground">Status</span>
+                  <span className="text-muted-foreground">
+                    {t(
+                      "myDonations:donationStatus",
+                      "Status"
+                    )}
+                  </span>
+
                   <span className="inline-flex items-center gap-1 bg-foreground text-background px-2.5 py-0.5 rounded-full text-xs font-medium">
-                    <span className="w-1.5 h-1.5 rounded-full bg-green-400" />{" "}
-                    Completed
+                    <span className="w-1.5 h-1.5 rounded-full bg-green-400" />
+
+                    {donationStatus}
                   </span>
                 </div>
               </div>
 
-              {/* QR verification note */}
+              {/* QR NOTE */}
               <div className="flex items-center gap-2 mt-4 pt-3 border-t border-border">
                 <QrCode className="w-4 h-4 text-accent shrink-0" />
+
                 <p className="text-xs text-muted-foreground">
-                  PDF receipt includes QR verification code for tax compliance
+                  {t(
+                    "donate:successReceiptNote",
+                    "PDF receipt includes QR verification code for tax compliance"
+                  )}
                 </p>
               </div>
             </motion.div>
 
-            {/* Quote */}
+            {/* QUOTE */}
             <div className="border-l-4 border-accent pl-4 mb-6 py-1">
-              <p className="text-sm italic text-foreground">"{quote.text}"</p>
+              <p className="text-sm italic text-foreground">
+                "{quote.text}"
+              </p>
+
               <p className="text-xs text-muted-foreground mt-1">
                 — {quote.source}
               </p>
             </div>
 
-            {/* Actions */}
+            {/* ACTIONS */}
             <div className="space-y-2">
               <div className="grid grid-cols-2 gap-2">
                 <Button
@@ -336,32 +707,53 @@ export default function DonationSuccessModal({
                   variant="outline"
                   className="flex items-center gap-2 rounded-xl h-11"
                 >
-                  <Download className="w-4 h-4" /> Tax Receipt
+                  <Download className="w-4 h-4" />
+
+                  {t(
+                    "nav:taxReceipts",
+                    "Tax Receipt"
+                  )}
                 </Button>
+
                 <Button
                   asChild
                   className="rounded-xl h-11 bg-foreground text-background hover:bg-foreground/90"
                 >
                   <Link to="/receipts">
-                    <FileText className="w-4 h-4 mr-1" /> All Receipts
+                    <FileText className="w-4 h-4 mr-1" />
+
+                    {t(
+                      "donate:allReceipts",
+                      "All Receipts"
+                    )}
                   </Link>
                 </Button>
               </div>
+
               <Button
                 asChild
                 variant="secondary"
                 className="w-full rounded-xl h-11"
               >
                 <Link to="/my-donations">
-                  <Heart className="w-4 h-4 mr-1" /> My Donations Dashboard
+                  <Heart className="w-4 h-4 mr-1" />
+
+                  {t(
+                    "nav:myDonations",
+                    "My Donations Dashboard"
+                  )}
                 </Link>
               </Button>
+
               <Button
                 onClick={onDonateAgain}
                 variant="ghost"
                 className="w-full text-sm text-muted-foreground hover:text-foreground"
               >
-                Donate Again
+                {t(
+                  "donate:donateAgain",
+                  "Donate Again"
+                )}
               </Button>
             </div>
           </div>

@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { motion } from "framer-motion";
 import {
   Plus,
@@ -12,70 +12,52 @@ import {
   CheckCircle2,
   Download,
 } from "lucide-react";
-import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
+import { Input } from "../../components/ui/input";
+import { Button } from "../../components/ui/button";
+import { Badge } from "../../components/ui/badge";
 import { format } from "date-fns";
-import CampaignFormModal from "@/components/admin/CampaignFormModal";
+import CampaignFormModal from "../../components/admin/CampaignFormModal";
+import { useLanguage } from "../../lib/LanguageContext";
+import { useTranslation } from "../../lib/i18n";
+import { useCampaignsQuery, useCampaignMutations } from "../../hooks/api";
 
 export default function CampaignsPro() {
-  const [campaigns, setCampaigns] = useState([]);
-  const [loading, setLoading] = useState(true);
+  const { language } = useLanguage();
+  const { t } = useTranslation(language);
+  const { data: campaigns = [], isLoading: loading, refetch } = useCampaignsQuery('-created_date', 100);
+  const { close } = useCampaignMutations();
   const [search, setSearch] = useState("");
   const [statusFilter, setStatusFilter] = useState("all");
   const [showModal, setShowModal] = useState(false);
   const [editing, setEditing] = useState(null);
-
-  // const load = () => {
-  //   setLoading(true);
-  //   base44.entities.FundraisingCampaign.list('-created_date', 200)
-  //     .then(setCampaigns).finally(() => setLoading(false));
-  // };
-
-  const load = () => {
-    setLoading(true);
-
-    const data = generateCampaigns(16);
-
-    setTimeout(() => {
-      setCampaigns(data);
-      setLoading(false);
-    }, 300);
-  };
-
-  useEffect(() => {
-    load();
-  }, []);
 
   const filtered = campaigns.filter((c) => {
     const matchSearch =
       !search ||
       c.title?.toLowerCase().includes(search.toLowerCase()) ||
       c.category?.toLowerCase().includes(search.toLowerCase());
-    const matchStatus = statusFilter === "all" || c.status === statusFilter;
+    const matchStatus = statusFilter === "all" || String(c.status).toLowerCase() === statusFilter;
     return matchSearch && matchStatus;
   });
 
   const handleDelete = async (id) => {
-    // if (!confirm("Delete this campaign?")) return;
-    const ok = window.confirm("Delete this campaign?");
+    const ok = window.confirm(t("admin:deleteCampaignConfirm", "Delete this campaign?"));
     if (!ok) return;
-    // await base44.entities.FundraisingCampaign.delete(id);
-    setCampaigns((prev) => prev.filter((c) => c.id !== id));
-    load();
+    await close.mutateAsync(id);
+    refetch();
   };
 
   const exportCSV = () => {
     const rows = [
       [
-        "Title",
-        "Category",
-        "Goal",
-        "Collected",
-        "Status",
-        "Donors",
-        "Start",
-        "End",
+        t("admin:title", "Title"),
+        t("admin:category", "Category"),
+        t("admin:goal", "Goal"),
+        t("admin:collected", "Collected"),
+        t("admin:status", "Status"),
+        t("admin:donorsTitle", "Donors"),
+        t("admin:fromDate", "Start"),
+        t("admin:toDate", "End"),
       ],
       ...filtered.map((c) => [
         c.title,
@@ -104,20 +86,41 @@ export default function CampaignsPro() {
     cancelled: "bg-destructive/10 text-destructive",
   };
 
+  const getStatusLabel = (s) => {
+    switch (s) {
+      case "active": return t("admin:statusActive", "Active");
+      case "paused": return t("admin:statusPaused", "Paused");
+      case "cancelled": return t("admin:statusCancelled", "Cancelled");
+      case "completed": return t("admin:statusCompleted", "Completed");
+      default: return s;
+    }
+  };
+
+  const getCategoryLabel = (cat) => {
+    switch (cat?.toLowerCase()) {
+      case "education": return t("admin:education", "Islamic Education");
+      case "masjid": return t("admin:masjid", "Masjid Project");
+      case "orphan": return t("admin:orphan", "Orphan Support");
+      case "food": return t("admin:food", "Food Distribution");
+      case "general": return t("admin:general", "General");
+      default: return cat;
+    }
+  };
+
   return (
     <div>
       <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mb-6">
         <div>
           <h1 className="font-playfair font-bold text-3xl text-foreground">
-            Campaigns
+            {t("admin:campaigns", "Campaigns")}
           </h1>
           <p className="text-muted-foreground text-sm mt-1">
-            Manage fundraising campaigns
+            {t("admin:manageCampaigns", "Manage fundraising campaigns")}
           </p>
         </div>
         <div className="flex gap-2">
           <Button variant="outline" size="sm" onClick={exportCSV}>
-            <Download size={14} className="mr-2" /> CSV
+            <Download size={14} className="mr-2" /> {t("admin:csv", "CSV")}
           </Button>
           <Button
             size="sm"
@@ -126,7 +129,7 @@ export default function CampaignsPro() {
               setShowModal(true);
             }}
           >
-            <Plus size={14} className="mr-2" /> New Campaign
+            <Plus size={14} className="mr-2" /> {t("admin:newCampaign", "New Campaign")}
           </Button>
         </div>
       </div>
@@ -134,17 +137,17 @@ export default function CampaignsPro() {
       {/* Summary Cards */}
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
         {[
-          { label: "Total Campaigns", value: campaigns.length },
+          { label: t("admin:totalCampaigns", "Total Campaigns"), value: campaigns.length },
           {
-            label: "Active",
+            label: t("admin:statusActive", "Active"),
             value: campaigns.filter((c) => c.status === "active").length,
           },
           {
-            label: "Total Goal",
+            label: t("admin:totalGoal", "Total Goal"),
             value: `$${campaigns.reduce((s, c) => s + (c.goal_amount || 0), 0).toLocaleString()}`,
           },
           {
-            label: "Total Raised",
+            label: t("admin:totalRaised", "Total Raised"),
             value: `$${campaigns.reduce((s, c) => s + (c.collected_amount || 0), 0).toLocaleString()}`,
           },
         ].map(({ label, value }) => (
@@ -168,7 +171,7 @@ export default function CampaignsPro() {
             className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground"
           />
           <Input
-            placeholder="Search campaigns..."
+            placeholder={t("admin:searchCampaigns", "Search campaigns...")}
             value={search}
             onChange={(e) => setSearch(e.target.value)}
             className="pl-9"
@@ -181,7 +184,7 @@ export default function CampaignsPro() {
               onClick={() => setStatusFilter(s)}
               className={`px-3 py-2 rounded-lg text-xs font-medium transition-colors ${statusFilter === s ? "bg-foreground text-background" : "bg-secondary text-muted-foreground hover:bg-muted"}`}
             >
-              {s.charAt(0).toUpperCase() + s.slice(1)}
+              {s === "all" ? t("admin:all", "All") : getStatusLabel(s)}
             </button>
           ))}
         </div>
@@ -214,12 +217,12 @@ export default function CampaignsPro() {
                       <span
                         className={`text-xs px-2 py-0.5 rounded-full font-medium ${statusColors[c.status] || statusColors.active}`}
                       >
-                        {c.status}
+                        {getStatusLabel(c.status)}
                       </span>
                       {c.priority === "urgent" && (
                         <span className="text-xs px-2 py-0.5 rounded-full bg-red-100 text-red-600 font-medium flex items-center gap-1">
                           <AlertCircle size={10} />
-                          Urgent
+                          {t("admin:urgent", "Urgent")}
                         </span>
                       )}
                     </div>
@@ -227,7 +230,7 @@ export default function CampaignsPro() {
                       {c.title}
                     </h3>
                     <p className="text-xs text-muted-foreground">
-                      {c.category} · {c.donors_count || 0} donors
+                      {getCategoryLabel(c.category)} · {c.donors_count || 0} {t("admin:donors", "donors")}
                     </p>
                   </div>
                   <div className="flex gap-1 ml-3">
@@ -254,7 +257,7 @@ export default function CampaignsPro() {
                       ${(c.collected_amount || 0).toLocaleString()}
                     </span>
                     <span className="text-muted-foreground">
-                      Goal: ${(c.goal_amount || 0).toLocaleString()}
+                      {t("admin:totalGoal", "Goal")}: ${(c.goal_amount || 0).toLocaleString()}
                     </span>
                   </div>
                   <div className="h-2 bg-secondary rounded-full overflow-hidden">
@@ -264,12 +267,12 @@ export default function CampaignsPro() {
                     />
                   </div>
                   <div className="text-xs text-muted-foreground mt-1">
-                    {pct.toFixed(1)}% funded
+                    {pct.toFixed(1)}% {t("admin:funded", "funded")}
                   </div>
                 </div>
                 {c.end_date && (
                   <div className="flex items-center gap-1 text-xs text-muted-foreground">
-                    <Calendar size={12} /> Ends:{" "}
+                    <Calendar size={12} /> {t("admin:ends", "Ends")}:{" "}
                     {format(new Date(c.end_date), "MMM d, yyyy")}
                   </div>
                 )}
@@ -279,7 +282,7 @@ export default function CampaignsPro() {
           {filtered.length === 0 && (
             <div className="col-span-2 text-center py-16 text-muted-foreground">
               <Heart size={40} className="mx-auto mb-3 opacity-20" />
-              <p>No campaigns found. Create your first campaign!</p>
+              <p>{t("admin:noCampaignsFound", "No campaigns found. Create your first campaign!")}</p>
             </div>
           )}
         </div>
@@ -295,7 +298,7 @@ export default function CampaignsPro() {
           onSaved={() => {
             setShowModal(false);
             setEditing(null);
-            load();
+            refetch();
           }}
         />
       )}

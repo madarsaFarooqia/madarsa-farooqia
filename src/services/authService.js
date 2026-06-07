@@ -1,29 +1,65 @@
 import { http, getStoredToken, setStoredToken } from './http';
+import { mapUserFromAuth } from '../lib/apiMappers';
 
-/**
- * Maps to your backend auth routes (adjust paths as needed).
- * Default: GET /api/auth/me, logout clears local token.
- */
+function mapAuthResponse(response) {
+  const token = response?.token;
+  if (token) setStoredToken(token);
+  const user = mapUserFromAuth({
+    email: response?.email,
+    role: response?.role,
+    preferredLanguage: response?.preferredLanguage,
+    firstName: response?.firstName,
+    lastName: response?.lastName,
+    id: response?.id,
+    fullName: response?.fullName,
+  });
+  return { token, user, ...response };
+}
+
 export const authService = {
   async me() {
     if (!getStoredToken()) {
       throw new Error('Not authenticated');
     }
-    const ms = Number(process.env.REACT_APP_AUTH_ME_TIMEOUT_MS) || 8000;
-    const controller = new AbortController();
-    const id = setTimeout(() => controller.abort(), ms);
-    try {
-      return await http.get('/api/auth/me', { signal: controller.signal });
-    } finally {
-      clearTimeout(id);
-    }
+    const data = await http.get('/auth/me');
+    return mapUserFromAuth(data);
+  },
+
+  async login(credentials) {
+    const response = await http.post('/auth/login', credentials);
+    return mapAuthResponse(response);
+  },
+
+  async register(userData) {
+    const payload = {
+      firstName: userData.firstName,
+      lastName: userData.lastName,
+      email: userData.email,
+      password: userData.password,
+      phoneNumber: userData.phoneNumber,
+      preferredLanguage: userData.preferredLanguage || 'en',
+    };
+    const response = await http.post('/auth/register', payload);
+    return mapAuthResponse(response);
+  },
+
+  async forgotPassword(email) {
+    return http.post('/auth/forgot-password', { email });
+  },
+
+  async resetPassword(data) {
+    return http.post('/auth/reset-password', {
+      token: data.token,
+      newPassword: data.newPassword,
+    });
+  },
+
+  async updateLanguagePreference(language) {
+    return http.put('/auth/language', { language });
   },
 
   logout(redirectTo) {
     setStoredToken(null);
-    if (typeof window !== 'undefined') {
-      window.localStorage.removeItem('token');
-    }
     if (typeof window !== 'undefined' && redirectTo) {
       window.location.assign(redirectTo);
     }
@@ -31,12 +67,7 @@ export const authService = {
 
   redirectToLogin(returnPath) {
     if (typeof window === 'undefined') return;
-    const loginBase = process.env.REACT_APP_LOGIN_URL || '/login';
-    const sep = loginBase.includes('?') ? '&' : '?';
-    const next =
-      returnPath ||
-      `${window.location.pathname}${window.location.search}`;
-    const url = `${loginBase}${sep}next=${encodeURIComponent(next)}`;
-    window.location.assign(url);
+    const next = returnPath || `${window.location.pathname}${window.location.search}`;
+    window.location.assign(`/login?next=${encodeURIComponent(next)}`);
   },
 };

@@ -1,20 +1,25 @@
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import { MapPin, Phone, Mail, Clock, Send, MessageSquare, Check, Navigation } from 'lucide-react';
-import { useLanguage } from '@/lib/LanguageContext';
-import { useTranslation } from '@/lib/i18n';
-import { contactMessageService } from '@/services';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import { Textarea } from '@/components/ui/textarea';
+import { useLanguage } from '../lib/LanguageContext';
+import { useTranslation } from '../lib/i18n';
+import { useContactMessageMutations } from '../hooks/api';
+import { Button } from '../components/ui/button';
+import { Input } from '../components/ui/input';
+import { Label } from '../components/ui/label';
+import { Textarea } from '../components/ui/textarea';
 import { toast } from 'sonner';
-import { FarooqiaLogo, AuthBackground } from "@/assets";
+import { FarooqiaLogo, AuthBackground } from "../assets";
 
 // Real coordinates: Husianabad, Mau, UP, India
-const MAPS_QUERY = 'Madarsa+Farooqia+Husianabad+Mau+Uttar+Pradesh+India';
-const MAPS_URL = `https://www.google.com/maps/search/?api=1&query=${MAPS_QUERY}`;
-const MAPS_EMBED = `https://maps.google.com/maps?q=${MAPS_QUERY}&z=15&output=embed`;
+const MAPS_URL = "https://maps.app.goo.gl/6RWzLvVsWRQzHfpk9";
+
+const MAPS_QUERY =
+  "Madarsa Farooqia Husianabad Mau Uttar Pradesh India";
+
+const MAPS_EMBED = `https://www.google.com/maps?q=${encodeURIComponent(
+  MAPS_QUERY
+)}&z=15&output=embed`;
 
 const contactInfo = [
   {
@@ -32,15 +37,13 @@ const contactInfo = [
 export default function Contact() {
   const { language, currentLang } = useLanguage();
   const { t } = useTranslation(language);
-  const [loading, setLoading] = useState(false);
+  const { create } = useContactMessageMutations();
   const [sent, setSent] = useState(false);
   const [form, setForm] = useState({ name: '', email: '', phone: '', subject: '', message: '' });
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setLoading(true);
-    await contactMessageService.create(form);
-    setLoading(false);
+    await create.mutateAsync(form);
     setSent(true);
     toast.success(t('contact:messageSent'));
     setForm({ name: '', email: '', phone: '', subject: '', message: '' });
@@ -104,7 +107,7 @@ export default function Contact() {
         {/* Location Pin overlay */}
         <div className="absolute top-4 left-4 bg-foreground text-background px-4 py-2 rounded-full text-xs font-semibold flex items-center gap-2 shadow-lg">
           <MapPin className="w-3.5 h-3.5 text-accent" />
-          Husianabad, Adri, Mau, UPIndia
+          Husianabad, Adari, Mau, UP India
         </div>
       </motion.a>
 
@@ -146,23 +149,6 @@ export default function Contact() {
                   </motion.div>
                 );
               })}
-
-              {/* Small map thumbnail */}
-              <a href={MAPS_URL} target="_blank" rel="noreferrer" className="block mt-4 rounded-2xl overflow-hidden border border-border shadow-sm group relative">
-                <iframe
-                  title="Mini Map"
-                  src={MAPS_EMBED}
-                  width="100%"
-                  height="180"
-                  style={{ border: 0, pointerEvents: 'none' }}
-                  loading="lazy"
-                />
-                <div className="absolute inset-0 bg-black/0 group-hover:bg-black/25 transition-all flex items-center justify-center">
-                  <span className="opacity-0 group-hover:opacity-100 transition-opacity bg-card text-foreground text-sm font-semibold px-4 py-2 rounded-full flex items-center gap-1.5 border border-border">
-                    <Navigation className="w-3.5 h-3.5" /> Open in Maps
-                  </span>
-                </div>
-              </a>
             </div>
 
             {/* Contact Form */}
@@ -210,10 +196,10 @@ export default function Contact() {
                   </div>
                   <Button
                     type="submit"
-                    disabled={loading}
+                    disabled={create.isPending}
                     className="w-full h-12 bg-foreground text-background font-bold rounded-xl hover:opacity-90 transition-all hover:scale-[1.01] active:scale-[0.99] shadow-lg"
                   >
-                    {loading ? (
+                    {create.isPending ? (
                       <span className="flex items-center gap-2">
                         <span className="w-4 h-4 border-2 border-background border-t-transparent rounded-full animate-spin" />
                         Sending...

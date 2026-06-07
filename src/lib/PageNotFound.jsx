@@ -1,38 +1,13 @@
 import { Link, useLocation } from 'react-router-dom';
-import { useQuery } from '@tanstack/react-query';
 import { Home, ArrowLeft } from 'lucide-react';
 import { motion } from 'framer-motion';
-import { FarooqiaLogo, AuthBackground } from "@/assets";
-
-// Mocking auth service for demonstration as seen in previous implementation
-const base44 = {
-  auth: {
-    me: async () => {
-      return {
-        id: 1,
-        full_name: "Admin User",
-        email: "admin@test.com",
-        role: "admin",
-      };
-    },
-  },
-};
+import { FarooqiaLogo, AuthBackground } from "../assets";
+import { useAuth } from './AuthContext';
 
 export default function PageNotFound() {
   const location = useLocation();
   const pageName = location.pathname.substring(1);
-
-  const { data: authData } = useQuery({
-    queryKey: ['user'],
-    queryFn: async () => {
-      try {
-        const user = await base44.auth.me();
-        return { user, isAuthenticated: true };
-      } catch {
-        return { user: null, isAuthenticated: false };
-      }
-    }
-  });
+  const { user, isAuthenticated } = useAuth();
 
   return (
     <div className="min-h-screen relative flex items-center justify-center p-6 bg-background overflow-hidden">
@@ -70,7 +45,7 @@ export default function PageNotFound() {
         </p>
         <p className="font-amiri text-primary text-2xl mb-8 font-bold italic">وَعَسَىٰ أَن تَكْرَهُوا شَيْئًا وَهُوَ خَيْرٌ لَّكُمْ</p>
 
-        {authData?.isAuthenticated && authData?.user?.role === 'admin' && (
+        {isAuthenticated && user?.role?.toLowerCase() === 'admin' && (
           <div className="mb-8 p-6 bg-primary/5 rounded-2xl border border-primary/20 text-left backdrop-blur-sm">
             <p className="font-bold text-primary mb-1 uppercase tracking-wider text-xs">Administration Note</p>
             <p className="text-muted-foreground italic text-sm">This page hasn't been implemented yet. Contact Administration for more details.</p>

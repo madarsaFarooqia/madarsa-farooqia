@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import {
   MessageSquare,
   CheckCircle2,
@@ -7,37 +7,28 @@ import {
   Reply,
   Trash2,
 } from "lucide-react";
-import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
+import { Input } from "../../components/ui/input";
+import { Button } from "../../components/ui/button";
 import { format } from "date-fns";
+import { useLanguage } from "../../lib/LanguageContext";
+import { useTranslation } from "../../lib/i18n";
+import { useContactMessagesQuery, useContactMessageMutations } from "../../hooks/api";
 
 export default function QAAdmin() {
-  const [messages, setMessages] = useState([]);
-  const [loading, setLoading] = useState(true);
+  const { language } = useLanguage();
+  const { t } = useTranslation(language);
+  const { data: apiMessages = [], isLoading: loading, refetch } = useContactMessagesQuery('-created_date', 200);
+  const { remove } = useContactMessageMutations();
+  const [localStatus, setLocalStatus] = useState({});
+  const messages = apiMessages.map((m) => ({
+    ...m,
+    status: localStatus[m.id] || m.status || 'new',
+  }));
   const [search, setSearch] = useState("");
   const [statusFilter, setStatusFilter] = useState("all");
   const [replyingTo, setReplyingTo] = useState(null);
   const [replyText, setReplyText] = useState("");
   const [saving, setSaving] = useState(false);
-
-  // const load = () => {
-  //   setLoading(true);
-  //   base44.entities.ContactMessage.list('-created_date', 200)
-  //     .then(setMessages).catch(() => setMessages([])).finally(() => setLoading(false));
-  // };
-
-  const load = () => {
-    setLoading(true);
-
-    setTimeout(() => {
-      setMessages(fakeMessages);
-      setLoading(false);
-    }, 400);
-  };
-
-  useEffect(() => {
-    load();
-  }, []);
 
   const filtered = messages.filter((m) => {
     const matchSearch =
@@ -50,11 +41,8 @@ export default function QAAdmin() {
   });
 
   const markStatus = async (id, status) => {
-    // await base44.entities.ContactMessage.update(id, { status });
-    setMessages((prev) =>
-      prev.map((m) => (m.id === id ? { ...m, status } : m)),
-    );
-    load();
+    setLocalStatus((prev) => ({ ...prev, [id]: status }));
+    refetch();
   };
 
   // const handleReply = async (msg) => {
@@ -72,27 +60,11 @@ export default function QAAdmin() {
   // };
   const handleReply = (msg) => {
     if (!replyText.trim()) return;
-
     setSaving(true);
-
-    setTimeout(() => {
-      setMessages((prev) =>
-        prev.map((m) =>
-          m.id === msg.id
-            ? {
-                ...m,
-                status: "replied",
-                admin_reply: replyText,
-                replied_at: new Date().toISOString(),
-              }
-            : m,
-        ),
-      );
-
-      setSaving(false);
-      setReplyingTo(null);
-      setReplyText("");
-    }, 400);
+    setLocalStatus((prev) => ({ ...prev, [msg.id]: 'replied' }));
+    setSaving(false);
+    setReplyingTo(null);
+    setReplyText("");
   };
 
   // const handleDelete = async (id) => {
@@ -100,10 +72,10 @@ export default function QAAdmin() {
   //   await base44.entities.ContactMessage.delete(id);
   //   load();
   // };
-  const handleDelete = (id) => {
-    if (!window.confirm("Delete this message?")) return;
-
-    setMessages((prev) => prev.filter((m) => m.id !== id));
+  const handleDelete = async (id) => {
+    if (!window.confirm(t("admin:deleteMessageConfirm", "Delete this message?"))) return;
+    await remove.mutateAsync(id);
+    refetch();
   };
 
   const statusColors = {
@@ -118,15 +90,15 @@ export default function QAAdmin() {
       <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mb-6">
         <div>
           <h1 className="font-playfair font-bold text-3xl text-foreground">
-            Messages & Q&A
+            {t("admin:messagesQAHeader", "Messages & Q&A")}
           </h1>
           <p className="text-muted-foreground text-sm mt-1">
-            Public enquiries and contact messages
+            {t("admin:publicEnquiries", "Public enquiries and contact messages")}
           </p>
         </div>
         <div className="flex gap-2 text-sm">
           <span className="px-3 py-1.5 bg-foreground text-background rounded-lg font-medium">
-            {messages.filter((m) => m.status === "new").length} New
+            {messages.filter((m) => m.status === "new").length} {t("admin:new", "New")}
           </span>
         </div>
       </div>
@@ -139,7 +111,7 @@ export default function QAAdmin() {
             className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground"
           />
           <Input
-            placeholder="Search messages..."
+            placeholder={t("admin:searchMessages", "Search messages...")}
             value={search}
             onChange={(e) => setSearch(e.target.value)}
             className="pl-8"
@@ -151,7 +123,7 @@ export default function QAAdmin() {
             onClick={() => setStatusFilter(s)}
             className={`px-3 py-2 rounded-lg text-xs font-medium transition-colors ${statusFilter === s ? "bg-foreground text-background" : "bg-secondary text-muted-foreground hover:bg-muted"}`}
           >
-            {s.charAt(0).toUpperCase() + s.slice(1)}
+            {t(`admin:${s}`, s.charAt(0).toUpperCase() + s.slice(1))}
           </button>
         ))}
       </div>
@@ -166,7 +138,7 @@ export default function QAAdmin() {
       ) : filtered.length === 0 ? (
         <div className="text-center py-16 text-muted-foreground bg-card border border-border rounded-xl">
           <MessageSquare size={40} className="mx-auto mb-3 opacity-20" />
-          <p>No messages found.</p>
+          <p>{t("admin:noMessagesFound", "No messages found.")}</p>
         </div>
       ) : (
         <div className="space-y-4">
@@ -181,7 +153,7 @@ export default function QAAdmin() {
                     <span
                       className={`text-xs px-2 py-0.5 rounded-full font-medium ${statusColors[m.status] || statusColors.new}`}
                     >
-                      {m.status}
+                      {t(`admin:${m.status}`, m.status)}
                     </span>
                     <span className="font-semibold text-foreground">
                       {m.name}
@@ -206,7 +178,7 @@ export default function QAAdmin() {
                     <button
                       onClick={() => markStatus(m.id, "read")}
                       className="p-1.5 hover:bg-secondary rounded text-muted-foreground hover:text-foreground"
-                      title="Mark as Read"
+                      title={t("admin:markAsRead", "Mark as Read")}
                     >
                       <CheckCircle2 size={14} />
                     </button>
@@ -217,14 +189,14 @@ export default function QAAdmin() {
                       setReplyText("");
                     }}
                     className="p-1.5 hover:bg-secondary rounded text-muted-foreground hover:text-foreground"
-                    title="Reply"
+                    title={t("admin:reply", "Reply")}
                   >
                     <Reply size={14} />
                   </button>
                   <button
                     onClick={() => markStatus(m.id, "archived")}
                     className="p-1.5 hover:bg-secondary rounded text-muted-foreground"
-                    title="Archive"
+                    title={t("admin:archive", "Archive")}
                   >
                     <Clock size={14} />
                   </button>
@@ -242,7 +214,7 @@ export default function QAAdmin() {
               {m.admin_reply && (
                 <div className="mt-3 p-3 bg-secondary/50 rounded-lg border-l-2 border-foreground">
                   <p className="text-xs font-semibold text-foreground mb-1">
-                    Admin Reply:
+                    {t("admin:adminReply", "Admin Reply:")}
                   </p>
                   <p className="text-sm text-foreground">{m.admin_reply}</p>
                   {m.replied_at && (
@@ -259,7 +231,7 @@ export default function QAAdmin() {
                     value={replyText}
                     onChange={(e) => setReplyText(e.target.value)}
                     className="w-full border border-input bg-background rounded-md px-3 py-2 text-sm resize-none h-24 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring"
-                    placeholder="Type your reply..."
+                    placeholder={t("admin:typeYourReply", "Type your reply...")}
                   />
                   <div className="flex gap-2">
                     <Button
@@ -267,14 +239,14 @@ export default function QAAdmin() {
                       onClick={() => handleReply(m)}
                       disabled={saving}
                     >
-                      {saving ? "Sending..." : "Send Reply"}
+                      {saving ? t("admin:sending", "Sending...") : t("admin:sendReply", "Send Reply")}
                     </Button>
                     <Button
                       size="sm"
                       variant="outline"
                       onClick={() => setReplyingTo(null)}
                     >
-                      Cancel
+                      {t("admin:cancel", "Cancel")}
                     </Button>
                   </div>
                 </div>

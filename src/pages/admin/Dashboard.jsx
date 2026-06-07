@@ -1,46 +1,42 @@
-import { useState, useEffect } from 'react';
 import {
-  teacherService,
-  studentService,
-  eventService,
-  campaignService,
-  donationService,
-  registrationService,
-} from '@/services';
+  useTeachersQuery,
+  useStudentsQuery,
+  useEventsQuery,
+  useCampaignsQuery,
+  useAdminDonationsQuery,
+  useRegistrationsQuery,
+} from '../../hooks/api';
 import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { Users, GraduationCap, Calendar, Heart, DollarSign, FileText, TrendingUp, ArrowUpRight } from 'lucide-react';
 import { format } from 'date-fns';
 
 export default function Dashboard() {
-  const [stats, setStats] = useState({ teachers: 0, students: 0, events: 0, campaigns: 0, donations: 0, raised: 0, registrations: 0 });
-  const [recentDonations, setRecentDonations] = useState([]);
-  const [recentRegs, setRecentRegs] = useState([]);
-  const [loading, setLoading] = useState(true);
+  const { data: teachers = [], isLoading: tLoading } = useTeachersQuery('-created_date', 500);
+  const { data: students = [], isLoading: sLoading } = useStudentsQuery('-created_date', 500);
+  const { data: events = [], isLoading: eLoading } = useEventsQuery('-created_date', 500);
+  const { data: campaigns = [], isLoading: cLoading } = useCampaignsQuery('-created_date', 500);
+  const { data: donations = [], isLoading: dLoading } = useAdminDonationsQuery('-created_date', 500);
+  const { data: registrations = [], isLoading: rLoading } = useRegistrationsQuery('-created_date', 10);
 
-  useEffect(() => {
-    Promise.all([
-      teacherService.list('-created_date', 500).catch(() => []),
-      studentService.list('-created_date', 500).catch(() => []),
-      eventService.list('-created_date', 500).catch(() => []),
-      campaignService.list('-created_date', 500).catch(() => []),
-      donationService.list('-created_date', 500).catch(() => []),
-      registrationService.list('-created_date', 10).catch(() => []),
-    ]).then(([t, s, e, c, d, r]) => {
-      const totalRaised = d.filter(x => x.status === 'completed').reduce((sum, x) => sum + (x.amount || 0), 0);
-      setStats({
-        teachers: t.length,
-        students: s.length,
-        events: e.length,
-        campaigns: c.length,
-        donations: d.length,
-        raised: totalRaised,
-        registrations: r.length,
-      });
-      setRecentDonations(d.slice(0, 5));
-      setRecentRegs(r.slice(0, 5));
-    }).finally(() => setLoading(false));
-  }, []);
+  const loading = tLoading || sLoading || eLoading || cLoading || dLoading || rLoading;
+
+  const totalRaised = donations
+    .filter((x) => String(x.status).toLowerCase() === 'completed')
+    .reduce((sum, x) => sum + (x.amount || 0), 0);
+
+  const stats = {
+    teachers: teachers.length,
+    students: students.length,
+    events: events.length,
+    campaigns: campaigns.length,
+    donations: donations.length,
+    raised: totalRaised,
+    registrations: registrations.length,
+  };
+
+  const recentDonations = donations.slice(0, 5);
+  const recentRegs = registrations.slice(0, 5);
 
   const statCards = [
     { label: 'Teachers', value: stats.teachers, icon: Users, color: 'bg-foreground text-background', href: '/admin/teachers' },

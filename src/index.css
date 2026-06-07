@@ -180,28 +180,47 @@
   }
 }
 
-.crescent-spin {
-  animation: crescentSpin 1.2s linear infinite;
-}
-
-/* Skeleton pulse */
-@keyframes skeletonPulse {
-
-  0%,
-  100% {
-    opacity: 1;
+  .crescent-spin {
+    animation: crescentSpin 1.2s linear infinite;
   }
 
-  50% {
-    opacity: 0.4;
+  /* Skeleton pulse */
+  @keyframes skeletonPulse {
+
+    0%,
+    100% {
+      opacity: 1;
+    }
+
+    50% {
+      opacity: 0.4;
+    }
   }
+
+  .skeleton {
+    animation: skeletonPulse 1.8s ease-in-out infinite;
+    @apply bg-muted rounded-lg;
+  }
+
+  /* Wavy progress indicator */
+  .wavy-progress {
+  /* Use accent color for visibility */
+  background: repeating-linear-gradient(
+    45deg,
+    hsl(var(--accent)) 0%,
+    hsl(var(--accent)) 20%,
+    transparent 20%,
+    transparent 40%
+  );
+  background-size: 200% 100%;
+  animation: wavy 1.5s linear infinite;
 }
 
-.skeleton {
-  animation: skeletonPulse 1.8s ease-in-out infinite;
-  @apply bg-muted rounded-lg;
+@keyframes wavy {
+  0% { background-position: 0% 0; }
+  100% { background-position: 200% 0; }
 }
 
-[dir="rtl"] .rtl-flip {
-  transform: scaleX(-1);
-}
+  [dir="rtl"] .rtl-flip {
+    transform: scaleX(-1);
+  }

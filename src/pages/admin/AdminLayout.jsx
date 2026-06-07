@@ -1,133 +1,6 @@
-// import { Outlet, Link, useLocation } from 'react-router-dom';
-// import { useState } from 'react';
-// import { useAuth } from '@/lib/AuthContext';
-// import {
-//   LayoutDashboard, Users, GraduationCap, Calendar, Heart, DollarSign,
-//   FileText, Menu, X, LogOut, ChevronDown
-// } from 'lucide-react';
-
-// const navItems = [
-//   { label: 'Dashboard', href: '/admin', icon: LayoutDashboard },
-//   { label: 'Teachers', href: '/admin/teachers', icon: Users },
-//   { label: 'Students', href: '/admin/students', icon: GraduationCap },
-//   { label: 'Events', href: '/admin/events', icon: Calendar },
-//   { label: 'Campaigns', href: '/admin/campaigns', icon: Heart },
-//   { label: 'Donations', href: '/admin/donations', icon: DollarSign },
-//   { label: 'Registrations', href: '/admin/registrations', icon: FileText },
-// ];
-
-// export default function AdminLayout() {
-//   const location = useLocation();
-//   const { user, logout } = useAuth();
-//   const [sidebarOpen, setSidebarOpen] = useState(false);
-
-//   const handleLogout = () => {
-//     logout(true);
-//   };
-
-//   return (
-//     <div className="min-h-screen bg-background flex">
-//       {/* Sidebar - Desktop */}
-//       <aside className="hidden lg:flex flex-col w-64 bg-card border-r border-border">
-//         <div className="p-6 border-b border-border">
-//           <Link to="/" className="flex items-center gap-3">
-//             <div className="w-10 h-10 rounded-full bg-foreground flex items-center justify-center border-2 border-accent/40">
-//               <span className="text-background font-amiri font-bold text-sm">مف</span>
-//             </div>
-//             <div>
-//               <p className="font-playfair font-bold text-foreground text-sm">Madrasa Farooqia</p>
-//               <p className="text-xs text-muted-foreground">Admin Panel</p>
-//             </div>
-//           </Link>
-//         </div>
-//         <nav className="flex-1 p-4 space-y-1">
-//           {navItems.map(({ label, href, icon: IconComp }) => {
-//             const isActive = location.pathname === href || (href !== '/admin' && location.pathname.startsWith(href));
-//             return (
-//               <Link
-//                 key={href}
-//                 to={href}
-//                 className={`flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-jakarta font-medium transition-all ${
-//                   isActive
-//                     ? 'bg-primary text-primary-foreground'
-//                     : 'text-muted-foreground hover:bg-muted hover:text-foreground'
-//                 }`}
-//               >
-//                 <IconComp size={18} />
-//                 {label}
-//               </Link>
-//             );
-//           })}
-//         </nav>
-//         <div className="p-4 border-t border-border">
-//           {user && (
-//             <div className="flex items-center gap-3 mb-3">
-//               <div className="w-9 h-9 rounded-full bg-secondary flex items-center justify-center text-foreground font-playfair font-bold text-sm">
-//                 {user.full_name?.[0]?.toUpperCase() || 'A'}
-//               </div>
-//               <div className="flex-1 min-w-0">
-//                 <p className="text-sm font-jakarta font-medium text-foreground truncate">{user.full_name || 'Admin'}</p>
-//                 <p className="text-xs font-jakarta text-muted-foreground truncate">{user.email}</p>
-//               </div>
-//             </div>
-//           )}
-//           <button
-//             onClick={handleLogout}
-//             className="flex items-center gap-2 w-full px-4 py-2 rounded-lg text-sm font-jakarta text-muted-foreground hover:text-destructive hover:bg-destructive/5 transition-all"
-//           >
-//             <LogOut size={16} /> Logout
-//           </button>
-//         </div>
-//       </aside>
-
-//       {/* Mobile Header */}
-//       <div className="lg:hidden fixed top-0 left-0 right-0 h-16 bg-card border-b border-border flex items-center px-4 z-40">
-//         <button onClick={() => setSidebarOpen(true)} className="p-2 text-foreground hover:bg-muted rounded-lg">
-//           <Menu size={20} />
-//         </button>
-//         <p className="ml-4 font-playfair font-bold text-foreground">Admin Panel</p>
-//       </div>
-
-//       {/* Mobile Sidebar */}
-//       {sidebarOpen && (
-//         <div className="lg:hidden fixed inset-0 z-50">
-//           <div className="absolute inset-0 bg-black/30" onClick={() => setSidebarOpen(false)} />
-//           <aside className="absolute left-0 top-0 bottom-0 w-72 bg-card flex flex-col">
-//             <div className="p-4 flex items-center justify-between border-b border-border">
-//               <p className="font-playfair font-bold text-foreground">Navigation</p>
-//               <button onClick={() => setSidebarOpen(false)} className="p-2"><X size={18} /></button>
-//             </div>
-//             <nav className="flex-1 p-4 space-y-1">
-//               {navItems.map(({ label, href, icon: MobileIcon }) => {
-//                 const isActive = location.pathname === href;
-//                 return (
-//                   <Link
-//                     key={href}
-//                     to={href}
-//                     onClick={() => setSidebarOpen(false)}
-//                     className={`flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-jakarta font-medium transition-all ${
-//                       isActive ? 'bg-primary text-primary-foreground' : 'text-muted-foreground hover:bg-muted'
-//                     }`}
-//                   >
-//                     <MobileIcon size={18} /> {label}
-//                   </Link>
-//                 );
-//               })}
-//             </nav>
-//           </aside>
-//         </div>
-//       )}
-
-//       {/* Main Content */}
-//       <main className="flex-1 lg:p-8 p-4 pt-20 lg:pt-8 overflow-auto">
-//         <Outlet />
-//       </main>
-//     </div>
-//   );
-// }
-
-import { Outlet, Link, useLocation, useNavigate } from "react-router-dom";
-import { useState, useEffect } from "react";
+import { Outlet, Link, useLocation, useNavigate, Navigate } from "react-router-dom";
+import { useState } from "react";
+import { useAuth } from "../../lib/AuthContext";
 import {
   LayoutDashboard,
   Users,
@@ -147,68 +20,82 @@ import {
   ChevronRight,
   ExternalLink,
 } from "lucide-react";
+import { useLanguage } from "../../lib/LanguageContext";
+import { useTranslation } from "../../lib/i18n";
 
-const fakeUser = {
-  full_name: "Admin User",
-  email: "admin@madarsa.com",
-};
-
-const navGroups = [
-  {
-    label: null,
-    items: [{ label: "Dashboard", href: "/admin", icon: LayoutDashboard }],
-  },
-  {
-    label: "Academic",
-    items: [
-      { label: "Teachers", href: "/admin/teachers", icon: Users },
-      { label: "Students", href: "/admin/students", icon: GraduationCap },
-      { label: "Registrations", href: "/admin/registrations", icon: FileText },
-      { label: "Events", href: "/admin/events", icon: Calendar },
-    ],
-  },
-  {
-    label: "Donations",
-    items: [
-      { label: "Campaigns", href: "/admin/campaigns-pro", icon: Heart },
-      { label: "Donations", href: "/admin/donations-pro", icon: DollarSign },
-      { label: "Reports", href: "/admin/reports", icon: BarChart2 },
-    ],
-  },
-  {
-    label: "Content",
-    items: [
-      { label: "Blog & News", href: "/admin/blog", icon: PenSquare },
-      { label: "Messages / Q&A", href: "/admin/messages", icon: MessageSquare },
-      {
-        label: "Infrastructure",
-        href: "/admin/infrastructure",
-        icon: Building2,
-      },
-    ],
-  },
-];
+// Navigation groups will be dynamically generated inside the component to support live translation.
 
 export default function AdminLayout() {
   const location = useLocation();
-  const navigate = useNavigate();
-  const [user, setUser] = useState(null);
+  const { user, logout } = useAuth();
   const [sidebarOpen, setSidebarOpen] = useState(false);
+  const { language, currentLang } = useLanguage();
+  const { t } = useTranslation(language);
 
-  // useEffect(() => {
-  //   base44.auth
-  //     .me()
-  //     .then(setUser)
-  //     .catch(() => navigate("/"));
-  // }, []);
-  useEffect(() => {
-    setUser(fakeUser);
-  }, []);
+  // Auth & Role protection
+  if (!user) {
+    return <Navigate to="/login" state={{ from: location }} replace />;
+  }
 
-  // const handleLogout = () => base44.auth.logout("/");
+  const roleLower = user.role?.toLowerCase();
+  if (roleLower !== "admin" && roleLower !== "teacher") {
+    return <Navigate to="/" replace />;
+  }
+
+  if (roleLower === "teacher" && location.pathname !== "/admin/students") {
+    return <Navigate to="/admin/students" replace />;
+  }
+
+  const isTeacher = roleLower === "teacher";
+
+  const navGroups = [
+    {
+      label: null,
+      items: [{ label: t("admin:dashboard", "Dashboard"), href: "/admin", icon: LayoutDashboard }],
+    },
+    {
+      label: t("admin:academic", "Academic"),
+      items: [
+        { label: t("admin:teachers", "Teachers"), href: "/admin/teachers", icon: Users },
+        { label: t("admin:students", "Students"), href: "/admin/students", icon: GraduationCap },
+        { label: t("admin:registrations", "Registrations"), href: "/admin/registrations", icon: FileText },
+        { label: t("admin:events", "Events"), href: "/admin/events", icon: Calendar },
+      ],
+    },
+    {
+      label: t("admin:donations", "Donations"),
+      items: [
+        { label: t("admin:campaigns", "Campaigns"), href: "/admin/campaigns-pro", icon: Heart },
+        { label: t("admin:donationsTitle", "Donations"), href: "/admin/donations-pro", icon: DollarSign },
+        { label: t("admin:reports", "Reports"), href: "/admin/reports", icon: BarChart2 },
+      ],
+    },
+    {
+      label: t("admin:content", "Content"),
+      items: [
+        { label: t("admin:blogNews", "Blog & News"), href: "/admin/blog", icon: PenSquare },
+        { label: t("admin:messagesQA", "Messages / Q&A"), href: "/admin/messages", icon: MessageSquare },
+        {
+          label: t("admin:infrastructure", "Infrastructure"),
+          href: "/admin/infrastructure",
+          icon: Building2,
+        },
+      ],
+    },
+  ];
+
+  const filteredNavGroups = navGroups.map(group => {
+    const items = group.items.filter(item => {
+      if (isTeacher) {
+        return item.href === "/admin/students";
+      }
+      return true;
+    });
+    return { ...group, items };
+  }).filter(group => group.items.length > 0);
+
   const handleLogout = () => {
-    setUser(null);
-    navigate("/login");
+    logout("/login");
   };
 
   const isActive = (href) =>
@@ -229,13 +116,13 @@ export default function AdminLayout() {
               Madrasa Farooqia
             </p>
             <p className="text-xs text-sidebar-foreground/50 flex items-center gap-1">
-              Admin Panel <ExternalLink size={10} />
+              {isTeacher ? t("nav:studentPanel", "Student Panel") : t("admin:panelTitle", "Admin Panel")} <ExternalLink size={10} />
             </p>
           </div>
         </Link>
       </div>
       <nav className="flex-1 p-3 space-y-4 overflow-y-auto">
-        {navGroups.map((group, gi) => (
+        {filteredNavGroups.map((group, gi) => (
           <div key={gi}>
             {group.label && (
               <p className="text-xs font-semibold text-sidebar-foreground/40 uppercase tracking-widest px-3 mb-2">
@@ -263,21 +150,18 @@ export default function AdminLayout() {
       </nav>
       <div className="p-4 border-t border-sidebar-border">
         {user && (
-          <div className=" flex w-full w-full justify-between">
-
-            {/* <div className="flex items-center gap-3 mb-3 px-2 bg-black/30"> */}
-            <div className="w-8 h-8 rounded-full bg-gray-200  bg-sidebar-accent flex items-center justify-center text-sidebar-foreground font-bold text-sm shrink-0">
-              {user.full_name?.[0]?.toUpperCase() || "A"}
+          <div className=" flex w-full justify-between items-center">
+            <div className="w-8 h-8 rounded-full bg-sidebar-accent flex items-center justify-center text-sidebar-foreground font-bold text-sm shrink-0">
+              {user.firstName?.[0]?.toUpperCase() || "A"}
             </div>
             <div className="flex-1 pl-2 min-w-0">
               <p className="text-sm font-medium text-sidebar-foreground truncate">
-                {user.full_name || "Admin"}
+                {`${user.firstName} ${user.lastName}` || "Admin"}
               </p>
               <p className="text-xs text-sidebar-foreground/50 truncate">
                 {user.email}
               </p>
             </div>
-            {/* </div> */}
             <button
               onClick={handleLogout}
               className="flex items-center gap-2 px-3 py-2 rounded-sm text-sm text-sidebar-foreground/60 hover:text-red-400 hover:bg-red-500/10 transition-all"
@@ -291,14 +175,16 @@ export default function AdminLayout() {
   );
 
   return (
-    <div className="min-h-screen bg-background flex">
+    <div className="min-h-screen bg-background flex" dir={currentLang.dir}>
       {/* Desktop Sidebar */}
-      <aside className="hidden lg:flex flex-col w-64 bg-sidebar fixed top-0 left-0 bottom-0 z-30 border-r border-sidebar-border">
+      <aside className={`hidden lg:flex flex-col w-64 bg-sidebar fixed top-0 bottom-0 z-30 ${
+        currentLang.dir === 'rtl' ? 'right-0 border-l border-sidebar-border' : 'left-0 border-r border-sidebar-border'
+      }`}>
         <SidebarContent />
       </aside>
 
       {/* Mobile Header */}
-      <div className="lg:hidden fixed top-0 left-0 right-0 h-14 bg-card border-b border-border flex items-center px-4 z-40 gap-3">
+      <div className={`lg:hidden fixed top-0 left-0 right-0 h-14 bg-card border-b border-border flex items-center px-4 z-40 gap-3`}>
         <button
           onClick={() => setSidebarOpen(true)}
           className="p-2 text-foreground hover:bg-muted rounded-lg"
@@ -306,7 +192,7 @@ export default function AdminLayout() {
           <Menu size={20} />
         </button>
         <span className="font-playfair font-bold text-foreground">
-          Madrasa Admin
+          {isTeacher ? t("nav:studentPanel", "Student Panel") : t("admin:mobileTitle", "Madrasa Admin")}
         </span>
       </div>
 
@@ -317,10 +203,12 @@ export default function AdminLayout() {
             className="absolute inset-0 bg-black/50"
             onClick={() => setSidebarOpen(false)}
           />
-          <aside className="absolute left-0 top-0 bottom-0 w-72 bg-sidebar flex flex-col">
+          <aside className={`absolute top-0 bottom-0 w-72 bg-sidebar flex flex-col ${
+            currentLang.dir === 'rtl' ? 'right-0' : 'left-0'
+          }`}>
             <div className="p-4 flex items-center justify-between border-b border-sidebar-border">
               <span className="font-playfair font-bold text-sidebar-foreground">
-                Navigation
+                {t("admin:navigation", "Navigation")}
               </span>
               <button
                 onClick={() => setSidebarOpen(false)}
@@ -335,7 +223,9 @@ export default function AdminLayout() {
       )}
 
       {/* Main Content */}
-      <main className="flex-1 lg:ml-64 p-4 sm:p-6 lg:p-8 pt-20 lg:pt-8 min-h-screen overflow-auto">
+      <main className={`flex-1 p-4 sm:p-6 lg:p-8 pt-20 lg:pt-8 min-h-screen overflow-auto ${
+        currentLang.dir === 'rtl' ? 'lg:mr-64 lg:ml-0' : 'lg:ml-64 lg:mr-0'
+      }`}>
         <Outlet />
       </main>
     </div>

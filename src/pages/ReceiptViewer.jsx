@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { motion } from "framer-motion";
 import {
   Download,
@@ -9,13 +9,18 @@ import {
   QrCode,
 } from "lucide-react";
 import { Link, useNavigate } from "react-router-dom";
-import { Button } from "@/components/ui/button";
+import { Button } from "../components/ui/button";
 import {
   generateReceiptId,
   downloadReceipt,
   TAX_RULES,
-} from "@/lib/receiptGenerator";
+} from "../lib/receiptGenerator";
 import { format } from "date-fns";
+import { useLanguage } from "../lib/LanguageContext";
+import { useTranslation } from "../lib/i18n";
+import { useAuth } from "../lib/AuthContext";
+import { useMyDonationsQuery } from "../hooks/api";
+import { getStoredToken } from "../services/http";
 
 const purposeIcons = {
   sadqa: "💝",
@@ -33,19 +38,9 @@ const purposeIcons = {
   scholarship: "🎓",
 };
 
-const COUNTRIES = [
-  { code: "IN", flag: "🇮🇳", name: "India (Section 80G)" },
-  { code: "US", flag: "🇺🇸", name: "USA (501c3)" },
-  { code: "GB", flag: "🇬🇧", name: "UK (Gift Aid)" },
-  { code: "AE", flag: "🇦🇪", name: "UAE" },
-  { code: "SA", flag: "🇸🇦", name: "Saudi Arabia" },
-  { code: "default", flag: "🌍", name: "International" },
-];
-
-function ReceiptCard({ donation, country, onDownload }) {
+function ReceiptCard({ donation, country, onDownload, t }) {
   const receiptId = generateReceiptId(donation);
   const taxInfo = TAX_RULES[country] || TAX_RULES.default;
-  const pct = Math.min(100, Math.random() * 30 + 70); // Visual only
 
   return (
     <motion.div
@@ -68,11 +63,11 @@ function ReceiptCard({ donation, country, onDownload }) {
                 {donation.status}
               </span>
               <span className="text-xs px-2 py-0.5 bg-accent/10 text-accent border border-accent/20 rounded-full font-medium">
-                Tax Deductible
+                {t("receipt:tax_deductible", "Tax Deductible")}
               </span>
             </div>
             <h3 className="font-playfair font-bold text-xl text-foreground capitalize">
-              {(donation.purpose || "general").replace(/_/g, " ")} Donation
+              {(donation.purpose || "general").replace(/_/g, " ")} {t("receipt:donation_suffix", "Donation")}
             </h3>
             <p className="text-xs font-mono text-muted-foreground mt-1">
               {receiptId}
@@ -100,7 +95,7 @@ function ReceiptCard({ donation, country, onDownload }) {
           </div>
           <div className="relative flex justify-center">
             <span className="bg-white px-3 text-muted-foreground text-xs font-medium">
-              RECEIPT DETAILS
+              {t("receipt:receipt_details", "RECEIPT DETAILS")}
             </span>
           </div>
         </div>
@@ -109,16 +104,16 @@ function ReceiptCard({ donation, country, onDownload }) {
         <div className="grid grid-cols-2 gap-3 mb-5">
           {[
             {
-              label: "Donor",
+              label: t("receipt:donor", "Donor"),
               value: donation.is_anonymous
-                ? "Anonymous"
+                ? t("receipt:anonymous", "Anonymous")
                 : donation.donor_name || "—",
             },
             {
-              label: "Payment",
+              label: t("receipt:payment", "Payment"),
               value: (donation.payment_method || "Card").toUpperCase(),
             },
-            { label: "Country", value: taxInfo.name },
+            { label: t("receipt:country", "Country"), value: taxInfo.name },
             { label: taxInfo.taxId, value: taxInfo.reg },
           ].map(({ label, value }) => (
             <div key={label} className="bg-secondary/40 rounded-xl p-3">
@@ -137,10 +132,10 @@ function ReceiptCard({ donation, country, onDownload }) {
           <QrCode className="w-8 h-8 text-accent shrink-0" />
           <div>
             <div className="text-xs font-bold text-foreground">
-              QR Verification Included
+              {t("receipt:qr_ver_title", "QR Verification Included")}
             </div>
             <div className="text-xs text-muted-foreground">
-              Scan in PDF to verify authenticity at madrasafarooqia.org/verify
+              {t("receipt:qr_ver_desc", "Scan in PDF to verify authenticity at madrasafarooqia.org/verify")}
             </div>
           </div>
           <div className="ml-auto">
@@ -156,7 +151,7 @@ function ReceiptCard({ donation, country, onDownload }) {
           className="w-full h-12 bg-foreground text-background hover:bg-foreground/90 rounded-xl font-semibold text-sm gap-2"
         >
           <Download className="w-4 h-4" />
-          Download Tax Receipt PDF
+          {t("receipt:download_pdf", "Download Tax Receipt PDF")}
         </Button>
 
         {/* Legal note */}
@@ -169,60 +164,24 @@ function ReceiptCard({ donation, country, onDownload }) {
 }
 
 export default function ReceiptViewer() {
-  const [donations, setDonations] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [user, setUser] = useState(null);
+  const { language } = useLanguage();
+  const { t } = useTranslation(language);
+  const { user, isLoadingAuth } = useAuth();
+  const { data: donations = [], isLoading: donationsLoading } = useMyDonationsQuery({
+    enabled: !!getStoredToken(),
+  });
+  const loading = isLoadingAuth || donationsLoading;
   const [country, setCountry] = useState("IN");
   const navigate = useNavigate();
 
-  // useEffect(() => {
-  //   base44.auth.me()
-  //     .then(u => {
-  //       setUser(u);
-  //       return base44.entities.Donation.filter({ donor_email: u.email, status: 'completed' }, '-created_date');
-  //     })
-  //     .then(setDonations)
-  //     .catch(() => {})
-  //     .finally(() => setLoading(false));
-  // }, []);
-
-  useEffect(() => {
-    const fakeUser = {
-      id: 1,
-      full_name: "Demo User",
-      email: "demo@madarsa.com",
-      role: "admin",
-    };
-
-    const fakeDonations = [
-      {
-        id: 1,
-        purpose: "zakat",
-        amount: 500,
-        currency: "$",
-        status: "completed",
-        created_date: new Date().toISOString(),
-        donor_name: "Demo User",
-        payment_method: "card",
-        is_anonymous: false,
-      },
-      {
-        id: 2,
-        purpose: "sadqa",
-        amount: 250,
-        currency: "$",
-        status: "completed",
-        created_date: new Date().toISOString(),
-        donor_name: "Demo User",
-        payment_method: "upi",
-        is_anonymous: false,
-      },
-    ];
-
-    setUser(fakeUser);
-    setDonations(fakeDonations);
-    setLoading(false);
-  }, []);
+  const COUNTRIES = [
+    { code: "IN", flag: "🇮🇳", name: t("receipt:country_in", "India (Section 80G)") },
+    { code: "US", flag: "🇺🇸", name: t("receipt:country_us", "USA (501c3)") },
+    { code: "GB", flag: "🇬🇧", name: t("receipt:country_gb", "UK (Gift Aid)") },
+    { code: "AE", flag: "🇦🇪", name: t("receipt:country_ae", "UAE") },
+    { code: "SA", flag: "🇸🇦", name: t("receipt:country_sa", "Saudi Arabia") },
+    { code: "default", flag: "🌍", name: t("receipt:country_int", "International") },
+  ];
 
   const handleDownload = (donation) => downloadReceipt(donation, country);
 
@@ -232,17 +191,16 @@ export default function ReceiptViewer() {
         <div className="text-center p-8 bg-card rounded-3xl border border-border shadow-xl max-w-sm">
           <FileText className="w-16 h-16 text-muted-foreground/20 mx-auto mb-4" />
           <h2 className="font-playfair text-2xl font-bold text-foreground mb-2">
-            Login Required
+            {t("receipt:login_required", "Login Required")}
           </h2>
           <p className="text-muted-foreground mb-6 text-sm">
-            Please login to view and download your tax receipts.
+            {t("receipt:login_req_desc", "Please login to view and download your tax receipts.")}
           </p>
           <Button
-            // onClick={() => base44.auth.redirectToLogin("/receipts")}
             onClick={() => navigate("/login?redirect=/receipts")}
             className="w-full rounded-xl"
           >
-            Login to Continue
+            {t("receipt:login_btn", "Login to Continue")}
           </Button>
         </div>
       </div>
@@ -265,21 +223,19 @@ export default function ReceiptViewer() {
             className="max-w-3xl"
           >
             <div className="inline-flex items-center gap-2 text-accent text-sm font-medium mb-5 px-4 py-2 bg-white/10 backdrop-blur-sm rounded-full border border-white/20">
-              <FileText className="w-4 h-4" /> Tax-Compliant Donation Receipts
+              <FileText className="w-4 h-4" /> {t("receipt:hero_badge", "Tax-Compliant Donation Receipts")}
             </div>
             <h1 className="font-playfair text-4xl sm:text-5xl font-bold text-white mb-4 leading-tight">
-              Your Official Receipts
+              {t("receipt:hero_title", "Your Official Receipts")}
             </h1>
             <p className="text-white/70 text-lg mb-8 max-w-xl">
-              Download legally compliant, country-specific tax receipts with QR
-              verification for each of your donations.
+              {t("receipt:hero_desc", "Download legally compliant, country-specific tax receipts with QR verification for each of your donations.")}
             </p>
 
             {/* Country Selector */}
             <div className="bg-white/10 backdrop-blur-sm border border-white/20 rounded-2xl p-4">
               <div className="flex items-center gap-2 text-white/60 text-sm mb-3">
-                <Globe className="w-4 h-4" /> Select your country for the
-                correct tax format:
+                <Globe className="w-4 h-4" /> {t("receipt:select_country", "Select your country for the correct tax format:")}
               </div>
               <div className="flex flex-wrap gap-2">
                 {COUNTRIES.map((c) => (
@@ -307,7 +263,7 @@ export default function ReceiptViewer() {
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3 flex items-center gap-3 text-sm">
             <Check className="w-4 h-4 text-accent shrink-0" />
             <span className="text-foreground font-medium">
-              {TAX_RULES[country].name} Format:
+              {TAX_RULES[country].name} {t("receipt:format", "Format:")}
             </span>
             <span className="text-muted-foreground">
               {TAX_RULES[country].disclaimer}
@@ -329,13 +285,13 @@ export default function ReceiptViewer() {
             <div className="text-center py-24 bg-card rounded-3xl border border-border">
               <FileText className="w-16 h-16 text-muted-foreground/20 mx-auto mb-4" />
               <h3 className="font-playfair text-2xl font-bold text-foreground mb-2">
-                No Completed Donations
+                {t("receipt:no_donations", "No Completed Donations")}
               </h3>
               <p className="text-muted-foreground mb-6">
-                Make your first donation to generate tax receipts.
+                {t("receipt:no_donations_desc", "Make your first donation to generate tax receipts.")}
               </p>
               <Link to="/donate">
-                <Button className="rounded-xl px-8">Make a Donation</Button>
+                <Button className="rounded-xl px-8">{t("receipt:make_donation", "Make a Donation")}</Button>
               </Link>
             </div>
           ) : (
@@ -343,11 +299,13 @@ export default function ReceiptViewer() {
               <div className="flex items-center justify-between mb-8">
                 <div>
                   <h2 className="font-playfair text-2xl font-bold text-foreground">
-                    {donations.length} Tax Receipt
-                    {donations.length !== 1 ? "s" : ""}
+                    {donations.length}{" "}
+                    {donations.length === 1
+                      ? t("receipt:tax_receipt", "Tax Receipt")
+                      : t("receipt:tax_receipts", "Tax Receipts")}
                   </h2>
                   <p className="text-muted-foreground text-sm">
-                    All receipts include QR verification code · Format:{" "}
+                    {t("receipt:receipts_subtitle", "All receipts include QR verification code · Format: ")}{" "}
                     {TAX_RULES[country]?.name}
                   </p>
                 </div>
@@ -361,7 +319,7 @@ export default function ReceiptViewer() {
                   }
                   className="gap-2"
                 >
-                  <Download className="w-4 h-4" /> Download All
+                  <Download className="w-4 h-4" /> {t("receipt:download_all", "Download All")}
                 </Button>
               </div>
               <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -376,6 +334,7 @@ export default function ReceiptViewer() {
                       donation={d}
                       country={country}
                       onDownload={handleDownload}
+                      t={t}
                     />
                   </motion.div>
                 ))}

@@ -1,13 +1,17 @@
 import { useState, useEffect } from "react";
 import { Building2, Plus, Edit2, Trash2, Search, Download } from "lucide-react";
-import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
-import { Label } from "@/components/ui/label";
+import { Input } from "../../components/ui/input";
+import { Button } from "../../components/ui/button";
+import { Label } from "../../components/ui/label";
 import { format } from "date-fns";
+import { useLanguage } from "../../lib/LanguageContext";
+import { useTranslation } from "../../lib/i18n";
 
 const STATUS_OPTS = ["planning", "in_progress", "completed", "on_hold"];
 
 function InfraModal({ project, onClose, onSaved }) {
+  const { language } = useLanguage();
+  const { t } = useTranslation(language);
   const [form, setForm] = useState({
     name: project?.name || "",
     description: project?.description || "",
@@ -24,24 +28,8 @@ function InfraModal({ project, onClose, onSaved }) {
   const [saving, setSaving] = useState(false);
   const set = (k, v) => setForm((f) => ({ ...f, [k]: v }));
 
-  // const handleSave = async () => {
-  //   if (!form.name) return alert("Project name required.");
-  //   setSaving(true);
-  //   const data = {
-  //     ...form,
-  //     budget: Number(form.budget),
-  //     spent: Number(form.spent),
-  //     progress: Number(form.progress),
-  //   };
-  //   if (project?.id)
-  //     await base44.entities.InfrastructureProject.update(project.id, data);
-  //   else await base44.entities.InfrastructureProject.create(data);
-  //   setSaving(false);
-  //   onSaved();
-  // };
-
   const handleSave = async () => {
-    if (!form.name) return alert("Project name required.");
+    if (!form.name) return alert(t("admin:projectNameRequired", "Project name required."));
 
     setSaving(true);
 
@@ -59,12 +47,22 @@ function InfraModal({ project, onClose, onSaved }) {
     }, 400);
   };
 
+  const getStatusLabel = (s) => {
+    switch (s) {
+      case "planning": return t("admin:statusPlanning", "Planning");
+      case "in_progress": return t("admin:statusInProgress", "In Progress");
+      case "completed": return t("admin:statusCompleted", "Completed");
+      case "on_hold": return t("admin:statusOnHold", "On Hold");
+      default: return s;
+    }
+  };
+
   return (
     <div className="fixed inset-0 z-50 bg-black/40 flex items-center justify-center p-4">
       <div className="bg-card border border-border rounded-2xl shadow-2xl w-full max-w-2xl max-h-[90vh] overflow-y-auto">
         <div className="flex items-center justify-between p-6 border-b border-border">
           <h2 className="font-playfair font-bold text-xl text-foreground">
-            {project ? "Edit Project" : "New Infrastructure Project"}
+            {project ? t("admin:editProject", "Edit Project") : t("admin:newInfrastructureProject", "New Infrastructure Project")}
           </h2>
           <button
             onClick={onClose}
@@ -76,17 +74,17 @@ function InfraModal({ project, onClose, onSaved }) {
         <div className="p-6 space-y-4">
           <div>
             <Label className="mb-1.5 block text-sm font-medium">
-              Project Name *
+              {t("admin:projectName", "Project Name *")}
             </Label>
             <Input
               value={form.name}
               onChange={(e) => set("name", e.target.value)}
-              placeholder="e.g. New Classroom Block"
+              placeholder={t("admin:egClassroomBlock", "e.g. New Classroom Block")}
             />
           </div>
           <div>
             <Label className="mb-1.5 block text-sm font-medium">
-              Description
+              {t("admin:description", "Description")}
             </Label>
             <textarea
               value={form.description}
@@ -97,7 +95,7 @@ function InfraModal({ project, onClose, onSaved }) {
           <div className="grid grid-cols-2 gap-4">
             <div>
               <Label className="mb-1.5 block text-sm font-medium">
-                Total Budget
+                {t("admin:totalBudget", "Total Budget")}
               </Label>
               <Input
                 type="number"
@@ -108,7 +106,7 @@ function InfraModal({ project, onClose, onSaved }) {
             </div>
             <div>
               <Label className="mb-1.5 block text-sm font-medium">
-                Amount Spent
+                {t("admin:amountSpent", "Amount Spent")}
               </Label>
               <Input
                 type="number"
@@ -120,7 +118,7 @@ function InfraModal({ project, onClose, onSaved }) {
           <div className="grid grid-cols-2 gap-4">
             <div>
               <Label className="mb-1.5 block text-sm font-medium">
-                Progress (%)
+                {t("admin:progressPercent", "Progress (%)")}
               </Label>
               <Input
                 type="number"
@@ -131,7 +129,7 @@ function InfraModal({ project, onClose, onSaved }) {
               />
             </div>
             <div>
-              <Label className="mb-1.5 block text-sm font-medium">Status</Label>
+              <Label className="mb-1.5 block text-sm font-medium">{t("admin:status", "Status")}</Label>
               <select
                 value={form.status}
                 onChange={(e) => set("status", e.target.value)}
@@ -139,7 +137,7 @@ function InfraModal({ project, onClose, onSaved }) {
               >
                 {STATUS_OPTS.map((s) => (
                   <option key={s} value={s}>
-                    {s.replace(/_/g, " ")}
+                    {getStatusLabel(s)}
                   </option>
                 ))}
               </select>
@@ -148,7 +146,7 @@ function InfraModal({ project, onClose, onSaved }) {
           <div className="grid grid-cols-2 gap-4">
             <div>
               <Label className="mb-1.5 block text-sm font-medium">
-                Start Date
+                {t("admin:fromDate", "Start Date")}
               </Label>
               <Input
                 type="date"
@@ -158,7 +156,7 @@ function InfraModal({ project, onClose, onSaved }) {
             </div>
             <div>
               <Label className="mb-1.5 block text-sm font-medium">
-                Expected Completion
+                {t("admin:expectedCompletion", "Expected Completion")}
               </Label>
               <Input
                 type="date"
@@ -169,7 +167,7 @@ function InfraModal({ project, onClose, onSaved }) {
           </div>
           <div>
             <Label className="mb-1.5 block text-sm font-medium">
-              Contractor / Vendor
+              {t("admin:contractorVendor", "Contractor / Vendor")}
             </Label>
             <Input
               value={form.contractor}
@@ -178,7 +176,7 @@ function InfraModal({ project, onClose, onSaved }) {
           </div>
           <div>
             <Label className="mb-1.5 block text-sm font-medium">
-              Image URL
+              {t("admin:imageUrl", "Image URL")}
             </Label>
             <Input
               value={form.image_url}
@@ -187,7 +185,7 @@ function InfraModal({ project, onClose, onSaved }) {
             />
           </div>
           <div>
-            <Label className="mb-1.5 block text-sm font-medium">Notes</Label>
+            <Label className="mb-1.5 block text-sm font-medium">{t("admin:notes", "Notes")}</Label>
             <textarea
               value={form.notes}
               onChange={(e) => set("notes", e.target.value)}
@@ -197,10 +195,10 @@ function InfraModal({ project, onClose, onSaved }) {
         </div>
         <div className="flex gap-3 p-6 border-t border-border">
           <Button variant="outline" onClick={onClose} className="flex-1">
-            Cancel
+            {t("admin:cancel", "Cancel")}
           </Button>
           <Button onClick={handleSave} disabled={saving} className="flex-1">
-            {saving ? "Saving..." : project ? "Update" : "Create Project"}
+            {saving ? t("admin:saving", "Saving...") : project ? t("admin:update", "Update") : t("admin:createProject", "Create Project")}
           </Button>
         </div>
       </div>
@@ -209,17 +207,13 @@ function InfraModal({ project, onClose, onSaved }) {
 }
 
 export default function InfrastructureAdmin() {
+  const { language } = useLanguage();
+  const { t } = useTranslation(language);
   const [projects, setProjects] = useState([]);
   const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState("");
   const [showModal, setShowModal] = useState(false);
   const [editing, setEditing] = useState(null);
-
-  // const load = () => {
-  //   setLoading(true);
-  //   base44.entities.InfrastructureProject.list('-created_date', 100)
-  //     .then(setProjects).catch(() => setProjects([])).finally(() => setLoading(false));
-  // };
 
   const load = () => {
     setLoading(true);
@@ -239,9 +233,7 @@ export default function InfrastructureAdmin() {
   );
 
   const handleDelete = async (id) => {
-    // if (!confirm('Delete this project?')) return;
-    // await base44.entities.InfrastructureProject.delete(id);
-    if (!window.confirm("Delete this project?")) return;
+    if (!window.confirm(t("admin:deleteProjectConfirm", "Delete this project?"))) return;
     setProjects((prev) => prev.filter((p) => p.id !== id));
     load();
   };
@@ -256,15 +248,25 @@ export default function InfrastructureAdmin() {
     on_hold: "bg-destructive/10 text-destructive",
   };
 
+  const getStatusLabel = (s) => {
+    switch (s) {
+      case "planning": return t("admin:statusPlanning", "Planning");
+      case "in_progress": return t("admin:statusInProgress", "In Progress");
+      case "completed": return t("admin:statusCompleted", "Completed");
+      case "on_hold": return t("admin:statusOnHold", "On Hold");
+      default: return s;
+    }
+  };
+
   return (
     <div>
       <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mb-6">
         <div>
           <h1 className="font-playfair font-bold text-3xl text-foreground">
-            Infrastructure Projects
+            {t("admin:infrastructureProjects", "Infrastructure Projects")}
           </h1>
           <p className="text-muted-foreground text-sm mt-1">
-            Track building, renovation & development projects
+            {t("admin:trackBuildingRenovation", "Track building, renovation & development projects")}
           </p>
         </div>
         <Button
@@ -274,20 +276,20 @@ export default function InfrastructureAdmin() {
             setShowModal(true);
           }}
         >
-          <Plus size={14} className="mr-2" /> New Project
+          <Plus size={14} className="mr-2" /> {t("admin:newProject", "New Project")}
         </Button>
       </div>
 
       {/* Summary */}
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
         {[
-          { label: "Total Projects", value: projects.length },
+          { label: t("admin:totalProjects", "Total Projects"), value: projects.length },
           {
-            label: "In Progress",
+            label: t("admin:statusInProgress", "In Progress"),
             value: projects.filter((p) => p.status === "in_progress").length,
           },
-          { label: "Total Budget", value: `$${totalBudget.toLocaleString()}` },
-          { label: "Total Spent", value: `$${totalSpent.toLocaleString()}` },
+          { label: t("admin:totalBudget", "Total Budget"), value: `$${totalBudget.toLocaleString()}` },
+          { label: t("admin:totalSpent", "Total Spent"), value: `$${totalSpent.toLocaleString()}` },
         ].map(({ label, value }) => (
           <div
             key={label}
@@ -308,7 +310,7 @@ export default function InfrastructureAdmin() {
           className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground"
         />
         <Input
-          placeholder="Search projects..."
+          placeholder={t("admin:searchProjects", "Search projects...")}
           value={search}
           onChange={(e) => setSearch(e.target.value)}
           className="pl-8 max-w-sm"
@@ -335,7 +337,7 @@ export default function InfrastructureAdmin() {
                     <span
                       className={`text-xs px-2 py-0.5 rounded-full font-medium ${statusColors[p.status] || statusColors.planning}`}
                     >
-                      {p.status?.replace(/_/g, " ")}
+                      {getStatusLabel(p.status)}
                     </span>
                   </div>
                   <h3 className="font-playfair font-bold text-foreground">
@@ -343,7 +345,7 @@ export default function InfrastructureAdmin() {
                   </h3>
                   {p.contractor && (
                     <p className="text-xs text-muted-foreground">
-                      Contractor: {p.contractor}
+                      {t("admin:contractor", "Contractor")}: {p.contractor}
                     </p>
                   )}
                 </div>
@@ -372,7 +374,7 @@ export default function InfrastructureAdmin() {
               )}
               <div className="mb-3">
                 <div className="flex justify-between text-xs mb-1.5">
-                  <span className="text-muted-foreground">Progress</span>
+                  <span className="text-muted-foreground">{t("admin:progress", "Progress")}</span>
                   <span className="font-medium text-foreground">
                     {p.progress || 0}%
                   </span>
@@ -386,13 +388,13 @@ export default function InfrastructureAdmin() {
               </div>
               <div className="flex justify-between text-xs text-muted-foreground">
                 <span>
-                  Budget:{" "}
+                  {t("admin:totalBudget", "Budget")}:{" "}
                   <strong className="text-foreground">
                     ${(p.budget || 0).toLocaleString()}
                   </strong>
                 </span>
                 <span>
-                  Spent:{" "}
+                  {t("admin:totalSpent", "Spent")}:{" "}
                   <strong className="text-foreground">
                     ${(p.spent || 0).toLocaleString()}
                   </strong>
@@ -401,10 +403,10 @@ export default function InfrastructureAdmin() {
               {(p.start_date || p.expected_end) && (
                 <div className="text-xs text-muted-foreground mt-2">
                   {p.start_date &&
-                    `Start: ${format(new Date(p.start_date), "MMM d, yyyy")}`}
+                    `${t("admin:fromDate", "Start")}: ${format(new Date(p.start_date), "MMM d, yyyy")}`}
                   {p.start_date && p.expected_end && " → "}
                   {p.expected_end &&
-                    `End: ${format(new Date(p.expected_end), "MMM d, yyyy")}`}
+                    `${t("admin:expectedCompletion", "End")}: ${format(new Date(p.expected_end), "MMM d, yyyy")}`}
                 </div>
               )}
             </div>
@@ -412,7 +414,7 @@ export default function InfrastructureAdmin() {
           {filtered.length === 0 && (
             <div className="col-span-2 text-center py-16 text-muted-foreground bg-card border border-border rounded-xl">
               <Building2 size={40} className="mx-auto mb-3 opacity-20" />
-              <p>No projects yet. Add your first project!</p>
+              <p>{t("admin:noProjectsYet", "No projects yet. Add your first project!")}</p>
             </div>
           )}
         </div>
@@ -425,11 +427,6 @@ export default function InfrastructureAdmin() {
             setShowModal(false);
             setEditing(null);
           }}
-          // onSaved={() => {
-          //   setShowModal(false);
-          //   setEditing(null);
-          //   load();
-          // }}
           onSaved={(data, id) => {
             setShowModal(false);
             setEditing(null);
