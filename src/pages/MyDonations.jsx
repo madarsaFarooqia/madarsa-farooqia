@@ -38,6 +38,7 @@ import { downloadReceipt } from "../lib/receiptGenerator";
 import { useAuth } from "../lib/AuthContext";
 import { useMyDonationsQuery } from "../hooks/api";
 import { getStoredToken } from "../services/http";
+import Skeleton from '../components/ui/skeleton';
 
 const purposeIcons = {
   sadqa: "💝",
@@ -236,7 +237,9 @@ export default function MyDonations() {
           {loading ? (
             <div className="space-y-4">
               {[1, 2, 3].map((i) => (
-                <div key={i} className="h-20 skeleton rounded-2xl" />
+                <div key={i} className="bg-card rounded-2xl p-4">
+                  <Skeleton height={64} borderRadius={8} />
+                </div>
               ))}
             </div>
           ) : donations.length === 0 ? (

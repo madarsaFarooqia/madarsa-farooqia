@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { useAdminDonationsQuery } from '../../hooks/api';
-import { Loader2, Search, Download, DollarSign } from 'lucide-react';
+import { Search, Download, DollarSign } from 'lucide-react';
+import Skeleton from '../../components/ui/skeleton';
 import { Input } from '../../components/ui/input';
 import { format } from 'date-fns';
 
@@ -45,9 +46,7 @@ export default function DonationsAdmin() {
         </div>
 
         {loading ? (
-          <div className="flex items-center justify-center py-16">
-            <Loader2 size={24} className="animate-spin text-primary" />
-          </div>
+          <Skeleton count={8} height={60} gap={12} containerClassName="p-4" />
         ) : filtered.length === 0 ? (
           <div className="text-center py-16">
             <p className="font-jakarta text-muted-foreground">No donations found.</p>

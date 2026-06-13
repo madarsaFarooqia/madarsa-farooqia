@@ -15,6 +15,7 @@ import { useLanguage } from "../../lib/LanguageContext";
 import { useTranslation } from "../../lib/i18n";
 import { useAdminDonationsQuery } from "../../hooks/api";
 import { getStatusLabel, getStatusClass } from "../../lib/statusUtils";
+import Skeleton from "../../components/ui/skeleton";
 
 export default function DonationsPro() {
   const { language } = useLanguage();
@@ -292,11 +293,7 @@ export default function DonationsPro() {
       {/* Table */}
       <div className="bg-card border border-border rounded-xl overflow-hidden">
         {loading ? (
-          <div className="p-8 space-y-3">
-            {[1, 2, 3, 4, 5].map((i) => (
-              <div key={i} className="h-12 skeleton rounded-lg" />
-            ))}
-          </div>
+          <Skeleton count={5} height={48} gap={12} containerClassName="p-8" />
         ) : filtered.length === 0 ? (
           <div className="text-center py-16 text-muted-foreground">
             <DollarSign size={40} className="mx-auto mb-3 opacity-20" />

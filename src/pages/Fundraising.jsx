@@ -7,6 +7,7 @@ import { useCampaignsQuery } from '../hooks/api';
 import CampaignCard from '../components/fundraising/CampaignCard';
 import { Progress } from '../components/ui/progress';
 import { RadialBarChart, RadialBar, BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, Cell, PieChart as RePieChart, Pie } from 'recharts';
+import Skeleton from '../components/ui/skeleton';
 
 const COLORS = ['#0a0a0a', '#b8891a', '#374151', '#6b7280', '#111827', '#d4a53a', '#1f2937', '#4b5563'];
 
@@ -171,7 +172,17 @@ export default function Fundraising() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           {loading ? (
             <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-              {[1, 2, 3].map(i => <div key={i} className="bg-card rounded-2xl h-80 skeleton" />)}
+              {[1, 2, 3].map(i => (
+                <div key={i} className="bg-card rounded-2xl p-6 border border-border">
+                  <Skeleton height={180} borderRadius={8} />
+                  <div className="mt-4">
+                    <Skeleton height={18} width="70%" borderRadius={4} />
+                    <div className="mt-2">
+                      <Skeleton height={12} width="50%" borderRadius={4} />
+                    </div>
+                  </div>
+                </div>
+              ))}
             </div>
           ) : campaigns.length > 0 ? (
             <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">

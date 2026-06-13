@@ -20,6 +20,7 @@ import CampaignFormModal from "../../components/admin/CampaignFormModal";
 import { useLanguage } from "../../lib/LanguageContext";
 import { useTranslation } from "../../lib/i18n";
 import { useCampaignsQuery, useCampaignMutations } from "../../hooks/api";
+import Skeleton from "../../components/ui/skeleton";
 
 export default function CampaignsPro() {
   const { language } = useLanguage();
@@ -194,7 +195,9 @@ export default function CampaignsPro() {
       {loading ? (
         <div className="grid md:grid-cols-2 gap-4">
           {[1, 2, 3, 4].map((i) => (
-            <div key={i} className="h-48 skeleton rounded-xl" />
+            <div key={i} className="bg-card rounded-xl p-6 border border-border">
+              <Skeleton height={192} borderRadius={8} />
+            </div>
           ))}
         </div>
       ) : (

@@ -10,6 +10,7 @@ import { Badge } from '../components/ui/badge';
 import TeacherCard from '../components/teachers/TeacherCard';
 import InstitutionTabs from '../components/institutions/InstitutionTabs';
 import FacultyStats from '../components/teachers/FacultyStats';
+import Skeleton from '../components/ui/skeleton';
 
 export default function Teachers() {
   const { language } = useLanguage();
@@ -126,13 +127,13 @@ export default function Teachers() {
             <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
               {[1, 2, 3, 4, 5, 6].map(i => (
                 <div key={i} className="bg-card rounded-2xl overflow-hidden border border-border">
-                  <div className="h-56 skeleton" />
+                  <Skeleton height={224} borderRadius={0} />
                   <div className="p-5 space-y-3">
-                    <div className="h-4 skeleton rounded w-3/4" />
-                    <div className="h-3 skeleton rounded w-1/2" />
+                    <Skeleton height={16} width="60%" borderRadius={4} />
+                    <Skeleton height={12} width="40%" borderRadius={4} />
                     <div className="flex gap-2 mt-2">
-                      <div className="h-6 skeleton rounded-full w-16" />
-                      <div className="h-6 skeleton rounded-full w-16" />
+                      <Skeleton height={24} width={64} borderRadius={12} />
+                      <Skeleton height={24} width={64} borderRadius={12} />
                     </div>
                   </div>
                 </div>

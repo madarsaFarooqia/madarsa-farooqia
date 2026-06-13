@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { useEventsQuery } from '../hooks/api';
 import EventCard from '../components/events/EventCard';
 import SectionHeader from '../components/shared/SectionHeader';
-import { Loader2 } from 'lucide-react';
+import Skeleton from '../components/ui/skeleton';
 import { useLanguage } from "../lib/LanguageContext";
 import { useTranslation } from "../lib/i18n";
 
@@ -60,8 +60,18 @@ export default function Events() {
           </div>
 
           {loading ? (
-            <div className="flex items-center justify-center py-24">
-              <Loader2 size={32} className="animate-spin text-primary" />
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+              {[1, 2, 3, 4, 5, 6].map(i => (
+                <div key={i} className="bg-card rounded-2xl p-6 border border-border">
+                  <Skeleton height={180} borderRadius={8} />
+                  <div className="mt-4">
+                    <Skeleton height={18} width="70%" borderRadius={4} />
+                    <div className="mt-2">
+                      <Skeleton height={12} width="50%" borderRadius={4} />
+                    </div>
+                  </div>
+                </div>
+              ))}
             </div>
           ) : filtered.length === 0 ? (
             <div className="text-center py-24">

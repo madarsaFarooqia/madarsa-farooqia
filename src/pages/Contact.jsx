@@ -50,7 +50,7 @@ export default function Contact() {
   };
 
   return (
-    <div className="min-h-screen bg-background relative overflow-hidden" dir={currentLang.dir}>
+    <div className="min-h-screen bg-black/50 relative overflow-hidden" dir={currentLang.dir}>
       {/* Hero */}
       <section className="relative hero-gradient geometric-pattern pt-28 sm:pt-32 pb-16 sm:pb-20 overflow-hidden">
         {/* Background Image Overlay */}

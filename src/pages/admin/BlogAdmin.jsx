@@ -8,6 +8,7 @@ import BlogPostModal from "../../components/admin/BlogPostModal";
 import DeleteConfirmModal from "../../components/shared/DeleteConfirmModal";
 import { useLanguage } from "../../lib/LanguageContext";
 import { useTranslation } from "../../lib/i18n";
+import Skeleton from '../../components/ui/skeleton';
 
 export default function BlogAdmin() {
   const { language } = useLanguage();
@@ -239,7 +240,9 @@ export default function BlogAdmin() {
         {loading ? (
           <div className="p-6 space-y-3">
             {[1, 2, 3].map((i) => (
-              <div key={i} className="h-16 skeleton rounded-lg" />
+              <div key={i} className="rounded-lg">
+                <Skeleton height={64} borderRadius={8} />
+              </div>
             ))}
           </div>
         ) : filtered.length === 0 ? (

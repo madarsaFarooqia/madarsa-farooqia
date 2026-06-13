@@ -13,6 +13,7 @@ import { format } from "date-fns";
 import { useLanguage } from "../../lib/LanguageContext";
 import { useTranslation } from "../../lib/i18n";
 import { useContactMessagesQuery, useContactMessageMutations } from "../../hooks/api";
+import Skeleton from '../../components/ui/skeleton';
 
 export default function QAAdmin() {
   const { language } = useLanguage();
@@ -132,7 +133,9 @@ export default function QAAdmin() {
       {loading ? (
         <div className="space-y-3">
           {[1, 2, 3].map((i) => (
-            <div key={i} className="h-24 skeleton rounded-xl" />
+            <div key={i} className="bg-card rounded-xl p-4">
+              <Skeleton height={96} borderRadius={8} />
+            </div>
           ))}
         </div>
       ) : filtered.length === 0 ? (

@@ -8,13 +8,15 @@ import { Label } from '../ui/label';
 import { Textarea } from '../ui/textarea';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '../ui/select';
 import { Switch } from '../ui/switch';
-import { useToast } from '../ui/use-toast';
+import { Toast } from '../../utils/toast';
+
 import { format } from 'date-fns';
 import { useLanguage } from '../../lib/LanguageContext';
 import { useTranslation } from '../../lib/i18n';
+import Skeleton from '../../components/ui/skeleton';
 
 export default function EntityManager({ entityName, title, fields, displayField = 'name', sortField = '-created_date' }) {
-  const { toast } = useToast();
+  
   const { language } = useLanguage();
   const { t } = useTranslation(language);
   const { data: items = [], isLoading: loading, refetch } = useEntityQuery(entityName, sortField);
@@ -44,10 +46,10 @@ export default function EntityManager({ entityName, title, fields, displayField 
   const handleSave = async () => {
     if (editing) {
       await update.mutateAsync({ id: editing.id, payload: form });
-      toast({ title: t('admin:recordUpdated', 'Record updated successfully') });
+      Toast('success', t('admin:recordUpdated', 'Record updated successfully'));
     } else {
       await create.mutateAsync(form);
-      toast({ title: t('admin:recordCreated', 'Record created successfully') });
+      Toast('success', t('admin:recordCreated', 'Record created successfully'));
     }
     setDialogOpen(false);
     refetch();
@@ -56,7 +58,7 @@ export default function EntityManager({ entityName, title, fields, displayField 
   const handleDelete = async (item) => {
     if (!window.confirm(t('admin:deleteConfirm', 'Are you sure you want to delete this record?'))) return;
     await remove.mutateAsync(item.id);
-    toast({ title: t('admin:recordDeleted', 'Record deleted successfully') });
+    Toast('success', t('admin:recordDeleted', 'Record deleted successfully'));
     refetch();
   };
 
@@ -125,9 +127,7 @@ export default function EntityManager({ entityName, title, fields, displayField 
         </div>
 
         {loading ? (
-          <div className="flex items-center justify-center py-16">
-            <Loader2 size={24} className="animate-spin text-primary" />
-          </div>
+          <Skeleton count={6} height={64} gap={12} containerClassName="p-4" />
         ) : filtered.length === 0 ? (
           <div className="text-center py-16">
             <p className="font-jakarta text-muted-foreground">{t('admin:noRecordsFound', 'No records found.')}</p>

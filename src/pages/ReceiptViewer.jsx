@@ -21,6 +21,7 @@ import { useTranslation } from "../lib/i18n";
 import { useAuth } from "../lib/AuthContext";
 import { useMyDonationsQuery } from "../hooks/api";
 import { getStoredToken } from "../services/http";
+import Skeleton from '../components/ui/skeleton';
 
 const purposeIcons = {
   sadqa: "💝",
@@ -278,7 +279,9 @@ export default function ReceiptViewer() {
           {loading ? (
             <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
               {[1, 2, 3].map((i) => (
-                <div key={i} className="h-80 skeleton rounded-3xl" />
+                <div key={i} className="bg-card rounded-3xl p-6">
+                  <Skeleton height={320} borderRadius={24} />
+                </div>
               ))}
             </div>
           ) : donations.length === 0 ? (

@@ -6,6 +6,7 @@ import { Label } from "../../components/ui/label";
 import { format } from "date-fns";
 import { useLanguage } from "../../lib/LanguageContext";
 import { useTranslation } from "../../lib/i18n";
+import Skeleton from '../../components/ui/skeleton';
 
 const STATUS_OPTS = ["planning", "in_progress", "completed", "on_hold"];
 
@@ -321,7 +322,9 @@ export default function InfrastructureAdmin() {
       {loading ? (
         <div className="grid md:grid-cols-2 gap-4">
           {[1, 2].map((i) => (
-            <div key={i} className="h-48 skeleton rounded-xl" />
+            <div key={i} className="bg-card rounded-xl p-4">
+              <Skeleton height={48} borderRadius={8} />
+            </div>
           ))}
         </div>
       ) : (

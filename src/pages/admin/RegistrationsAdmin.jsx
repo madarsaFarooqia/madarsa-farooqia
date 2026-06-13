@@ -1,16 +1,17 @@
 import { useState } from 'react';
 import { useRegistrationsQuery, useRegistrationMutations } from '../../hooks/api';
-import { Loader2, Search, Check, X, Eye } from 'lucide-react';
+import { Search, Check, X, Eye } from 'lucide-react';
 import { Input } from '../../components/ui/input';
 import { Button } from '../../components/ui/button';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '../../components/ui/dialog';
-import { useToast } from '../../components/ui/use-toast';
+import { Toast } from '../../utils/toast';
 import { format } from 'date-fns';
 import { useLanguage } from '../../lib/LanguageContext';
 import { useTranslation } from '../../lib/i18n';
+import Skeleton from '../../components/ui/skeleton';
 
 export default function RegistrationsAdmin() {
-  const { toast } = useToast();
+
   const { language } = useLanguage();
   const { t } = useTranslation(language);
   const { data: regs = [], isLoading: loading, refetch } = useRegistrationsQuery('-created_date', 500);
@@ -25,7 +26,7 @@ export default function RegistrationsAdmin() {
 
   const updateStatus = async (reg, status) => {
     await update.mutateAsync({ id: reg.id, payload: { status } });
-    toast({ title: t('admin:registrationStatusUpdated', 'Registration status updated successfully') });
+    Toast('success', t('admin:registrationStatusUpdated', 'Registration status updated successfully'));
     refetch();
     setSelected(null);
   };
@@ -58,9 +59,7 @@ export default function RegistrationsAdmin() {
         </div>
 
         {loading ? (
-          <div className="flex items-center justify-center py-16">
-            <Loader2 size={24} className="animate-spin text-primary" />
-          </div>
+          <Skeleton count={8} height={60} gap={12} containerClassName="p-4" />
         ) : filtered.length === 0 ? (
           <div className="text-center py-16">
             <p className="font-jakarta text-muted-foreground">{t('admin:noRegistrationsYet', 'No registrations yet.')}</p>
